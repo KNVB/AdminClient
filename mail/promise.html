@@ -1,0 +1,61 @@
+<html>
+<head>
+	<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+	<script>
+		var counter=0;
+		class AdminPageControl
+		{
+			constructor()
+			{
+				this.interval;
+				this.a=new AccessRight();
+				this.vv=$("#vv");
+				
+			}
+			go()
+			{
+				var self=this;
+				this.interval=setInterval(updateCounter, 1000);
+				this.a.go().then(function()
+								 {
+									self.vv.html("vv");
+									clearInterval(self.interval);
+								 });
+			}
+		}
+		class AccessRight
+		{
+			constructor()
+			{
+				this.qq=$("#qq");
+				
+			}
+			go()
+			{
+				var self=this;
+				return new Promise(function(resolve, reject)
+								   {
+										self.qq.html("qq");
+										setTimeout(resolve,3000);
+								   });
+			}
+		}
+		function gg()
+		{
+			var a=new AdminPageControl();
+			a.go();
+		}
+		function updateCounter()
+		{
+			counter++;
+			$("#counter").text(counter);
+		}
+	</script>
+</head>
+<body>
+	<div id="counter">0</div>
+	<div id="qq"></div>
+	<div id="vv"></div>
+	<button onclick="gg()">start</button>
+</body>
+</html>

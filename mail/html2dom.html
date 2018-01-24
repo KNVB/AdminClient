@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+		<script>
+			function convert()
+			{
+				var domCode;
+				var domObj=$($("#htmlCode").val());
+				domCode=findChild(domObj,null);
+				$("#domCode").val(domCode);						
+			}
+			function findChild(domObj,parentTagVariable)
+			{
+				var result="";
+				var tagName=$(domObj).prop("tagName");
+				var tagVariable=tagName.toLowerCase();
+				result+="var "+tagVariable+"=document.createElement(\""+tagName+"\");\n";
+				$(domObj).each(function()
+								{
+									$.each(this.attributes, function() {
+										if(this.specified) {
+											result+=tagVariable+"."+this.name+"=\""+ this.value+"\";\n";
+										}
+									});
+								});
+				if (parentTagVariable!=null)
+					result+=parentTagVariable+".appendChild("+tagVariable+");\n";
+				console.log($(domObj).prop("tagName"),$(domObj).text());	
+				if ($(domObj).children().length>0)
+				{	
+					$(domObj).children().each(function()
+												{
+													result+=findChild(this,tagVariable);
+												});
+											
+				}
+				return result;								
+			}
+		</script>
+	</head>
+	<body>
+		<table width="100%" height="100%" border=1>
+			<tr>
+				<td width=50%>
+					<textarea id="htmlCode" style="width:100%;height:100%">
+					</textarea>
+				</td>
+				<td width=50%>		
+					<textarea id="domCode" style="width:100%;height:100%">
+					</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<button onclick="convert()">Convert</button>
+				</td>	
+		</table>	
+	</body>
+</html>	
