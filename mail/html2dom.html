@@ -4,9 +4,12 @@
 		<script>
 			function convert()
 			{
-				var domCode;
+				var domCode="";
 				var domObj=$($("#htmlCode").val());
-				domCode=findChild(domObj,null);
+				for (var i=0;i<domObj.length;i++)
+				{	
+					domCode+=findChild(domObj[i],null);
+				}
 				$("#domCode").val(domCode);						
 			}
 			function findChild(domObj,parentTagVariable)
@@ -19,7 +22,24 @@
 								{
 									$.each(this.attributes, function() {
 										if(this.specified) {
-											result+=tagVariable+"."+this.name+"=\""+ this.value+"\";\n";
+											if ((tagName=="INTPUT")||(tagName=="TEXTAREA"))
+											{	
+												switch (this.name.toLowerCase())
+												{
+													case "disabled":
+													case "required":
+																	result+=tagVariable+"."+this.name.toLowerCase()+"=true;\n";
+																	break;
+													case "readonly":
+																	result+=tagVariable+".readOnly=true;\n";
+																	break;
+																							
+													default:
+																result+=tagVariable+"."+this.name+"=\""+ this.value+"\";\n";
+												}
+											}
+											else
+												result+=tagVariable+"."+this.name+"=\""+ this.value+"\";\n";
 										}
 									});
 								});
@@ -32,8 +52,11 @@
 												{
 													result+=findChild(this,tagVariable);
 												});
-											
 				}
+				else
+				{
+					result+=tagVariable+".textContent=\""+$(domObj).text()+"\";\n";
+				}	
 				return result;								
 			}
 		</script>
@@ -43,6 +66,30 @@
 			<tr>
 				<td width=50%>
 					<textarea id="htmlCode" style="width:100%;height:100%">
+						<table class="loginTable" style="display:none">
+							<tr>
+								<td colspan=2 align=center>Admin. Server login</td>
+							</tr>
+							<tr>
+								<td class="loginCaption">server name:</td>
+								<td><input type=text value="localhost" id="hostName" size="10" required ></td>
+							</tr>
+							<tr>
+								<td class="loginCaption">server port no:</td>
+								<td><input type=number value="4466" id="portNo" min="1" max="999999" required ></td>
+							</tr>
+							<tr>
+								<td class="loginCaption">user name:</td>
+								<td><input type="text" value ="admin" id="userName" size="10" required></td>
+							</tr>
+							<tr>
+								<td class="loginCaption">password:</td>
+								<td><input type="password" value ="password" id="password" size="10" required></td>
+							</tr>
+							<tr>
+								<td colspan=2 style="text-align:center;"><button id="loginButton" onclick="login()">Login</button></td>
+							</tr>	
+						</table>
 					</textarea>
 				</td>
 				<td width=50%>		
