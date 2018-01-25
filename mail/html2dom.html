@@ -3,123 +3,125 @@
 		<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
 		<script>
 			var counter=new Array();
+			var textContent=new Array();
 			function convert()
 			{
 				var domCode="";
-				var domObj=$($("#htmlCode").val());
+				var domObj=$.parseHTML($.trim($("#htmlCode").val()));
 				
-				for (var i=0;i<domObj.length;i++)
+				for (var i=0;i<$(domObj).children().length;i++)
 				{	
-					domCode+=findChild(domObj[i],null);
+					//domCode+=findChild(domObj[i],null);
+					console.log($(domObj).children()[i]);
 				}
-				$("#domCode").html(domCode);						
+				$("#domCode").html(domCode);
+				
 			}
 			function findChild(domObj,parentTagVariable)
 			{
 				var result="";
 				var tagName=$(domObj).prop("tagName");
-				if (tagName!=null)
+				var tagVariable=tagName.toLowerCase();
+
+				//console.log(tagName,domObj.textContent);
+				if (counter[tagName]==null)
 				{
-					var tagVariable=tagName.toLowerCase();
-					if (counter[tagName]==null)
-					{
-						counter[tagName]=1
-					}
-					else
-					{
-						counter[tagName]++;
-					}
-					tagVariable+=counter[tagName];
-					result+="var "+tagVariable+"=document.createElement(\""+tagName+"\");\n";
-					$(domObj).each(function()
-									{
-										$.each(this.attributes, function() {
-											if(this.specified) 
+					counter[tagName]=1
+				}
+				else
+				{
+					counter[tagName]++;
+				}
+				tagVariable+=counter[tagName];
+				
+				textContent[tagVariable]=$.trim(domObj.textContent);
+				textContent[parentTagVariable]=String(textContent[parentTagVariable]).replace(textContent[tagVariable],"");
+				result+="var "+tagVariable+"=document.createElement(\""+tagName+"\");\n";
+				$(domObj).each(function()
+								{
+									$.each(this.attributes, function() {
+										if(this.specified) 
+										{
+											switch(this.name.toLowerCase())
 											{
-												switch(this.name.toLowerCase())
-												{
-													case "class":
-														result+=tagVariable+".className=\""+this.value+"\";\n";
-														break;
-													case "required":
-														switch (tagName)
-														{
-															case "INPUT":
-															case "SELECT":
-															case "TEXTAREA":
-																	result+=tagVariable+".required=true;\n";
-															break;
-														}
-														break;
-													case "disabled":
-														switch (tagName)
-														{
-															case "INPUT":
-															case "BUTTON":
-															case "SELECT":
-															case "OPTION":
-															case "FIELDSET":
-															case "OPTGROUP":
-															case "TEXTAREA":
-																	result+=tagVariable+".disabled=true;\n";
-														}
-														break;
-													
-													case "readonly":
-														switch (tagName)
-														{
-															case "INPUT":
-															case "TEXTAREA":
-																result+=tagVariable+".readOnly=true;\n";
-														}
-														break;
-													case "multiple":
-														switch (tagName)
-														{
-															case "INPUT":
-															case "SELECT":
-																	result+=tagVariable+".required=true;\n";
-															break;
-														}
-														break;	
-													case "selected":
-														switch (tagName)
-														{
-															case "OPTION":
-																result+=tagVariable+".selected=true;\n";
-														}
-														break;
-													case "checked":
-														switch (tagName)
-														{
-															case "INPUT":
-																result+=tagVariable+".checked=true;\n";
-														}
-														break;	
-													default:result+=tagVariable+"."+this.name+"=\""+ this.value+"\";\n";
-															break;
-												}
-											}
-										});
-									});
-					if (parentTagVariable!=null)
-						result+=parentTagVariable+".appendChild("+tagVariable+");\n";
-					//console.log($(domObj).prop("tagName"),$(domObj).text());	
-					if ($(domObj).children().length>0)
-					{	
-						$(domObj).children().each(function()
+												case "class":
+													result+=tagVariable+".className=\""+this.value+"\";\n";
+													break;
+												case "required":
+													switch (tagName)
 													{
-														result+=findChild(this,tagVariable);
-													});
-						counter[tagName]--;						
-					}
-					else
-					{
-						if ($(domObj).text()!="")
-							result+=tagVariable+".textContent=\""+$(domObj).text()+"\";\n";
-					}
-				}					
-				return result;								
+														case "INPUT":
+														case "SELECT":
+														case "TEXTAREA":
+																result+=tagVariable+".required=true;\n";
+														break;
+													}
+													break;
+												case "disabled":
+													switch (tagName)
+													{
+														case "INPUT":
+														case "BUTTON":
+														case "SELECT":
+														case "OPTION":
+														case "FIELDSET":
+														case "OPTGROUP":
+														case "TEXTAREA":
+																result+=tagVariable+".disabled=true;\n";
+													}
+													break;
+												
+												case "readonly":
+													switch (tagName)
+													{
+														case "INPUT":
+														case "TEXTAREA":
+															result+=tagVariable+".readOnly=true;\n";
+													}
+													break;
+												case "multiple":
+													switch (tagName)
+													{
+														case "INPUT":
+														case "SELECT":
+																result+=tagVariable+".required=true;\n";
+														break;
+													}
+													break;	
+												case "selected":
+													switch (tagName)
+													{
+														case "OPTION":
+															result+=tagVariable+".selected=true;\n";
+													}
+													break;
+												case "checked":
+													switch (tagName)
+													{
+														case "INPUT":
+															result+=tagVariable+".checked=true;\n";
+													}
+													break;	
+												default:result+=tagVariable+"."+this.name+"=\""+ this.value+"\";\n";
+														break;
+											}
+										}
+									});
+								});
+				$(domObj).children().each(function()
+										{
+											result+=findChild(this,tagVariable);
+										});
+				if (parentTagVariable!=null)
+				{		
+					result+=parentTagVariable+".appendChild("+tagVariable+");\n";						
+				}
+				if ($.trim(textContent[tagVariable])!="")
+				{
+					result+=tagVariable+".appendChild(document.createTextNode(\""+$.trim(textContent[tagVariable])+"\"));\n";
+				}
+				counter[tagName]--;
+				return result;
 			}
 		</script>
 	</head>
@@ -130,6 +132,7 @@
 					<textarea id="htmlCode" style="width:100%;height:100%">
 					
 		<div id="functionList" >
+			dsfdsfsdf
 			<a href="javascript:w3_close()" title="Close Sidemenu" class="w3-bar-item w3-button w3-hide-large w3-large">
 				Close <i class="fa fa-remove"></i>
 			</a>
@@ -152,22 +155,9 @@
 						<span class="w3-opacity w3-large">Remove Server </span>
 						<i class="w3-padding fa fa-pencil"></i>	
 					</div>	
-				</a>				
-			</div>
-			<a class="w3-bar-item w3-button functionListItem" onclick="showHideChild(this)">
-				Administration Server Setting
-				<i class="fa fa-caret-down w3-margin-left"></i>
-			</a>
-			<div class="w3-hide w3-animate-left">	
-				<a class="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey" onclick="gg()">
-					<div class="w3-container">
-						<span class="w3-opacity w3-large">Change Admin user and password </span>
-						<i class="w3-padding fa fa-pencil"></i>
-					</div>	
-				</a>				
-			</div>
-			<a href="#" class="w3-bar-item w3-button">Logout</a>
-		</div>					
+				</a>							
+			</div>		
+		</div>
 						
 					</textarea>
 				</td>

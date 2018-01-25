@@ -53,6 +53,66 @@ html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
 <script>
 $(document).ready(function() 
 				 {
+var div1=document.createElement("DIV");
+div1.id="functionList";
+var a1=document.createElement("A");
+a1.href="javascript:w3_close()";
+a1.title="Close Sidemenu";
+a1.className="w3-bar-item w3-button w3-hide-large w3-large";
+var i1=document.createElement("I");
+i1.className="fa fa-remove";
+a1.appendChild(i1);
+div1.appendChild(a1);
+a1.textContent="Close";
+var a1=document.createElement("A");
+a1.className="w3-bar-item w3-button functionListItem";
+a1.onclick="showHideChild(this)";
+var i1=document.createElement("I");
+i1.className="fa fa-caret-down w3-margin-left";
+a1.appendChild(i1);
+div1.appendChild(a1);
+a1.textContent="FTP Server Administration";
+var div2=document.createElement("DIV");
+div2.className="w3-hide w3-animate-left";
+var a1=document.createElement("A");
+a1.className="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey";
+a1.onclick="vv()";
+var div3=document.createElement("DIV");
+div3.className="w3-container";
+var span1=document.createElement("SPAN");
+span1.className="w3-opacity w3-large";
+div3.appendChild(span1);
+span1.textContent="List Server";
+a1.appendChild(div3);
+div2.appendChild(a1);
+var a1=document.createElement("A");
+a1.className="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey";
+var div3=document.createElement("DIV");
+div3.className="w3-container";
+var span1=document.createElement("SPAN");
+span1.className="w3-opacity w3-large";
+div3.appendChild(span1);
+span1.textContent="Add Server";
+var i1=document.createElement("I");
+i1.className="w3-padding fa fa-pencil";
+div3.appendChild(i1);
+a1.appendChild(div3);
+div2.appendChild(a1);
+var a1=document.createElement("A");
+a1.className="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey";
+var div3=document.createElement("DIV");
+div3.className="w3-container";
+var span1=document.createElement("SPAN");
+span1.className="w3-opacity w3-large";
+div3.appendChild(span1);
+span1.textContent="Remove Server";
+var i1=document.createElement("I");
+i1.className="w3-padding fa fa-pencil";
+div3.appendChild(i1);
+a1.appendChild(div3);
+div2.appendChild(a1);
+div1.appendChild(div2);
+div1.appendChild(document.createTextNode("dsfdsfsdf"));
 document.getElementById("mySideBar").appendChild(div1);
 });
 </script>
@@ -67,6 +127,5 @@ document.getElementById("mySideBar").appendChild(div1);
 <div class="w3-main" style="margin-left:320px;">
 	<i class="fa fa-bars w3-button w3-white w3-hide-large w3-xlarge w3-margin-left w3-margin-top" onclick="w3_open()"></i>
 </div>	
-<button onclick="go()">go</button>
 </body>
 </html> 
