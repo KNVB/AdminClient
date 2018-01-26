@@ -169,7 +169,7 @@ function openDetailSetting(event,settingName)
 <body>
 <!-- Login Side Navigation  -->
 <nav class="w3-sidebar w3-bar-block w3-collapse w3-white w3-animate-left w3-card " style="z-index:3;width:320px;" id="mySideBar">
-		<table class="loginTable" style="display:none">
+		<table class="loginTable">
 			<tr>
 				<td colspan=2 align=center>Admin. Server login</td>
 			</tr>
@@ -193,7 +193,7 @@ function openDetailSetting(event,settingName)
 				<td colspan=2 style="text-align:center;"><button id="loginButton" onclick="login()">Login</button></td>
 			</tr>	
 		</table>
-		<div id="functionList" >
+		<div id="functionList" style="display:none">
 			<a href="javascript:w3_close()" title="Close Sidemenu" class="w3-bar-item w3-button w3-hide-large w3-large">
 				Close <i class="fa fa-remove"></i>
 			</a>

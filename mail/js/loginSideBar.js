@@ -102,6 +102,18 @@ class LoginSideBar
 		tbody1.appendChild(tr1);
 		this.loginSideBar.appendChild(tbody1);
 	}
+	show()
+	{
+		
+	}
+	hide()
+	{
+		var self=this;
+		return new Promise(function(resolve, reject)
+		{
+			$(self.loginSideBar).hide("slide",{},500,resolve);
+		});
+	}
 	getDomObj()
 	{
 		return this.loginSideBar;

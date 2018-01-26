@@ -1,22 +1,86 @@
 class ModuleList
 {
-	constructor()
+	constructor(closeHandler)
 	{
 		this.moduleDiv;
+		this.closeHandler=closeHandler;
 		this.moduleList=new Array();
 	}
+	loadModule()
+	{		
+		this.moduleList.push(new FtpModule(this.showHideFunctionList.bind(this)));
+	}	
 	addModule(module)
 	{
 		this.moduleList.push(module);
 	}
 	getDomObj()
 	{
-		this.moduleDiv=$(document.createElement("div"));
-		this.moduleDiv.id="qq";
+		var self=this;
+		this.moduleDiv=document.createElement("div");
+		var text1=document.createTextNode("Close");
+		var a1=document.createElement("A");
+		var i1=document.createElement("I");
+		a1.onclick=function()
+							{	
+								self.closeHandler();
+							}
+		a1.title="Close Sidemenu";
+		a1.className="w3-bar-item w3-button w3-hide-large w3-large";
+		a1.appendChild(text1);
+		i1.className="fa fa-remove";
+		a1.appendChild(i1);
+		
+		this.moduleDiv.appendChild(a1);
 		for (var i=0;i<this.moduleList.length;i++)
 		{
-			this.moduleDiv.append(this.moduleList[i].getDomObj());
+			//console.log(this.moduleList[i].heading);
+			var functionList=this.moduleList[i].getFunctionList();
+			//console.log(functionList);
+			for (var j=0;j<functionList.length;j++)
+			{
+				this.moduleDiv.appendChild(functionList[j]);
+			}
 		}						
 		return this.moduleDiv;
+	}
+	hide()
+	{
+		var self=this;
+		return new Promise(function(resolve, reject)
+		{
+			$(self.moduleDiv).hide("slide",{},500,resolve);
+		});		
+	}
+	showHideFunctionList(modulesListItem)
+	{
+		//console.log(modulesListItem);
+		var mli=modulesListItem;
+		var parentDiv=$(modulesListItem).parent();
+		$(parentDiv).children("div").each(function ()
+																			{
+																				if (this.className.indexOf("w3-show")>-1)
+																					this.className=this.className.replace("w3-show","w3-hide");
+																			});
+		$(parentDiv).children(".moduleListItem").each(function()
+									{
+										if (this===mli)
+										{
+											if (this.className.indexOf("w3-red")==-1)
+											{	
+												this.className+=" w3-red";
+												this.nextElementSibling.className=this.nextElementSibling.className.replace("w3-hide","w3-show");
+											}
+											else
+											{
+												this.className=this.className.replace(" w3-red","");
+												this.nextElementSibling.className=this.nextElementSibling.className.replace("w3-show","w3-hide");
+											}
+										}
+										else
+										{
+											this.className=this.className.replace(" w3-red",""); 
+										}
+									});							
 	}
 }

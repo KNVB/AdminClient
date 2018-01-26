@@ -2,10 +2,11 @@ class LogoutModule
 {
 	constructor(headingHandler)
 	{
+		this.domObjList=new Array();
 		this.heading="Logout";
 		this.headingHandler=headingHandler;
 	}
-	getDomObj()
+	getFunctionList()
 	{
 		var self=this;
 		var a=document.createElement("a");
@@ -16,6 +17,7 @@ class LogoutModule
 					self.headingHandler();
 				}
 		a.className="w3-bar-item w3-button";
-		return a;	
+		this.domObjList.push(a);
+		return this.domObjList;	
 	}
 }
