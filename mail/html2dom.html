@@ -92,6 +92,23 @@
 					{
 						switch(domObj.attributes[i].name.toLowerCase())
 						{
+							case "colspan":
+								switch (tagName)
+								{
+									case "TH":
+									case "TD":
+										domCode+=tagVariable+".colSpan=\""+domObj.attributes[i].value+"\";\n";
+										break;
+								}
+								break;
+							case "rowspan":
+								switch (tagName)
+								{
+									case "TR":
+										domCode+=tagVariable+".rowSpan=\""+domObj.attributes[i].value+"\";\n";
+										break;
+								}
+								break;	
 							case "class":
 								domCode+=tagVariable+".className=\""+domObj.attributes[i].value+"\";\n";
 								break;
@@ -101,8 +118,8 @@
 									case "INPUT":
 									case "SELECT":
 									case "TEXTAREA":
-											domCode+=tagVariable+".required=true;\n";
-									break;
+										domCode+=tagVariable+".required=true;\n";
+										break;
 								}
 								break;
 							case "disabled":
@@ -115,7 +132,8 @@
 									case "FIELDSET":
 									case "OPTGROUP":
 									case "TEXTAREA":
-											domCode+=tagVariable+".disabled=true;\n";
+										domCode+=tagVariable+".disabled=true;\n";
+										break;
 								}
 								break;
 							
@@ -125,6 +143,7 @@
 									case "INPUT":
 									case "TEXTAREA":
 										domCode+=tagVariable+".readOnly=true;\n";
+										break;
 								}
 								break;
 							case "multiple":
@@ -132,8 +151,8 @@
 								{
 									case "INPUT":
 									case "SELECT":
-											domCode+=tagVariable+".required=true;\n";
-									break;
+										domCode+=tagVariable+".required=true;\n";
+										break;
 								}
 								break;	
 							case "selected":
@@ -141,6 +160,7 @@
 								{
 									case "OPTION":
 										domCode+=tagVariable+".selected=true;\n";
+										break;
 								}
 								break;
 							case "checked":
@@ -148,6 +168,7 @@
 								{
 									case "INPUT":
 										domCode+=tagVariable+".checked=true;\n";
+										break;
 								}
 								break;	
 							default:domCode+=tagVariable+"."+domObj.attributes[i].name+"=\""+ domObj.attributes[i].value+"\";\n";
