@@ -2,126 +2,160 @@
 	<head>
 		<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
 		<script>
-			var counter=new Array();
+			var elementCounter=new Array();
 			var textContent=new Array();
 			function convert()
 			{
 				var domCode="";
 				var domObj=$.parseHTML($.trim($("#htmlCode").val()));
 				
-				for (var i=0;i<$(domObj).children().length;i++)
+				for (var i=0;i<$(domObj).length;i++)
 				{	
-					//domCode+=findChild(domObj[i],null);
-					console.log($(domObj).children()[i]);
+					domCode+=getDomCode(domObj[i],null);
 				}
 				$("#domCode").html(domCode);
-				
 			}
-			function findChild(domObj,parentTagVariable)
+			function getDomCode(domObj,parentTagVariable)
 			{
-				var result="";
-				var tagName=$(domObj).prop("tagName");
-				var tagVariable=tagName.toLowerCase();
-
-				//console.log(tagName,domObj.textContent);
-				if (counter[tagName]==null)
+				var domCode="";
+				var tagVariable;
+				switch (domObj.nodeType) //Currently process DOM element and text node only
 				{
-					counter[tagName]=1
+					case 1:
+						tagVariable=getTagVariableName(domObj);
+						domCode+="var "+tagVariable+"=document.createElement(\""+domObj.tagName+"\");\n";
+						domCode+=getAttrDomCode(domObj,tagVariable);
+						for (var i=0;i<domObj.childNodes.length;i++)
+						{
+							domCode+=getDomCode(domObj.childNodes[i],tagVariable);
+						}
+						elementCounter[domObj.tagName]--;		
+						if (parentTagVariable!=null)
+						{		
+							domCode+=parentTagVariable+".appendChild("+tagVariable+");\n";						
+						}						
+						break; 
+					case 3:
+						if (($.trim(domObj.textContent)!="") && 
+							((domObj.parentNode.nodeType==11)|| 
+							 (!domObj.parentNode.hasAttribute("text"))))
+						{ 
+							tagVariable=getTagVariableName(domObj);
+							domCode+="var "+tagVariable+"=document.createTextNode(\""+$.trim(domObj.textContent)+"\");\n";
+							elementCounter["TEXT"]--;
+							if (parentTagVariable!=null)
+								domCode+=parentTagVariable+".appendChild("+tagVariable+");\n";						
+						}
+						break;
 				}
-				else
-				{
-					counter[tagName]++;
-				}
-				tagVariable+=counter[tagName];
 				
-				textContent[tagVariable]=$.trim(domObj.textContent);
-				textContent[parentTagVariable]=String(textContent[parentTagVariable]).replace(textContent[tagVariable],"");
-				result+="var "+tagVariable+"=document.createElement(\""+tagName+"\");\n";
-				$(domObj).each(function()
-								{
-									$.each(this.attributes, function() {
-										if(this.specified) 
-										{
-											switch(this.name.toLowerCase())
-											{
-												case "class":
-													result+=tagVariable+".className=\""+this.value+"\";\n";
-													break;
-												case "required":
-													switch (tagName)
-													{
-														case "INPUT":
-														case "SELECT":
-														case "TEXTAREA":
-																result+=tagVariable+".required=true;\n";
-														break;
-													}
-													break;
-												case "disabled":
-													switch (tagName)
-													{
-														case "INPUT":
-														case "BUTTON":
-														case "SELECT":
-														case "OPTION":
-														case "FIELDSET":
-														case "OPTGROUP":
-														case "TEXTAREA":
-																result+=tagVariable+".disabled=true;\n";
-													}
-													break;
-												
-												case "readonly":
-													switch (tagName)
-													{
-														case "INPUT":
-														case "TEXTAREA":
-															result+=tagVariable+".readOnly=true;\n";
-													}
-													break;
-												case "multiple":
-													switch (tagName)
-													{
-														case "INPUT":
-														case "SELECT":
-																result+=tagVariable+".required=true;\n";
-														break;
-													}
-													break;	
-												case "selected":
-													switch (tagName)
-													{
-														case "OPTION":
-															result+=tagVariable+".selected=true;\n";
-													}
-													break;
-												case "checked":
-													switch (tagName)
-													{
-														case "INPUT":
-															result+=tagVariable+".checked=true;\n";
-													}
-													break;	
-												default:result+=tagVariable+"."+this.name+"=\""+ this.value+"\";\n";
-														break;
-											}
-										}
-									});
-								});
-				$(domObj).children().each(function()
-										{
-											result+=findChild(this,tagVariable);
-										});
-				if (parentTagVariable!=null)
-				{		
-					result+=parentTagVariable+".appendChild("+tagVariable+");\n";						
-				}
-				if ($.trim(textContent[tagVariable])!="")
+				return domCode;
+			}
+			function getTagVariableName(dom)
+			{
+				var tagName="";
+				var tagVariableName;
+				if ((dom.nodeType==1)||(dom.nodeType==3))//Currently process DOM element and text node only
 				{
-					result+=tagVariable+".appendChild(document.createTextNode(\""+$.trim(textContent[tagVariable])+"\"));\n";
+					if ((dom.nodeType==1) && (dom.id!=""))
+						tagVariableName=dom.id;
+					else
+					{
+						switch (dom.nodeType)
+						{
+							case 1:tagName=dom.tagName;
+									break;
+							case 3:tagName="TEXT";
+									break;
+						}
+						tagVariableName=tagName.toLowerCase();
+						if (elementCounter[tagName]==null)
+						{
+							elementCounter[tagName]=1
+						}
+						else
+						{
+							elementCounter[tagName]++;
+						}
+						tagVariableName+=elementCounter[tagName];	
+					}					
 				}
-				counter[tagName]--;
-				return result;
+				return tagVariableName;
+			}
+			function getAttrDomCode(domObj,tagVariable)
+			{
+				var domCode="";
+				var tagName=domObj.tagName;
+				for (var i=0;i<domObj.attributes.length;i++)
+				{
+					if (domObj.attributes[i].specified)
+					{
+						switch(domObj.attributes[i].name.toLowerCase())
+						{
+							case "class":
+								domCode+=tagVariable+".className=\""+domObj.attributes[i].value+"\";\n";
+								break;
+							case "required":
+								switch (tagName)
+								{
+									case "INPUT":
+									case "SELECT":
+									case "TEXTAREA":
+											domCode+=tagVariable+".required=true;\n";
+									break;
+								}
+								break;
+							case "disabled":
+								switch (tagName)
+								{
+									case "INPUT":
+									case "BUTTON":
+									case "SELECT":
+									case "OPTION":
+									case "FIELDSET":
+									case "OPTGROUP":
+									case "TEXTAREA":
+											domCode+=tagVariable+".disabled=true;\n";
+								}
+								break;
+							
+							case "readonly":
+								switch (tagName)
+								{
+									case "INPUT":
+									case "TEXTAREA":
+										domCode+=tagVariable+".readOnly=true;\n";
+								}
+								break;
+							case "multiple":
+								switch (tagName)
+								{
+									case "INPUT":
+									case "SELECT":
+											domCode+=tagVariable+".required=true;\n";
+									break;
+								}
+								break;	
+							case "selected":
+								switch (tagName)
+								{
+									case "OPTION":
+										domCode+=tagVariable+".selected=true;\n";
+								}
+								break;
+							case "checked":
+								switch (tagName)
+								{
+									case "INPUT":
+										domCode+=tagVariable+".checked=true;\n";
+								}
+								break;	
+							default:domCode+=tagVariable+"."+domObj.attributes[i].name+"=\""+ domObj.attributes[i].value+"\";\n";
+									break;
+						}						
+					}
+				}
+				return domCode;
 			}
 		</script>
 	</head>
