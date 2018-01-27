@@ -1,14 +1,22 @@
 class ModuleList
 {
-	constructor(closeHandler)
+	constructor(closeSideBar,setMainContent)
 	{
 		this.moduleDiv;
-		this.closeHandler=closeHandler;
+		this.setMainContent=setMainContent;
+		this.closeSideBar=closeSideBar;
 		this.moduleList=new Array();
+		
+	}
+	setMainStageContent(content)
+	{
+		this.setMainContent(content);
+		this.closeSideBar();
 	}
 	loadModule()
 	{		
-		this.moduleList.push(new FtpModule(this.showHideFunctionList.bind(this)));
+		this.moduleList.push(new FtpModule(this.showHideFunctionList.bind(this),this.setMainStageContent.bind(this)));
+		this.moduleList.push(new AdminServerModule(this.showHideFunctionList.bind(this),this.setMainStageContent.bind(this)));
 	}	
 	addModule(module)
 	{
@@ -23,7 +31,7 @@ class ModuleList
 		var i1=document.createElement("I");
 		a1.onclick=function()
 							{	
-								self.closeHandler();
+								self.closeSideBar();
 							}
 		a1.title="Close Sidemenu";
 		a1.className="w3-bar-item w3-button w3-hide-large w3-large";

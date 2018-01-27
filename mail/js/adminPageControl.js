@@ -3,16 +3,20 @@ class AdminPageControl
 	constructor()
 	{
 		var self=this;
+		var mainStageContainer;
+		var hamBurgerI,overlayDiv;
+
+		this.mainStage;
 		this.moduleList;
 		this.loginSideBar;
+		
 		this.navBar=document.createElement("nav");
 		this.navBar.className="w3-sidebar w3-bar-block w3-collapse w3-red w3-animate-left w3-card"; 
 		this.navBar.style="z-index:3;width:320px;";
 		this.navBar.id="mySideBar";
-		var overlayDiv=document.createElement("div");
 		
+		overlayDiv=document.createElement("div");
 		overlayDiv.className="w3-overlay w3-hide-large w3-animate-opacity" 
-		
 		overlayDiv.style="cursor:pointer";
 		overlayDiv.title="Close Sidemenu"; 
 		overlayDiv.id="myOverlay";
@@ -20,19 +24,24 @@ class AdminPageControl
 												{
 													self.w3_close();
 												}			
-		var hamBurgerDiv=document.createElement("div");										
-		var hamBurgerI=document.createElement("i");
-		hamBurgerDiv.className="w3-main"; 
-		hamBurgerDiv.style="margin-left:320px;";
+												
+		hamBurgerI=document.createElement("i");
 		hamBurgerI.className="fa fa-bars w3-button w3-white w3-hide-large w3-xlarge w3-margin-left w3-margin-top";
 		hamBurgerI.onclick=function()
 											{
 												self.w3_open();
 											}
-		hamBurgerDiv.appendChild(hamBurgerI);									
+		this.mainStage=document.createElement("div");
+		this.mainStage.style.marginLeft="5px";
+		mainStageContainer=document.createElement("div");
+		mainStageContainer.className="w3-main";
+		mainStageContainer.style.marginLeft="320px";
+		mainStageContainer.appendChild(hamBurgerI);
+		mainStageContainer.appendChild(this.mainStage);
+		
 		document.body.appendChild(this.navBar);
 		document.body.appendChild(overlayDiv);
-		document.body.appendChild(hamBurgerDiv);
+		document.body.appendChild(mainStageContainer);
 	}
 	
 	initSideBar()
@@ -46,7 +55,6 @@ class AdminPageControl
 	{
 		var self=this;
 		this.navBar.className=this.navBar.className.replace("w3-red","w3-white");
-		
 		this.loginSideBar.hide().then(function()
 																	{
 																		self.initAdminPage();
@@ -55,10 +63,15 @@ class AdminPageControl
 	initAdminPage()
 	{
 		$(this.navBar).empty();
-		this.moduleList=new ModuleList(this.w3_close.bind(this));
+		this.moduleList=new ModuleList(this.w3_close.bind(this),this.setMainStageContent.bind(this));
 		this.moduleList.loadModule();
 		this.moduleList.addModule(new LogoutModule(this.logout.bind(this)));
 		$(this.navBar).append(this.moduleList.getDomObj());
+	}
+	setMainStageContent(content)
+	{
+		$(this.mainStage).empty();
+		$(this.mainStage).append(content);
 	}
 	logout()
 	{
