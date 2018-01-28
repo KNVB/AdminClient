@@ -63,8 +63,9 @@ class AdminPageControl
 	initAdminPage()
 	{
 		$(this.navBar).empty();
-		this.moduleList=new ModuleList(this.w3_close.bind(this),this.setMainStageContent.bind(this));
-		this.moduleList.loadModule();
+		this.moduleList=new ModuleList(this.w3_close.bind(this));
+		this.moduleList.addModule(new FtpModule(this.moduleList.showHideFunctionList.bind(this.moduleList),this.setMainStageContent.bind(this)));
+		this.moduleList.addModule(new AdminServerModule(this.moduleList.showHideFunctionList.bind(this.moduleList),this.setMainStageContent.bind(this)));
 		this.moduleList.addModule(new LogoutModule(this.logout.bind(this)));
 		$(this.navBar).append(this.moduleList.getDomObj());
 	}
@@ -72,11 +73,12 @@ class AdminPageControl
 	{
 		$(this.mainStage).empty();
 		$(this.mainStage).append(content);
+		this.w3_close();
 	}
 	logout()
 	{
 		var self=this;
-		
+		this.setMainStageContent("");
 		this.moduleList.hide().then(function()
 																{
 																	self.initSideBar();
