@@ -9,6 +9,6 @@ class AdminServerModule extends ModuleTemplate
 	}
 	changePassword()
 	{
-		this.setMainContent(this.heading+" > Change Admin user and password");
+		this.setMainContent(new Array(this.heading+" > Change Admin user and password"));
 	}
 }

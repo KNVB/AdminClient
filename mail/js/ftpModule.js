@@ -8,7 +8,7 @@ class FtpModule extends ModuleTemplate
 		var functionItem={"title":"List Server","action":this.listServer.bind(this)};
 		this.functionList.push(functionItem);
 		
-	  var functionItem={"title":"Add Server","action":this.addServer.bind(this)};
+		var functionItem={"title":"Add Server","action":this.addServer.bind(this)};
 		this.functionList.push(functionItem);
 		
 		var functionItem={"title":"Remove Server","action":this.removeServer.bind(this)};
@@ -16,14 +16,14 @@ class FtpModule extends ModuleTemplate
 	}
 	listServer()
 	{
-		this.setMainContent(this.heading+" > list server");
+		this.setMainContent(new Array(this.heading+" > list server"));
 	}
 	addServer()
 	{
-		this.setMainContent(this.heading+" > add server");
+		this.setMainContent(new Array(this.heading+" > add server"));
 	}
 	removeServer()
 	{
-		this.setMainContent(this.heading+" > remove server");
+		this.setMainContent(new Array(this.heading+" > remove server"));
 	}
 }

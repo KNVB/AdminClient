@@ -72,7 +72,10 @@ class AdminPageControl
 	setMainStageContent(content)
 	{
 		$(this.mainStage).empty();
-		$(this.mainStage).append(content);
+		for (var i=0;i<content.length;i++)
+		{
+			$(this.mainStage).append(content);
+		}
 		this.w3_close();
 	}
 	logout()
