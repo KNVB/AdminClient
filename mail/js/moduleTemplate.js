@@ -1,11 +1,10 @@
 class ModuleTemplate
 {
-	constructor(headingHandler,setMainContent)
+	constructor(adminPageControl)
 	{
 		this.domObjList=new Array();
 		this.functionList=new Array();
-		this.setMainContent=setMainContent;
-		this.headingHandler=headingHandler;
+		this.adminPageControl=adminPageControl;
 	}
 	getFunctionList()
 	{
@@ -15,7 +14,7 @@ class ModuleTemplate
 		functionHeader.text=this.heading;
 		functionHeader.onclick=function()
 				{
-					self.headingHandler(functionHeader);
+					self.adminPageControl.moduleList.showHideFunctionList.bind(this.moduleList)(functionHeader);
 				}
 		functionHeader.className="w3-bar-item w3-button moduleListItem";
 		i1.className="fa fa-caret-down w3-margin-left";
@@ -32,12 +31,12 @@ class ModuleTemplate
 				let action=self.functionList[i].action;
 				a.className="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey";
 				a.onclick=function()
-									{
-										action();
-									}
+							{
+								action();
+							}
 				div.className="w3-container";
 				span.className="w3-opacity w3-large";
-				span.appendChild(document.createTextNode(this.functionList[i].title));
+				span.innerHTML=this.functionList[i].title;
 				div.appendChild(span);
 				a.appendChild(div);
 				functionListDiv.appendChild(a);

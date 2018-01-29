@@ -1,14 +1,15 @@
 class AdminServerModule extends ModuleTemplate
 {
-	constructor(headingHandler,setMainContent)
+	constructor(adminPageControl)
 	{
-		super(headingHandler,setMainContent);
+		super(adminPageControl);
 		this.heading="Administration Server Setting";
-		var functionItem={"title":"Change Admin user and password","action":this.changePassword.bind(this)};
+		var functionItem={"title":"Change Admin user and password<i class=\"w3-padding fa fa-pencil\"></i>",
+		                  "action":this.changePassword.bind(this)};
 		this.functionList.push(functionItem);
 	}
 	changePassword()
 	{
-		this.setMainContent(new Array(this.heading+" > Change Admin user and password"));
+		this.adminPageControl.setMainContent(new Array(this.heading+" > Change Admin user and password"));
 	}
 }

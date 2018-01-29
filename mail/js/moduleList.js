@@ -54,10 +54,10 @@ class ModuleList
 		var mli=modulesListItem;
 		var parentDiv=$(modulesListItem).parent();
 		$(parentDiv).children("div").each(function ()
-																			{
-																				if (this.className.indexOf("w3-show")>-1)
-																					this.className=this.className.replace("w3-show","w3-hide");
-																			});
+										{
+											if (this.className.indexOf("w3-show")>-1)
+												this.className=this.className.replace("w3-show","w3-hide");
+										});
 		$(parentDiv).children(".moduleListItem").each(function()
 									{
 										if (this===mli)

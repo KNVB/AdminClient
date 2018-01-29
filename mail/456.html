@@ -43,25 +43,40 @@ html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
 	padding-left: 0px;
 	margin-left:0px
 }
-
+.passiveModeSetting
+{
+	border:none;
+}
+.toolbar 
+{
+    float: left;
+}	
 </style>
 <script src="http://code.jquery.com/jquery-3.2.1.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.2.4/js/dataTables.select.min.js"></script>
 <script src="jquery.easing.1.3.js"></script>
-<script src="js/adminPageControl.js"></script>
-<script src="js/moduleList.js"></script>
-<script src="js/loginSideBar.js"></script>
-<script src="js/moduleTemplate.js"></script>
-<script src="js/ftpModule.js"></script>
-<script src="js/adminServerModule.js"></script>
-<script src="js/logoutModule.js"></script>
+<script src="js/Login.js"></script>
+<script src="js/Utility.js"></script>
+<script src="js/AdminPageControl.js"></script>
+<script src="js/ModuleList.js"></script>
+<script src="js/LoginSideBar.js"></script>
+<script src="js/ModuleTemplate.js"></script>
+<script src="js/FtpModule.js"></script>
+<script src="js/FtpModule.addServer.js"></script>
+<script src="js/AdminServerModule.js"></script>
+<script src="js/LogoutModule.js"></script>
+<script src="js/AdminServer.js"></script>
+<script src="js/UserManagement.js"></script>
+<script src="js/UserDetailSetting.js"></script>
+<script src="js/UserDetailSettingSelector.js"></script>
+<script src="js/UserAccessRightSetting.js"></script>
+<script src="js/UserQutoaSetting.js"></script>
 <script>
 $(document).ready(function() 
 				{
 					var adminPageControl=new AdminPageControl();
-					adminPageControl.initSideBar();					
 				});
 </script>
 <body>

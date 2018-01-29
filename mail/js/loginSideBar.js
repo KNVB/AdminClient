@@ -2,6 +2,7 @@ class LoginSideBar
 {
 	constructor(loginHandler)
 	{
+		//<!-- Login Side Navigation  -->
 		this.loginSideBar=document.createElement("TABLE");
 		this.loginSideBar.className="loginTable";
 		this.loginSideBar.id="loginTable";
@@ -101,10 +102,6 @@ class LoginSideBar
 		tr1.appendChild(td1);
 		tbody1.appendChild(tr1);
 		this.loginSideBar.appendChild(tbody1);
-	}
-	show()
-	{
-		
 	}
 	hide()
 	{
