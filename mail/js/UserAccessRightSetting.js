@@ -1,15 +1,13 @@
 class UserAccessRightSetting
 {
-	constructor(userEntryId,adminPageControl)
+	constructor(thisUserData,adminPageControl)
 	{	
 		this.name="User Access Right";
-		this.userEntryId=userEntryId;
-		
+		this.userEntryId=thisUserData.userEntryId;
 		this.directoryAccessTable=document.createElement("table");
 		this.containerDiv=document.createElement("div");
 		
 		var accessRightEntryId=Utility.getUniqueId();
-
 		var th=document.createElement("th");
 		var thead=document.createElement("thead"); 
 		var permissionTable=document.createElement("table");
@@ -229,13 +227,108 @@ class UserAccessRightSetting
 	}
 	addAccessRightRow(accessRightDataEntry,userEntryId)
 	{
-		var pObj=document.createElement("p");
+		var self=this;
 		var accessRightEntryId=Utility.getUniqueId();
-		var physicalDirInputBox=document.createElement("input");
+		var pObj=document.createElement("p");
+		var remoteDirDiv=document.createElement("div");
+		var remoteDirContainer=document.createElement("div");
+		var remoteDirList=document.createElement("ul");
 		var permissionSummary=document.createElement("input");
+		var physicalDirInputBox=document.createElement("input");
 		var virtualDirInputBox=document.createElement("input");
 		var oldPhysicalDirValue=document.createElement("input");
 		var showRemoteDirBtn=document.createElement("input");
+		var resumeOldSettingBtn=document.createElement("input");
+		var hideRemoteDirBtn=document.createElement("input");
+		
+		remoteDirDiv.id="remoteDirDiv"+userEntryId+"_"+accessRightEntryId;
+		remoteDirDiv.className="remoteDirDiv";
+		remoteDirContainer.className="remoteDirContainer";
+		remoteDirContainer.id="remoteDirContainer"+userEntryId+"_"+accessRightEntryId;
+		remoteDirList.style="padding:0px;margin:0px";
+		remoteDirList.id="remoteDirList"+userEntryId+"_"+accessRightEntryId;
+		remoteDirContainer.appendChild(remoteDirList);
+		
+		permissionSummary.setAttribute("type", "hidden");
+		permissionSummary.id="permissionSummary"+userEntryId+"_"+accessRightEntryId;
+		
+		virtualDirInputBox.required = true;
+		virtualDirInputBox.id="virtualDir"+userEntryId+"_"+accessRightEntryId;
+		virtualDirInputBox.setAttribute("type", "text");
+		if (accessRightDataEntry!=null)
+		{
+			virtualDirInputBox.setAttribute("value",accessRightDataEntry.virtualDir);
+		}
+		physicalDirInputBox.readOnly=true;
+		physicalDirInputBox.required = true;
+		physicalDirInputBox.id="physicalDir"+userEntryId+"_"+accessRightEntryId;
+		physicalDirInputBox.setAttribute("type", "text");
+		if (accessRightDataEntry!= null)
+		{
+			physicalDirInputBox.setAttribute("value",accessRightDataEntry.physicalDir);
+		}
+		
+		oldPhysicalDirValue.id="oldPhysicalDirValue"+userEntryId+"_"+accessRightEntryId;
+		oldPhysicalDirValue.setAttribute("type", "hidden");
+		if (accessRightDataEntry!= null)
+		{
+			oldPhysicalDirValue.setAttribute("value",accessRightDataEntry.physicalDir);
+		}
+		
+		showRemoteDirBtn.value="...";
+		showRemoteDirBtn.setAttribute("type", "button");
+		showRemoteDirBtn.onclick=function()
+								 {
+									self.getRemoteDir(self,userEntryId,accessRightEntryId);
+								 };
+		
+		resumeOldSettingBtn.value="Cancel";
+		resumeOldSettingBtn.setAttribute("type", "button");
+		resumeOldSettingBtn.onclick=function()
+									{
+										self.resumeOldSetting(userEntryId,accessRightEntryId);
+									};
+		
+		hideRemoteDirBtn.value="Ok";
+		hideRemoteDirBtn.setAttribute("type", "button");
+		hideRemoteDirBtn.onclick=function()
+								{
+									self.hideRemoteDir(userEntryId,accessRightEntryId);
+								};
+		
+		var row=this.table.insertRow(this.table.rows.length);
+		var cell=row.insertCell(row.cells.length);
+		
+		cell.appendChild(virtualDirInputBox);
+		cell.appendChild(permissionSummary);
+		
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(physicalDirInputBox);
+		cell.innerHTML+="\n";
+		cell.appendChild(showRemoteDirBtn);
+		
+		remoteDirDiv.appendChild(pObj);
+		pObj.appendChild(remoteDirContainer);
+		pObj.appendChild(oldPhysicalDirValue);
+		pObj.appendChild(resumeOldSettingBtn);
+		pObj.appendChild(hideRemoteDirBtn);
+		
+		cell.appendChild(remoteDirDiv);
+		cell=row.insertCell(row.cells.length);
+		cell.className="removeEntry";
+		cell.innerHTML="&#x1F5D1;";
+		cell.onclick=function ()
+					{
+						$(row).addClass("selected");
+						self.accessRightTable.row(".selected").remove().draw(true);
+					}
+		row.id=accessRightEntryId;
+		var dt = $(this.directoryAccessTable).dataTable().api();
+		dt.row.add($(row));
+		dt.draw();
+		
+		
+		
 	}
 	getDomObj()
 	{

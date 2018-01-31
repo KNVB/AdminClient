@@ -9,11 +9,10 @@ class FtpModule_AddServer
 		var heading=document.createTextNode("FTP Server Administration > Add Server");
 		var descriptionInputBox=document.createElement("input");
 		var descriptionTextNode=document.createTextNode("Description:");
-				
+		
 		var bindingTable=document.createElement("table");
 		var bindingLegend=document.createElement("Legend");
 		var bindingFieldSet=document.createElement("fieldset");
-		
 		
 		var controlPortInputBox=document.createElement("input");
 		var passiveModeFieldSet=document.createElement("fieldset");
@@ -21,10 +20,12 @@ class FtpModule_AddServer
 		var passiveModeCheckBox=document.createElement("input");
 		var passiveModeDetailDiv=document.createElement("div");
 		var passiveModePortRangeInputBox=document.createElement("input");
-		var userData={"userList":[{userName:"anonymous",
-								   password:"",
-								   accessRightList:[{virtualDir:"/",physicalDir:"/"}]
-								  }]};
+		var userList=new Array();
+		userList.push({userName:"anonymous",
+						password:"",
+						userId:"0",	
+						accessRightList:[{virtualDir:"/",physicalDir:"/"}]
+					});
 								  
 		this.bindingAddressDropDown=document.createElement("select");
 		this.bindingAddressDropDown.id="bindingAddress";
@@ -79,7 +80,7 @@ class FtpModule_AddServer
 
 		this.adminPageControl=adminPageControl;
 		this.userManagement=new UserManagement(this.adminPageControl);
-		this.userManagement.addUserRow(userData.userList[0]);
+		this.userManagement.addUserRow(userList[0]);
 		
 		saveLink.className="w3-red w3-button w3-right w3-margin-top w3-margin-right";
 		$(saveLink).html("Add  <i class=\"fa fa-check\"></i>");

@@ -36,7 +36,8 @@ class UserManagement
 		$(th).text("Remove");
 		$(row).append(th);
 		this.table.appendChild(thead);
-		this.table.className="display";
+		this.table.className="display responsive no-wrap";
+		this.table.style.width="100%";
 		this.fieldset.appendChild(this.table);
 		this.userTable=$(this.table).DataTable(
 					{ 
@@ -58,7 +59,7 @@ class UserManagement
 		$(toolbar).html("&nbsp;<i class=\"fa fa-plus w3-large w3-button\"></i>");					
 		$(toolbar).on("click",function()
 								{
-									var userData={accessRightList:[{virtualDir:"/",physicalDir:"/"}]}
+									var userData={accessRightList:[{virtualDir:"/",physicalDir:"/",permission:""}]}
 									self.addUserRow(userData);
 								});
 	}
@@ -73,7 +74,7 @@ class UserManagement
 		var entryId=Utility.getUniqueId();
 		var deleteEntrySpan=document.createElement("span");
 		var popupDetailSettingSpan=document.createElement("span");
-		var accessRight=document.createElement("input");
+		var detailSetting=document.createElement("input");
 		var userNameInputBox=document.createElement("input");
 		var passwordInputBox=document.createElement("input");
 		var userEnableCheckBox=document.createElement("input");
@@ -85,8 +86,8 @@ class UserManagement
 		userNameInputBox.setAttribute("type","text");
 		userNameInputBox.required = true;
 		
-		accessRight.id="accessRight"+entryId;
-		accessRight.setAttribute("type","hidden");
+		detailSetting.id="detailSetting"+entryId;
+		detailSetting.setAttribute("type","hidden");
 		
 		passwordInputBox.id="password"+entryId;
 		passwordInputBox.required = true;
@@ -103,7 +104,9 @@ class UserManagement
 		popupDetailSettingSpan.innerHTML="<i class=\"w3-padding fa fa-pencil w3-button\"></i>";
 		popupDetailSettingSpan.onclick=function()
 									 {
-										self.popupDetailSettingModal(self,entryId,thisUserData);
+										thisUserData["entryId"]=entryId;
+										thisUserData["userName"]=userNameInputBox.value;
+										self.popupDetailSettingModal(self,thisUserData);
 									 };
 		deleteEntrySpan.innerHTML="<i class=\"fa fa-trash w3-button\" style=\"font-size:25px\"></i>";
 		deleteEntrySpan.className="removeEntry";
@@ -115,7 +118,7 @@ class UserManagement
 		
 		var cell=row.insertCell(row.cells.length);
 		cell.appendChild(userNameInputBox);
-		cell.appendChild(accessRight);
+		cell.appendChild(detailSetting);
 		
 		cell=row.insertCell(row.cells.length);
 		cell.appendChild(passwordInputBox);
@@ -152,10 +155,11 @@ class UserManagement
 		dt.row.add($(row));
 		dt.draw();
 	}
-	popupDetailSettingModal(self,userEntryId,thisUserData)
+	popupDetailSettingModal(self,thisUserData)
 	{
+		var userDetailSetting=new UserDetailSetting(thisUserData,self.adminPageControl);
 		//var accessRightData=thisUserData.accessRightList;
-		if (userEntryId in this.detailSettingArray)
+/*		if (userEntryId in this.detailSettingArray)
 		{
 			this.detailSettingArray[userEntryId].show();
 		}
@@ -164,8 +168,8 @@ class UserManagement
 			var userDetailSetting=new UserDetailSetting(userEntryId,self.adminPageControl);
 			/*var accessRight=new AccessRight(userEntryId,self.adminPageControl);
 			accessRight.loadData(accessRightData,userEntryId);
-			this.detailSettingArray[userEntryId]=accessRight;*/
-		}				
+			this.detailSettingArray[userEntryId]=accessRight;
+		}*/				
 	}
 	removeRow(row,userCount)
 	{

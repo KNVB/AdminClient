@@ -16,9 +16,9 @@
 			{
 				var self=this;
 				this.interval=setInterval(updateCounter, 1000);
-				this.a.go().then(function()
+				this.a.go().then(function(value)
 								 {
-									self.vv.html("vv");
+									self.vv.html(value);
 									clearInterval(self.interval);
 								 });
 			}
@@ -36,7 +36,7 @@
 				return new Promise(function(resolve, reject)
 								   {
 										self.qq.html("qq");
-										setTimeout(resolve,3000);
+										setTimeout(function(){resolve("vv");},3000);
 								   });
 			}
 		}

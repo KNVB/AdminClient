@@ -4,14 +4,13 @@
 <title>FTP Server Administration Page</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.4/css/select.dataTables.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css">
-
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
 .w3-bar-block .w3-bar-item {padding: 16px}
@@ -48,7 +47,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
 }
 .passiveModeSetting
 {
-	border:none;
+	//border:none;
 }
 .toolbar 
 {
@@ -77,21 +76,86 @@ html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
 <script src="js/UserDetailSettingSelector.js"></script>
 <script src="js/UserAccessRightSetting.js"></script>
 <script src="js/UserQutoaSetting.js"></script>
-<script>
-$(document).ready(function() 
-				{
-					var adminPageControl=new AdminPageControl();
-				});
-</script>
 </head>
 <body>
-
-
-<!-- Overlay effect when opening the side navigation on small screens
-<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="Close Sidemenu" id="myOverlay"></div>
-<div class="w3-main" style="margin-left:320px;">
-	<i class="fa fa-bars w3-button w3-white w3-hide-large w3-xlarge w3-margin-left w3-margin-top" onclick="w3_open()"></i>
-</div>	
- -->
+	<br>
+	<fieldset>
+	  <table>
+		<tbody>
+		  <tr>
+			<td>IP address:</td>
+			<td>Port:</td>
+		  </tr>
+		  <tr>
+			<td>
+			  <select id="bindingAddress" multiple=""></select>
+			</td>
+			<td style="vertical-align: top;">
+			  <input id="controlPort" type="number" min="1" max="65535" required="">
+			</td>
+		  </tr>
+		</tbody>
+	  </table>
+	</fieldset>
+	<fieldset id="passiveModeSetting" class="passiveModeSetting">
+	  <legend>
+		<input id="isPassiveModeEnable" type="checkbox">Passive Mode</legend>
+		<div id="passiveModeDetail">Port Range:
+			<input type="text" id="passiveModePortRange" required="">
+		</div>
+	</fieldset>
+	<fieldset>
+	  <legend>User Management</legend>
+	 	<table class="display" id="0" width="100%">
+		  <thead>
+			<tr>
+			  <th >User Name</th>
+			  <th >Password</th>
+			  <th >Detail Setting</th>
+			  <th >Enabled</th>
+			  <th >Remove</th>
+			</tr>
+		  </thead>
+		  <tbody>
+			<tr>
+			  <td data-order="0" >anonymous
+				<input id="userNamezxpya46im5ijd2klwhp" type="hidden" required="" value="anonymous">
+				<input id="accessRightzxpya46im5ijd2klwhp" type="hidden">
+			  </td>
+			  <td></td>
+			  <td><span class="popupDetailSettingPage"><i class="w3-padding fa fa-pencil w3-button"></i></span></td>
+			  <td>
+				<input id="isUserEnablezxpya46im5ijd2klwhp" type="checkbox">
+			  </td>
+			  <td >
+				<input id="isRemoveThisUserzxpya46im5ijd2klwhp" type="hidden" value="0">
+			  </td>
+			</tr>
+		  </tbody>
+		</table>
+		
+	</fieldset>
+	<button onclick="go()">Go</button>
+	<script>
+		$(document).ready(function ()
+						{
+							var table=document.getElementById("0");
+							var userTable=$(table).DataTable(
+									{ 
+										"dom": '<"toolbar">frtip',
+										"CaseSensitive":true, 
+										"order": [[ 0, "desc" ]],
+										paging: true,
+										"pageLength": 10,
+										responsive: true,
+										"info": true,
+										"orderCellsTop": true, 
+										"fixedHeader":true,
+										"columnDefs": [{"className": "dt-center", "targets": [2,3,4]},
+														{"orderable": false,"targets":[1,2,3,4]}
+													  ],
+									})
+						});
+	</script>
 </body>
-</html> 
+</html>
