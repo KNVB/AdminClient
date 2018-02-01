@@ -59,19 +59,19 @@ class UserManagement
 		$(toolbar).html("&nbsp;<i class=\"fa fa-plus w3-large w3-button\"></i>");					
 		$(toolbar).on("click",function()
 								{
-									var userData={accessRightList:[{virtualDir:"/",physicalDir:"/",permission:""}]}
-									self.addUserRow(userData);
+									var userInfo=new UserInfo();
+									userInfo.userId=Utility.getUniqueId();
+									self.addUserRow(userInfo);
 								});
 	}
 	getHTML()
 	{
 		return this.fieldset;
 	}
-	addUserRow(thisUserData)
+	addUserRow(userInfo)
 	{
 		var self=this;
 		var tbody=this.userTable.table().body();
-		var entryId=Utility.getUniqueId();
 		var deleteEntrySpan=document.createElement("span");
 		var popupDetailSettingSpan=document.createElement("span");
 		var detailSetting=document.createElement("input");
@@ -82,21 +82,21 @@ class UserManagement
 																		
 		var row=document.createElement("tr");
 		
-		userNameInputBox.id="userName"+entryId;
+		userNameInputBox.id="userName"+userInfo.userId;
 		userNameInputBox.setAttribute("type","text");
 		userNameInputBox.required = true;
 		
-		detailSetting.id="detailSetting"+entryId;
+		detailSetting.id="detailSetting"+userInfo.userId;
 		detailSetting.setAttribute("type","hidden");
 		
-		passwordInputBox.id="password"+entryId;
+		passwordInputBox.id="password"+userInfo.userId;
 		passwordInputBox.required = true;
 		passwordInputBox.setAttribute("type","password");					
 		
-		userEnableCheckBox.id="isUserEnable"+entryId;
+		userEnableCheckBox.id="isUserEnable"+userInfo.userId;
 		userEnableCheckBox.setAttribute("type","checkbox");
 		
-		isRemoveThisUserInputBox.id="isRemoveThisUser"+entryId;
+		isRemoveThisUserInputBox.id="isRemoveThisUser"+userInfo.userId;
 		isRemoveThisUserInputBox.setAttribute("type","hidden");
 		isRemoveThisUserInputBox.value=0;
 		
@@ -104,9 +104,14 @@ class UserManagement
 		popupDetailSettingSpan.innerHTML="<i class=\"w3-padding fa fa-pencil w3-button\"></i>";
 		popupDetailSettingSpan.onclick=function()
 									 {
-										thisUserData["entryId"]=entryId;
+										if ($.trim(userNameInputBox.value)!="")
+											userInfo.userName=$.trim(userNameInputBox.value);
+										if ($.trim(passwordInputBox)!="")
+											userInfo.password=$.trim(passwordInputBox.value);
+										self.popupDetailSettingModal(self,userInfo);
+										/*thisUserData["entryId"]=entryId;
 										thisUserData["userName"]=userNameInputBox.value;
-										self.popupDetailSettingModal(self,thisUserData);
+										self.popupDetailSettingModal(self,thisUserData);*/
 									 };
 		deleteEntrySpan.innerHTML="<i class=\"fa fa-trash w3-button\" style=\"font-size:25px\"></i>";
 		deleteEntrySpan.className="removeEntry";
@@ -133,9 +138,9 @@ class UserManagement
 		cell.appendChild(deleteEntrySpan);
 		cell.appendChild(isRemoveThisUserInputBox);
 		
-		if ((thisUserData.userName!=null))
+		if ((userInfo.userName!=null))
 		{
-			if (thisUserData.userName=="anonymous")
+			if (userInfo.userName=="anonymous")
 			{
 				userNameInputBox.setAttribute("type","hidden");
 				cell=$(userNameInputBox).parent();
@@ -147,17 +152,24 @@ class UserManagement
 			}
 			else
 			{
-				passwordInputBox.setAttribute("value",thisUserData.password);
+				passwordInputBox.setAttribute("value",userInfo.password);
 			}
-			userNameInputBox.setAttribute("value",thisUserData.userName);
+			userNameInputBox.setAttribute("value",userInfo.userName);
 		}
 		var dt = $(this.table).dataTable().api();
 		dt.row.add($(row));
 		dt.draw();
 	}
-	popupDetailSettingModal(self,thisUserData)
+	popupDetailSettingModal(self,userInfo)
 	{
-		var userDetailSetting=new UserDetailSetting(thisUserData,self.adminPageControl);
+		if (userInfo.userId in this.detailSettingArray)
+			this.detailSettingArray[userInfo.userId].show();
+		else
+		{
+			var userDetailSetting=new UserDetailSetting(userInfo,self.adminPageControl);
+			this.detailSettingArray[userInfo.userId]=userDetailSetting;
+		}
+		//var userDetailSetting=new UserDetailSetting(userInfo,self.adminPageControl);
 		//var accessRightData=thisUserData.accessRightList;
 /*		if (userEntryId in this.detailSettingArray)
 		{

@@ -20,13 +20,10 @@ class FtpModule_AddServer
 		var passiveModeCheckBox=document.createElement("input");
 		var passiveModeDetailDiv=document.createElement("div");
 		var passiveModePortRangeInputBox=document.createElement("input");
-		var userList=new Array();
-		userList.push({userName:"anonymous",
-						password:"",
-						userId:"0",	
-						accessRightList:[{virtualDir:"/",physicalDir:"/"}]
-					});
-								  
+		
+		var userInfo=new UserInfo();
+		userInfo.userName="anonymous";
+		
 		this.bindingAddressDropDown=document.createElement("select");
 		this.bindingAddressDropDown.id="bindingAddress";
 		this.bindingAddressDropDown.multiple = true;
@@ -80,7 +77,7 @@ class FtpModule_AddServer
 
 		this.adminPageControl=adminPageControl;
 		this.userManagement=new UserManagement(this.adminPageControl);
-		this.userManagement.addUserRow(userList[0]);
+		this.userManagement.addUserRow(userInfo);
 		
 		saveLink.className="w3-red w3-button w3-right w3-margin-top w3-margin-right";
 		$(saveLink).html("Add  <i class=\"fa fa-check\"></i>");

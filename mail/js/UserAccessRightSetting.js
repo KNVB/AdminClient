@@ -1,29 +1,98 @@
 class UserAccessRightSetting
 {
-	constructor(thisUserData,adminPageControl)
+	constructor(userInfo,adminPageControl)
 	{	
 		this.name="User Access Right";
-		this.userEntryId=thisUserData.userEntryId;
+		this.userInfo=userInfo;
+		this.accessRightDiv=document.createElement("div");
+		this.permissionTable=document.createElement("table");
 		this.directoryAccessTable=document.createElement("table");
-		this.containerDiv=document.createElement("div");
 		
-		var accessRightEntryId=Utility.getUniqueId();
+		this.genDirectoryAccessTable();
+		this.genPermissionTable();
+				
+		this.accessRightDiv.className="w3-animate-left detail-setting";
+		this.accessRightDiv.id=this.name+userInfo.userId;
+		this.accessRightDiv.innerHTML="<br>";
+		this.accessRightDiv.appendChild(this.directoryAccessTable);
+		this.accessRightDiv.appendChild(this.permissionTable);
+		
+		this.accessRightTable=$(this.directoryAccessTable).DataTable({
+													responsive: true,
+													"columnDefs": [
+																   {"className": "dt-center", "targets":[2]},
+																   {"orderable": false,"targets":[2]}
+																	],
+													select: {
+																style: 'single'
+															},				
+													"fixedHeader":true
+												});
+												
+		for (var i=0;i<userInfo.accessRightList.length;i++)
+		{
+			this.addAccessRightRow(userInfo.accessRightList[i],userInfo.userId);
+		}			
+	}
+	addAccessRightRow(accessRightData,userId)
+	{
+		var row,cell;
+		var remoteDirDiv=document.createElement("div");
+		var remoteDirContainer=document.createElement("div");
+		var remoteDirList=document.createElement("ul");
+		var permissionSummary=document.createElement("input");
+		var physicalDirInputBox=document.createElement("input");
+		var virtualDirInputBox=document.createElement("input");
+		var oldPhysicalDirValue=document.createElement("input");
+		var showRemoteDirSpan=document.createElement("span");
+		var resumeOldSettingBtn=document.createElement("input");
+		var hideRemoteDirBtn=document.createElement("input");
+		
+		virtualDirInputBox.required = true;
+		virtualDirInputBox.setAttribute("type","text");
+		//virtualDirInputBox.style.width="100%";
+		virtualDirInputBox.id="virtualDir"+userId+"_"+accessRightData.id;
+		virtualDirInputBox.value=accessRightData.virtualDir;
+		
+		physicalDirInputBox.readOnly=true;
+		physicalDirInputBox.required = true;
+		//physicalDirInputBox.style.width="100%";
+		physicalDirInputBox.setAttribute("type","text");
+		physicalDirInputBox.id="physicalDir"+userId+"_"+accessRightData.id;
+		physicalDirInputBox.value=accessRightData.physicalDir;
+		
+		showRemoteDirSpan.className="w3-button w3-small";
+		showRemoteDirSpan.innerHTML="...";
+		
+		row=this.directoryAccessTable.insertRow(this.directoryAccessTable.rows.length);
+		cell=row.insertCell(row.cells.length);
+		cell.style.verticalAlign="text-top";
+		cell.appendChild(virtualDirInputBox);
+		
+		cell=row.insertCell(row.cells.length);
+		cell.style.verticalAlign="text-top";
+		cell.appendChild(physicalDirInputBox);
+		cell.appendChild(showRemoteDirSpan);
+		
+		
+		cell=row.insertCell(row.cells.length);
+		cell.style.verticalAlign="text-top";
+		cell.innerHTML="<i class=\"fa fa-trash w3-button\" style=\"font-size:25px\"></i>";
+		
+		
+		var dt = $(this.directoryAccessTable).dataTable().api();
+		dt.row.add($(row));
+		dt.draw();
+	}
+	getDomObj()
+	{
+		return this.accessRightDiv;
+	}
+	genDirectoryAccessTable()
+	{
+		var self=this;
 		var th=document.createElement("th");
 		var thead=document.createElement("thead"); 
-		var permissionTable=document.createElement("table");
-		var filePermissionTable=document.createElement("table");
-		var folderPermissionTable=document.createElement("table");
-		
-		var downloadFileCheckBox=document.createElement("input");
-		var uploadFileCheckBox=document.createElement("input");
-		var deleteFileCheckBox=document.createElement("input");
-		var listFileCheckBox=document.createElement("input");
-		var createDirCheckBox=document.createElement("input");
-		var listDirCheckBox=document.createElement("input");
-		var removeSubDirCheckBox=document.createElement("input");
-		var denyDirCheckBox=document.createElement("input");
-		var hideDirCheckBox=document.createElement("input");
-		
 		var row=thead.insertRow(thead.rows.length);
 		
 		$(th).text("Virtual Path");
@@ -36,302 +105,126 @@ class UserAccessRightSetting
 		th=document.createElement("th");
 		$(th).html("<i class=\"fa fa-plus w3-large w3-button\"></i>");
 		th.className="addEntry";
+		th.onclick=function ()
+					{
+						//self.addAccessRightRow({d:"0",virtualDir:"",physicalDir:"/"},self.userInfo.userId);
+						self.addAccessRightRow(new AccessRight(Utility.getUniqueId()),self.userInfo.userId);
+					};
+		
 		row.appendChild(th);
-		
-		this.directoryAccessTable.setAttribute("width","100%");
-		this.directoryAccessTable.className="display";
 		this.directoryAccessTable.appendChild(thead);
-		
-		
-		downloadFileCheckBox.setAttribute("type","checkbox");
-		downloadFileCheckBox.id="downloadFile"+userEntryId;
-		downloadFileCheckBox.onchange=function()
-									{
-										if (downloadFileCheckBox.checked)
-											self.addPermissionSummaryValue("downloadFile");
-										else
-											self.removePermissionSummaryValue("downloadFile");			
-									}
-		
-		uploadFileCheckBox.setAttribute("type","checkbox");
-		uploadFileCheckBox.id="uploadFile"+userEntryId;
-		uploadFileCheckBox.onchange=function()
-									{
-										if (uploadFileCheckBox.checked)
-											self.addPermissionSummaryValue("uploadFile");
-										else
-											self.removePermissionSummaryValue("uploadFile");			
-									}
-		
-		deleteFileCheckBox.setAttribute("type","checkbox");
-		deleteFileCheckBox.id="deleteFile"+userEntryId;
-		deleteFileCheckBox.onchange=function()
-									{
-										if (deleteFileCheckBox.checked)
-											self.addPermissionSummaryValue("deleteFile");
-										else
-											self.removePermissionSummaryValue("deleteFile");			
-									}
-		
-		
-		listFileCheckBox.setAttribute("type","checkbox");
-		listFileCheckBox.id="listFile"+userEntryId;
-		listFileCheckBox.onchange=function()
-									{
-										if (listFileCheckBox.checked)
-											self.addPermissionSummaryValue("listFile");
-										else
-											self.removePermissionSummaryValue("listFile");			
-									}
-		
-		createDirCheckBox.setAttribute("type","checkbox");
-		createDirCheckBox.id="createDir"+userEntryId;
-		createDirCheckBox.onchange=function()
-									{
-										if (createDirCheckBox.checked)
-											self.addPermissionSummaryValue("createDir");
-										else
-											self.removePermissionSummaryValue("createDir");			
-									}
-		
-		listDirCheckBox.setAttribute("type","checkbox");
-		listDirCheckBox.id="listDir"+userEntryId;
-		listDirCheckBox.onchange=function()
-									{
-										if (listDirCheckBox.checked)
-											self.addPermissionSummaryValue("listDir");
-										else
-											self.removePermissionSummaryValue("listDir");			
-									}
-		
-		removeSubDirCheckBox.setAttribute("type","checkbox");
-		removeSubDirCheckBox.id="removeSubDir"+userEntryId;
-		removeSubDirCheckBox.onchange=function()
-									{
-										if (removeSubDirCheckBox.checked)
-											self.addPermissionSummaryValue("removeSubDir");
-										else
-											self.removePermissionSummaryValue("removeSubDir");			
-									}
-		denyDirCheckBox.setAttribute("type","checkbox");
-		denyDirCheckBox.id="denyDir"+userEntryId;
-		denyDirCheckBox.onchange=function()
-									{
-										if (denyDirCheckBox.checked)
-											self.addPermissionSummaryValue("denyDir");
-										else
-											self.removePermissionSummaryValue("denyDir");			
-									}
-									
-		hideDirCheckBox.setAttribute("type","checkbox");
-		hideDirCheckBox.id="hideDir"+userEntryId;
-		hideDirCheckBox.onchange=function()
-									{
-										if (hideDirCheckBox.checked)
-											self.addPermissionSummaryValue("hideDir");
-										else
-											self.removePermissionSummaryValue("hideDir");			
-									}
-		
-		permissionTable.setAttribute("width","100%");
-		//permissionTable.style.display="none";
-		
-		row=permissionTable.insertRow(permissionTable.rows.length);
-		var cell=row.insertCell(row.cells.length);
-		var fieldset=document.createElement("fieldset");
-		var legend=document.createElement("legend");
-		legend.textContent="File access";
-		
-		var row2=filePermissionTable.insertRow(filePermissionTable.rows.length);
-		var cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="Download";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(downloadFileCheckBox);
-		
-		row2=filePermissionTable.insertRow(filePermissionTable.rows.length);
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="Upload";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(uploadFileCheckBox);
-
-		row2=filePermissionTable.insertRow(filePermissionTable.rows.length);
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="Delete";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(deleteFileCheckBox);
-		
-		fieldset.appendChild(legend);
-		fieldset.appendChild(filePermissionTable);
-		cell.appendChild(fieldset);
-		
-		cell=row.insertCell(row.cells.length);
-		fieldset=document.createElement("fieldset");
-		legend=document.createElement("legend");
-		legend.textContent="Folder access"
-		row2=folderPermissionTable.insertRow(folderPermissionTable.rows.length);
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="List File";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(listFileCheckBox);
-		
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="Create Sub. Dir.";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(createDirCheckBox);
-		
-		row2=folderPermissionTable.insertRow(folderPermissionTable.rows.length);
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="List Dir";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(listDirCheckBox);
-		
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="Remove Sub. Dir.";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(removeSubDirCheckBox);
-		
-		row2=folderPermissionTable.insertRow(folderPermissionTable.rows.length);
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="Deny";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(denyDirCheckBox);
-		
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.textContent="Hide";
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(hideDirCheckBox);
-
-		fieldset.appendChild(legend);
-		fieldset.appendChild(folderPermissionTable);
-		cell.appendChild(fieldset);
-		
-		this.containerDiv.innerHTML="<br>";
-		this.containerDiv.id=this.name+this.userEntryId;;
-		this.containerDiv.className="w3-animate-left detail-setting";
-		this.containerDiv.appendChild(this.directoryAccessTable);
-		this.containerDiv.appendChild(permissionTable);
-		
-		this.directoryAccessTableX=$(this.directoryAccessTable).DataTable({
-											responsive: true,
-											"columnDefs": [
-														   {"className": "dt-center", "targets":[2]},
-														   {"orderable": false,"targets":[2]}
-															],
-											select: {
-														style: 'single'
-													},				
-											"fixedHeader":true
-										});
-
-		
+		this.directoryAccessTable.style.width="100%";
+		this.directoryAccessTable.setAttribute("border","0");
+		this.directoryAccessTable.className="display";
 	}
-	addAccessRightRow(accessRightDataEntry,userEntryId)
+	genPermissionTable()
 	{
 		var self=this;
-		var accessRightEntryId=Utility.getUniqueId();
-		var pObj=document.createElement("p");
-		var remoteDirDiv=document.createElement("div");
-		var remoteDirContainer=document.createElement("div");
-		var remoteDirList=document.createElement("ul");
-		var permissionSummary=document.createElement("input");
-		var physicalDirInputBox=document.createElement("input");
-		var virtualDirInputBox=document.createElement("input");
-		var oldPhysicalDirValue=document.createElement("input");
-		var showRemoteDirBtn=document.createElement("input");
-		var resumeOldSettingBtn=document.createElement("input");
-		var hideRemoteDirBtn=document.createElement("input");
+		this.permissionTable.style.width="100%";
+		var folderPermissionTable=document.createElement("table");
+		var filePermissionTable=document.createElement("table");
+		var folderPermissionFieldSet=document.createElement("fieldset");
+		var filePermissionFieldSet=document.createElement("fieldset");
+		var filePermissionLegend=document.createElement("legend");
+		var folderPermissionLegend=document.createElement("legend");
+		var downloadFileCheckBox=document.createElement("input");
+		var uploadFileCheckBox=document.createElement("input");
+		var deleteFileCheckBox=document.createElement("input");
+		var listFileCheckBox=document.createElement("input");
+		var createDirCheckBox=document.createElement("input");
+		var listDirCheckBox=document.createElement("input");
+		var removeSubDirCheckBox=document.createElement("input");
+		var denyDirCheckBox=document.createElement("input");
+		var hideDirCheckBox=document.createElement("input");
 		
-		remoteDirDiv.id="remoteDirDiv"+userEntryId+"_"+accessRightEntryId;
-		remoteDirDiv.className="remoteDirDiv";
-		remoteDirContainer.className="remoteDirContainer";
-		remoteDirContainer.id="remoteDirContainer"+userEntryId+"_"+accessRightEntryId;
-		remoteDirList.style="padding:0px;margin:0px";
-		remoteDirList.id="remoteDirList"+userEntryId+"_"+accessRightEntryId;
-		remoteDirContainer.appendChild(remoteDirList);
-		
-		permissionSummary.setAttribute("type", "hidden");
-		permissionSummary.id="permissionSummary"+userEntryId+"_"+accessRightEntryId;
-		
-		virtualDirInputBox.required = true;
-		virtualDirInputBox.id="virtualDir"+userEntryId+"_"+accessRightEntryId;
-		virtualDirInputBox.setAttribute("type", "text");
-		if (accessRightDataEntry!=null)
-		{
-			virtualDirInputBox.setAttribute("value",accessRightDataEntry.virtualDir);
-		}
-		physicalDirInputBox.readOnly=true;
-		physicalDirInputBox.required = true;
-		physicalDirInputBox.id="physicalDir"+userEntryId+"_"+accessRightEntryId;
-		physicalDirInputBox.setAttribute("type", "text");
-		if (accessRightDataEntry!= null)
-		{
-			physicalDirInputBox.setAttribute("value",accessRightDataEntry.physicalDir);
-		}
-		
-		oldPhysicalDirValue.id="oldPhysicalDirValue"+userEntryId+"_"+accessRightEntryId;
-		oldPhysicalDirValue.setAttribute("type", "hidden");
-		if (accessRightDataEntry!= null)
-		{
-			oldPhysicalDirValue.setAttribute("value",accessRightDataEntry.physicalDir);
-		}
-		
-		showRemoteDirBtn.value="...";
-		showRemoteDirBtn.setAttribute("type", "button");
-		showRemoteDirBtn.onclick=function()
-								 {
-									self.getRemoteDir(self,userEntryId,accessRightEntryId);
-								 };
-		
-		resumeOldSettingBtn.value="Cancel";
-		resumeOldSettingBtn.setAttribute("type", "button");
-		resumeOldSettingBtn.onclick=function()
-									{
-										self.resumeOldSetting(userEntryId,accessRightEntryId);
-									};
-		
-		hideRemoteDirBtn.value="Ok";
-		hideRemoteDirBtn.setAttribute("type", "button");
-		hideRemoteDirBtn.onclick=function()
-								{
-									self.hideRemoteDir(userEntryId,accessRightEntryId);
-								};
-		
-		var row=this.table.insertRow(this.table.rows.length);
+		var row=this.permissionTable.insertRow(this.permissionTable.rows.length);
 		var cell=row.insertCell(row.cells.length);
-		
-		cell.appendChild(virtualDirInputBox);
-		cell.appendChild(permissionSummary);
-		
+		cell.appendChild(filePermissionFieldSet);
 		cell=row.insertCell(row.cells.length);
-		cell.appendChild(physicalDirInputBox);
-		cell.innerHTML+="\n";
-		cell.appendChild(showRemoteDirBtn);
+		cell.appendChild(folderPermissionFieldSet);
 		
-		remoteDirDiv.appendChild(pObj);
-		pObj.appendChild(remoteDirContainer);
-		pObj.appendChild(oldPhysicalDirValue);
-		pObj.appendChild(resumeOldSettingBtn);
-		pObj.appendChild(hideRemoteDirBtn);
+		downloadFileCheckBox.setAttribute("type","checkbox");
+		downloadFileCheckBox.id="downloadFile";
 		
-		cell.appendChild(remoteDirDiv);
+		uploadFileCheckBox.setAttribute("type","checkbox");
+		uploadFileCheckBox.id="uploadFile";
+		
+		deleteFileCheckBox.setAttribute("type","checkbox");
+		deleteFileCheckBox.id="deleteFile";
+		
+		row=filePermissionTable.insertRow(filePermissionTable.rows.length);
 		cell=row.insertCell(row.cells.length);
-		cell.className="removeEntry";
-		cell.innerHTML="&#x1F5D1;";
-		cell.onclick=function ()
-					{
-						$(row).addClass("selected");
-						self.accessRightTable.row(".selected").remove().draw(true);
-					}
-		row.id=accessRightEntryId;
-		var dt = $(this.directoryAccessTable).dataTable().api();
-		dt.row.add($(row));
-		dt.draw();
+		cell.innerHTML="Download";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(downloadFileCheckBox);
 		
+		row=filePermissionTable.insertRow(filePermissionTable.rows.length);
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="Upload";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(uploadFileCheckBox);
 		
+		row=filePermissionTable.insertRow(filePermissionTable.rows.length);
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="Delete";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(deleteFileCheckBox);
 		
-	}
-	getDomObj()
-	{
-		return this.containerDiv;
+		filePermissionLegend.innerHTML="File access";
+		filePermissionFieldSet.appendChild(filePermissionLegend);
+		filePermissionFieldSet.appendChild(filePermissionTable);
+		
+		listFileCheckBox.setAttribute("type","checkbox");
+		listFileCheckBox.id="listFile";
+		
+		createDirCheckBox.setAttribute("type","checkbox");
+		createDirCheckBox.id="createDir";
+		
+		listDirCheckBox.setAttribute("type","checkbox");
+		listDirCheckBox.id="listDir";
+		
+		removeSubDirCheckBox.setAttribute("type","checkbox");
+		removeSubDirCheckBox.id="removeSubDir";
+		
+		denyDirCheckBox.setAttribute("type","checkbox");
+		denyDirCheckBox.id="denyDir";
+		
+		hideDirCheckBox.setAttribute("type","checkbox");
+		hideDirCheckBox.id="hideDir";
+		
+		row=folderPermissionTable.insertRow(folderPermissionTable.rows.length);
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="List File";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(listFileCheckBox);
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="Create Sub. Dir.";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(createDirCheckBox);
+		
+		row=folderPermissionTable.insertRow(folderPermissionTable.rows.length);
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="List Dir";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(listDirCheckBox);
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="Remove Sub. Dir.";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(removeSubDirCheckBox);
+		
+		row=folderPermissionTable.insertRow(folderPermissionTable.rows.length);
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="Deny";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(denyDirCheckBox);
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="Hide";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(hideDirCheckBox);
+		
+		folderPermissionLegend.innerHTML="Folder access";
+		folderPermissionFieldSet.appendChild(folderPermissionLegend);
+		folderPermissionFieldSet.appendChild(folderPermissionTable);
+		
 	}
 }

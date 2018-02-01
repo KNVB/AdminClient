@@ -1,15 +1,17 @@
 class UserDetailSettingSelector
 {
-	constructor(userEntryId)
+	constructor(userInfo,adminPageControl)
 	{
 		this.domObjList=new Array();
-		this.userEntryId=userEntryId;
+		this.userInfo=userInfo;
 		this.userDetailSettingArray=new Array();
 		this.userDetailSettingSelectorDiv=document.createElement("div");
 		this.userDetailSettingSelectorDiv.className="w3-bar w3-light-grey";
-		this.userDetailSettingSelectorDiv.id="userDetailSettingSelector"+userEntryId;
+		this.userDetailSettingSelectorDiv.id="userDetailSettingSelector"+userInfo.userId;
 		this.userDetailSettingSelectorContainerDiv=document.createElement("div");
 		this.userDetailSettingSelectorContainerDiv.appendChild(this.userDetailSettingSelectorDiv);
+		this.addSetting(new UserAccessRightSetting(userInfo,adminPageControl));
+		this.addSetting(new UserQutoaSetting(userInfo,adminPageControl));
 	}
 	addSetting(setting)
 	{
@@ -20,7 +22,7 @@ class UserDetailSettingSelector
 		var self=this;
 		for (var i=0;i<this.userDetailSettingArray.length;i++)
 		{
-			let name=this.userDetailSettingArray[i].name+this.userEntryId;
+			let name=this.userDetailSettingArray[i].name+this.userInfo.userId;
 			var button1=document.createElement("BUTTON");
 			
 			button1.className="w3-bar-item w3-button tablink";
@@ -48,7 +50,6 @@ class UserDetailSettingSelector
 	switchDetailSetting(event,settingName)
 	{
 		var i, x, tablinks;
-		//console.log(settingName);
 		x = document.getElementsByClassName("detail-setting");
 		for (i = 0; i < x.length; i++) 
 		{

@@ -1,8 +1,7 @@
 class UserDetailSetting
 {
-	constructor(thisUserData,adminPageControl)
+	constructor(userInfo,adminPageControl)
 	{
-		console.log(thisUserData);
 		var self=this;
 		var cancelLink=document.createElement("a"); 
 		var savelLink=document.createElement("a"); 
@@ -12,13 +11,13 @@ class UserDetailSetting
 		var containerDiv=document.createElement("div");
 		var panelDiv=document.createElement("div");
 		var sectionDiv=document.createElement("div");
-		var userDetailSettingSelector=new UserDetailSettingSelector(thisUserData.userEntryId);
+		var userDetailSettingSelector=new UserDetailSettingSelector(userInfo,adminPageControl);
 		
 		this.adminPageControl=adminPageControl;
 		this.userDetailSettingDiv=document.createElement("div");
 		
 		titleSpan.className="w3-red w3-left";
-		$(titleSpan).html("<h3>User Detail Setting</h3>");
+		$(titleSpan).html("<h3>User "+userInfo.userName+" Detail Setting</h3>");
 		
 		closeSpan.className="w3-button w3-right";
 		closeSpan.innerHTML="<i class=\"fa fa-remove\"></i>";
@@ -48,9 +47,6 @@ class UserDetailSetting
 		sectionDiv.appendChild(cancelLink);
 		sectionDiv.appendChild(savelLink);
 		
-		userDetailSettingSelector.addSetting(new UserAccessRightSetting(thisUserData,adminPageControl));
-		userDetailSettingSelector.addSetting(new UserQutoaSetting(thisUserData,adminPageControl));
-		
 		panelDiv.className="w3-panel";
 		panelDiv.appendChild(userDetailSettingSelector.getDomObj());
 		/*
@@ -66,7 +62,7 @@ class UserDetailSetting
 		modalContentDiv.appendChild(panelDiv);
 		
 		
-		this.userDetailSettingDiv.id="userDetailSetting"+thisUserData.userEntryId;
+		this.userDetailSettingDiv.id="userDetailSetting"+userInfo.userEntryId;
 		this.userDetailSettingDiv.className="w3-modal";
 		this.userDetailSettingDiv.style.zIndex="4";
 		this.userDetailSettingDiv.appendChild(modalContentDiv);
