@@ -1,208 +1,76 @@
 class UserManagement
 {
-	constructor(adminPageControl)
+	constructor()
 	{
-		var cell,span,self=this;
-		var th=document.createElement("th");
-		var thead=document.createElement("thead"); 
-		var tbody=document.createElement("tbody");
-		var row=thead.insertRow(thead.rows.length);
-		var legend=document.createElement("legend");
+		var row,cell,row2,cell2;
+		var border=1;
+		var userPasswordInputBox=document.createElement("input");
+		var userEnableCheckBox=document.createElement("input");
+		var addUserButton=document.createElement("Span");
+		var removeUserButton=document.createElement("Span");
+		var copyUserButton=document.createElement("Span");
 		
-		this.detailSettingArray=new Array();
-		this.adminPageControl=adminPageControl;
-		this.table=document.createElement("table");
-		this.fieldset=document.createElement("fieldset");
+		var accountSettingTable=document.createElement("table");
+		var userManagementTable=document.createElement("table");
+		var userManagementLegend=document.createElement("Legend");
 		
-		$(this.fieldset).append(legend);
-		$(legend).text("User Management");
+		this.usersDropDownBox=document.createElement("select");
+		this.usersDropDownBox.style.width="100%";
+		this.usersDropDownBox.multiple = true;
 		
-		$(th).text("User Name");
-		$(row).append(th);
+		$(userManagementLegend).text("User Management");
 		
-		th=document.createElement("th");
-		$(th).text("Password");
-		$(row).append(th);
+		userManagementTable.style.width="100%";
+		userManagementTable.border=border;
+		accountSettingTable.style.width="100%";
+		accountSettingTable.border=border;
 		
-		th=document.createElement("th");
-		$(th).text("Detail Setting");
-		$(row).append(th);
+		userEnableCheckBox.id="isUserEnabled";
+		userEnableCheckBox.setAttribute("type","checkbox");
+		
+		userPasswordInputBox.id="userPassword";
+		userPasswordInputBox.setAttribute("type","password");
+		userPasswordInputBox.required=true;
+		
+		$(addUserButton).text("Add");
+		$(removeUserButton).text("Remove");
+		$(copyUserButton).text("Copy");
+		addUserButton.className="w3-button";
+		removeUserButton.className="w3-button";
+		copyUserButton.className="w3-button";
+		
+		row=userManagementTable.insertRow(userManagementTable.rows.length);
+		row.style.verticalAlign="top";
+		cell=row.insertCell(row.cells.length);
+		cell.rowSpan=10;
+		cell.appendChild(document.createTextNode("Users"));
+		cell.appendChild(document.createElement("br"));
+		cell.appendChild(this.usersDropDownBox);
+		
+		cell.appendChild(addUserButton);
+		cell.appendChild(removeUserButton);
+		cell.appendChild(copyUserButton);
+		
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(document.createTextNode("Account Setting"));
+		cell.appendChild(accountSettingTable);
+		
+		row2=accountSettingTable.insertRow(accountSettingTable.rows.length);
+		cell2=row2.insertCell(row2.cells.length);
+		cell2.appendChild(document.createTextNode("Password:"));
+		cell2.appendChild(userPasswordInputBox);
+		cell2.appendChild(document.createTextNode(" "));
+		cell2.appendChild(userEnableCheckBox);
+		cell2.appendChild(document.createTextNode("Enable"));
 
-		th=document.createElement("th");
-		$(th).text("Enabled");
-		$(row).append(th);
-
-		th=document.createElement("th");
-		$(th).text("Remove");
-		$(row).append(th);
-		this.table.appendChild(thead);
-		this.table.className="display responsive no-wrap";
-		this.table.style.width="100%";
-		this.fieldset.appendChild(this.table);
-		this.userTable=$(this.table).DataTable(
-					{ 
-						"dom": '<"toolbar">frtip',
-						"CaseSensitive":true, 
-						"order": [[ 0, "desc" ]],
-						paging: true,
-						"pageLength": 10,
-						responsive: true,
-						"info": true,
-						"orderCellsTop": true, 
-						"fixedHeader":true,
-						"columnDefs": [{"className": "dt-center", "targets": [2,3,4]},
-										{"orderable": false,"targets":[1,2,3,4]}
-									  ],
-					})
-		var toolbar=$(this.fieldset).children("div").children(".toolbar")
+		cell.appendChild(document.createTextNode("Access Right"));
 		
-		$(toolbar).html("&nbsp;<i class=\"fa fa-plus w3-large w3-button\"></i>");					
-		$(toolbar).on("click",function()
-								{
-									var userInfo=new UserInfo();
-									userInfo.userId=Utility.getUniqueId();
-									self.addUserRow(userInfo);
-								});
+		this.userManagementFieldSet=document.createElement("fieldset");
+		this.userManagementFieldSet.appendChild(userManagementLegend);
+		this.userManagementFieldSet.appendChild(userManagementTable);
 	}
 	getHTML()
 	{
-		return this.fieldset;
-	}
-	addUserRow(userInfo)
-	{
-		var self=this;
-		var tbody=this.userTable.table().body();
-		var deleteEntrySpan=document.createElement("span");
-		var popupDetailSettingSpan=document.createElement("span");
-		var detailSetting=document.createElement("input");
-		var userNameInputBox=document.createElement("input");
-		var passwordInputBox=document.createElement("input");
-		var userEnableCheckBox=document.createElement("input");
-		var isRemoveThisUserInputBox=document.createElement("input");
-																		
-		var row=document.createElement("tr");
-		
-		userNameInputBox.id="userName"+userInfo.userId;
-		userNameInputBox.setAttribute("type","text");
-		userNameInputBox.required = true;
-		
-		detailSetting.id="detailSetting"+userInfo.userId;
-		detailSetting.setAttribute("type","hidden");
-		
-		passwordInputBox.id="password"+userInfo.userId;
-		passwordInputBox.required = true;
-		passwordInputBox.setAttribute("type","password");					
-		
-		userEnableCheckBox.id="isUserEnable"+userInfo.userId;
-		userEnableCheckBox.setAttribute("type","checkbox");
-		
-		isRemoveThisUserInputBox.id="isRemoveThisUser"+userInfo.userId;
-		isRemoveThisUserInputBox.setAttribute("type","hidden");
-		isRemoveThisUserInputBox.value=0;
-		
-		popupDetailSettingSpan.className="popupDetailSettingPage";
-		popupDetailSettingSpan.innerHTML="<i class=\"w3-padding fa fa-pencil w3-button\"></i>";
-		popupDetailSettingSpan.onclick=function()
-									 {
-										if ($.trim(userNameInputBox.value)!="")
-											userInfo.userName=$.trim(userNameInputBox.value);
-										if ($.trim(passwordInputBox)!="")
-											userInfo.password=$.trim(passwordInputBox.value);
-										self.popupDetailSettingModal(self,userInfo);
-										/*thisUserData["entryId"]=entryId;
-										thisUserData["userName"]=userNameInputBox.value;
-										self.popupDetailSettingModal(self,thisUserData);*/
-									 };
-		deleteEntrySpan.innerHTML="<i class=\"fa fa-trash w3-button\" style=\"font-size:25px\"></i>";
-		deleteEntrySpan.className="removeEntry";
-		$(deleteEntrySpan).click(function()
-					{
-						self.removeRow(row,entryId);
-					});
-		
-		
-		var cell=row.insertCell(row.cells.length);
-		cell.appendChild(userNameInputBox);
-		cell.appendChild(detailSetting);
-		
-		cell=row.insertCell(row.cells.length);
-		cell.appendChild(passwordInputBox);
-		
-		cell=row.insertCell(row.cells.length);
-		cell.appendChild(popupDetailSettingSpan);
-
-		cell=row.insertCell(row.cells.length);
-		cell.appendChild(userEnableCheckBox);
-
-		cell=row.insertCell(row.cells.length);
-		cell.appendChild(deleteEntrySpan);
-		cell.appendChild(isRemoveThisUserInputBox);
-		
-		if ((userInfo.userName!=null))
-		{
-			if (userInfo.userName=="anonymous")
-			{
-				userNameInputBox.setAttribute("type","hidden");
-				cell=$(userNameInputBox).parent();
-				cell.attr("data-order","0");
-				var textNode=document.createTextNode("anonymous");
-				$(textNode).insertBefore(userNameInputBox);
-				$(passwordInputBox).remove();
-				$(deleteEntrySpan).remove();
-			}
-			else
-			{
-				passwordInputBox.setAttribute("value",userInfo.password);
-			}
-			userNameInputBox.setAttribute("value",userInfo.userName);
-		}
-		var dt = $(this.table).dataTable().api();
-		dt.row.add($(row));
-		dt.draw();
-	}
-	popupDetailSettingModal(self,userInfo)
-	{
-		if (userInfo.userId in this.detailSettingArray)
-			this.detailSettingArray[userInfo.userId].show();
-		else
-		{
-			var userDetailSetting=new UserDetailSetting(userInfo,self.adminPageControl);
-			this.detailSettingArray[userInfo.userId]=userDetailSetting;
-		}
-		//var userDetailSetting=new UserDetailSetting(userInfo,self.adminPageControl);
-		//var accessRightData=thisUserData.accessRightList;
-/*		if (userEntryId in this.detailSettingArray)
-		{
-			this.detailSettingArray[userEntryId].show();
-		}
-		else
-		{
-			var userDetailSetting=new UserDetailSetting(userEntryId,self.adminPageControl);
-			/*var accessRight=new AccessRight(userEntryId,self.adminPageControl);
-			accessRight.loadData(accessRightData,userEntryId);
-			this.detailSettingArray[userEntryId]=accessRight;
-		}*/				
-	}
-	removeRow(row,userCount)
-	{
-		var userName=$("#userName"+userCount).val();
-		var password=$("#password"+userCount).val();
-		if ((userName=="") && (password==""))
-		{	
-			$(row).addClass("selected");
-			this.userTable.row(".selected").remove().draw(true);
-		}
-		else	
-		{
-			var field=document.getElementById("isRemoveThisUser"+userCount);
-			field.value="1";
-			$(row).hide();
-		}
-	}
-	updateRemoteDir(userEntryId,accessRightEntryId,dirList)
-	{
-		//this.userManagement.updateRemoteDir(userEntryId,accessRightEntryId,dirList);
-		var accessRight=this.accessRightArray[userEntryId];
-		accessRight.updateRemoteDir(userEntryId,accessRightEntryId,dirList);
+		return this.userManagementFieldSet;
 	}
 }

@@ -8,25 +8,24 @@ class FtpModule_AddServer
 		var saveLink=document.createElement("a");
 		var heading=document.createTextNode("FTP Server Administration > Add Server");
 		var descriptionInputBox=document.createElement("input");
+		var controlPortInputBox=document.createElement("input");
+		var passiveModeCheckBox=document.createElement("input");
+
+		var networkSettingTable=document.createElement("table");
+		var networkSettingLegend=document.createElement("Legend");
+		var networkSettingFieldSet=document.createElement("fieldset");
+		
+		var bindingAddressDropDown=document.createElement("select");
 		var descriptionTextNode=document.createTextNode("Description:");
 		
-		var bindingTable=document.createElement("table");
-		var bindingLegend=document.createElement("Legend");
-		var bindingFieldSet=document.createElement("fieldset");
-		
-		var controlPortInputBox=document.createElement("input");
-		var passiveModeFieldSet=document.createElement("fieldset");
-		var passiveModeLegend=document.createElement("Legend");
-		var passiveModeCheckBox=document.createElement("input");
-		var passiveModeDetailDiv=document.createElement("div");
 		var passiveModePortRangeInputBox=document.createElement("input");
 		
-		var userInfo=new UserInfo();
-		userInfo.userName="anonymous";
+		this.userManagement=new UserManagement(adminPageControl);
 		
-		this.bindingAddressDropDown=document.createElement("select");
-		this.bindingAddressDropDown.id="bindingAddress";
-		this.bindingAddressDropDown.multiple = true;
+		this.passiveModePortRangeDiv=document.createElement("div");
+		this.passiveModePortRangeDiv.style.visibility="hidden";
+		bindingAddressDropDown.id="bindingAddress";
+		bindingAddressDropDown.multiple = true;
 		
 		controlPortInputBox.id="controlPort";
 		controlPortInputBox.setAttribute("type","number");
@@ -35,73 +34,60 @@ class FtpModule_AddServer
 		controlPortInputBox.max=65535;
 		controlPortInputBox.required=true;
 		
-		row=bindingTable.insertRow(bindingTable.rows.length);
-		cell=row.insertCell(row.cells.length);
-		cell.innerHTML="IP address:";
-		
-		cell=row.insertCell(row.cells.length);
-		cell.innerHTML="Port:";
-
-		row=bindingTable.insertRow(bindingTable.rows.length);
-		cell=row.insertCell(row.cells.length);
-		cell.appendChild(this.bindingAddressDropDown);
-		
-		cell=row.insertCell(row.cells.length);
-		cell.style.verticalAlign="top";
-		cell.appendChild(controlPortInputBox);
-		
-		bindingFieldSet.appendChild(bindingTable);
+		passiveModePortRangeInputBox.setAttribute("type","text");
+		passiveModePortRangeInputBox.id="passiveModePortRange";
+		passiveModePortRangeInputBox.required=true;
 		
 		passiveModeCheckBox.id="isPassiveModeEnable";
 		passiveModeCheckBox.setAttribute("type","checkbox");
 		passiveModeCheckBox.onclick=function()
-									{ 
-										self.togglePassiveMode(this);
-									};
-		passiveModeLegend.appendChild(passiveModeCheckBox);
-		passiveModeLegend.appendChild(document.createTextNode("Passive Mode"));
+									{
+										if (self.passiveModePortRangeDiv.style.visibility=="hidden")
+											self.passiveModePortRangeDiv.style.visibility="visible";
+										else
+											self.passiveModePortRangeDiv.style.visibility="hidden";
+									}	
 		
-		passiveModeDetailDiv.className="w3-hide";
-		passiveModeDetailDiv.id="passiveModeDetail";
-		passiveModeDetailDiv.innerHTML="Port Range:";
 		
-		passiveModePortRangeInputBox.setAttribute("type","text");
-		passiveModePortRangeInputBox.setAttribute("id","passiveModePortRange");
-		passiveModePortRangeInputBox.required=true;
-	
-		passiveModeDetailDiv.appendChild(passiveModePortRangeInputBox);
-		passiveModeFieldSet.id="passiveModeSetting";
-		passiveModeFieldSet.className="passiveModeSetting";
-		passiveModeFieldSet.appendChild(passiveModeLegend);
-		passiveModeFieldSet.appendChild(passiveModeDetailDiv);
-
-		this.adminPageControl=adminPageControl;
-		this.userManagement=new UserManagement(this.adminPageControl);
-		this.userManagement.addUserRow(userInfo);
+		row=networkSettingTable.insertRow(networkSettingTable.rows.length);
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(bindingAddressDropDown);
+		
+		cell=row.insertCell(row.cells.length);
+		cell.style.verticalAlign="middle";
+		cell.appendChild(controlPortInputBox);
+		
+		cell=row.insertCell(row.cells.length);
+		cell.style.verticalAlign="top";
+		cell.appendChild(passiveModeCheckBox);
+		
+		cell=row.insertCell(row.cells.length);
+		cell.style.verticalAlign="top";
+		cell.appendChild(document.createTextNode(" Passive Mode"));
+		this.passiveModePortRangeDiv.appendChild(document.createTextNode("Port Range for Passive Mode:"));
+		this.passiveModePortRangeDiv.appendChild(passiveModePortRangeInputBox);
+		cell.appendChild(this.passiveModePortRangeDiv);
+		
+		networkSettingTable.className="w3-responsive";
+		$(networkSettingLegend).text("Network related setting");
+		
+		networkSettingFieldSet.style.width="w3-table";
+		networkSettingFieldSet.appendChild(networkSettingLegend);
+		networkSettingFieldSet.appendChild(networkSettingTable);
 		
 		saveLink.className="w3-red w3-button w3-right w3-margin-top w3-margin-right";
-		$(saveLink).html("Add  <i class=\"fa fa-check\"></i>");
+		$(saveLink).html("Add <i class=\"fa fa-check\"></i>");
 		p.appendChild(descriptionTextNode);
 		p.appendChild(descriptionInputBox);
 		p.innerHTML+="<br><br>";
-		p.appendChild(bindingFieldSet);
-		p.appendChild(passiveModeFieldSet);
+		p.appendChild(networkSettingFieldSet);
 		p.appendChild(this.userManagement.getHTML());
 		p.appendChild(saveLink);
-		
-		
 		this.domObjList=new Array();
 		this.domObjList.push(heading);
 		this.domObjList.push(p);
 	}
-	togglePassiveMode(passiveModeDetail)
-	{
-	 		var passiveModeDetail=$("#passiveModeDetail");
-	 		var passiveModeSetting=$("#passiveModeSetting");
-			
-			passiveModeSetting.toggleClass("passiveModeSetting");
-			passiveModeDetail.toggleClass("w3-hide");
-	}
+	
 	getDomObjList()
 	{
 		return this.domObjList;

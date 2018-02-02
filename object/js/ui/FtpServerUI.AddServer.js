@@ -32,7 +32,6 @@ class FtpServerUI_AddServer extends MainPageTemplate
 		this.adminPageControl=adminPageControl;
 		this.userManagement=new UserManagement(this.adminPageControl);
 		
-		
 		$(bindingLegend).text("Binding");
 		bindingFieldSet.appendChild(bindingLegend);
 		
