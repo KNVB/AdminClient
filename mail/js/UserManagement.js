@@ -2,72 +2,124 @@ class UserManagement
 {
 	constructor()
 	{
-		var row,cell,row2,cell2;
 		var border=1;
-		var userPasswordInputBox=document.createElement("input");
-		var userEnableCheckBox=document.createElement("input");
-		var addUserButton=document.createElement("Span");
-		var removeUserButton=document.createElement("Span");
-		var copyUserButton=document.createElement("Span");
+		var row,cell,row2,cell2;
+		var th=document.createElement("th");
+		var row=document.createElement("div");
+		var cell=document.createElement("div");
+		var cell2=document.createElement("div");
+		var cell3=document.createElement("div");
+		var spacer=document.createElement("div");
+		var passwordDiv=document.createElement("div");
 		
-		var accountSettingTable=document.createElement("table");
-		var userManagementTable=document.createElement("table");
+		var thead=document.createElement("thead"); 
+		var tbody1=document.createElement("TBODY");
+		
+		var userEnableCheckBox=document.createElement("input");
+		var userPasswordInputBox=document.createElement("input");
+		
+		var addUserButton=document.createElement("Span");
+		var copyUserButton=document.createElement("Span");
+		var removeUserButton=document.createElement("Span");
+		
+		var userListLegend=document.createElement("Legend");
+		var accessRightLegend=document.createElement("Legend");
+		var accountSettingLegend=document.createElement("Legend");
 		var userManagementLegend=document.createElement("Legend");
 		
-		this.usersDropDownBox=document.createElement("select");
-		this.usersDropDownBox.style.width="100%";
-		this.usersDropDownBox.multiple = true;
+		var usersListFieldSet=document.createElement("fieldset");
+		var accessRightFieldSet=document.createElement("fieldset");	
+		var accountSettingFieldSet=document.createElement("fieldset");	
+		
+		this.usersList=document.createElement("ul");
+		this.accessRightTable=document.createElement("table");
+		this.userManagementFieldSet=document.createElement("fieldset");	
 		
 		$(userManagementLegend).text("User Management");
+		this.userManagementFieldSet.appendChild(userManagementLegend);
 		
-		userManagementTable.style.width="100%";
-		userManagementTable.border=border;
-		accountSettingTable.style.width="100%";
-		accountSettingTable.border=border;
+		this.usersList.className="w3-ul w3-hoverable";
+		this.usersList.style.border="2px inset"; 
+		this.usersList.style.overflowY="scroll";
+		this.usersList.innerHTML="<li>Jill</li>";
+		this.usersList.innerHTML+="<li>Eve</li>";
+		this.usersList.innerHTML+="<li>Adam</li>";
 		
-		userEnableCheckBox.id="isUserEnabled";
-		userEnableCheckBox.setAttribute("type","checkbox");
-		
-		userPasswordInputBox.id="userPassword";
-		userPasswordInputBox.setAttribute("type","password");
-		userPasswordInputBox.required=true;
-		
+		$(userListLegend).text("Users List");
 		$(addUserButton).text("Add");
 		$(removeUserButton).text("Remove");
 		$(copyUserButton).text("Copy");
 		addUserButton.className="w3-button";
 		removeUserButton.className="w3-button";
 		copyUserButton.className="w3-button";
+		spacer.className="w3-padding-small";
+		usersListFieldSet.appendChild(userListLegend);
+		usersListFieldSet.appendChild(this.usersList);
+		usersListFieldSet.appendChild(spacer);
+		usersListFieldSet.appendChild(addUserButton);
+		usersListFieldSet.appendChild(removeUserButton);
+		usersListFieldSet.appendChild(copyUserButton);
 		
-		row=userManagementTable.insertRow(userManagementTable.rows.length);
-		row.style.verticalAlign="top";
-		cell=row.insertCell(row.cells.length);
-		cell.rowSpan=10;
-		cell.appendChild(document.createTextNode("Users"));
-		cell.appendChild(document.createElement("br"));
-		cell.appendChild(this.usersDropDownBox);
+		row.className="w3-row";
+		cell.className="w3-third w3-padding-small";		
+		cell.appendChild(usersListFieldSet);
+		row.appendChild(cell);
 		
-		cell.appendChild(addUserButton);
-		cell.appendChild(removeUserButton);
-		cell.appendChild(copyUserButton);
+		passwordDiv.style.display="none"; //for edge 
+		$(accountSettingLegend).text("Account Setting");
+		userEnableCheckBox.id="isUserEnabled";
+		userEnableCheckBox.setAttribute("type","checkbox");
+		userEnableCheckBox.onclick=function()
+									{
+										$(passwordDiv).toggle();	
+									}
 		
-		cell=row.insertCell(row.cells.length);
-		cell.appendChild(document.createTextNode("Account Setting"));
-		cell.appendChild(accountSettingTable);
+		userPasswordInputBox.id="userPassword";
+		userPasswordInputBox.setAttribute("type","password");
+		userPasswordInputBox.required=true;
 		
-		row2=accountSettingTable.insertRow(accountSettingTable.rows.length);
-		cell2=row2.insertCell(row2.cells.length);
-		cell2.appendChild(document.createTextNode("Password:"));
-		cell2.appendChild(userPasswordInputBox);
-		cell2.appendChild(document.createTextNode(" "));
-		cell2.appendChild(userEnableCheckBox);
-		cell2.appendChild(document.createTextNode("Enable"));
-
-		cell.appendChild(document.createTextNode("Access Right"));
+		passwordDiv.appendChild(document.createTextNode("Password:"));
+		passwordDiv.appendChild(userPasswordInputBox);
 		
-		this.userManagementFieldSet=document.createElement("fieldset");
-		this.userManagementFieldSet.appendChild(userManagementLegend);
-		this.userManagementFieldSet.appendChild(userManagementTable);
+		accountSettingFieldSet.appendChild(accountSettingLegend);
+		accountSettingFieldSet.appendChild(userEnableCheckBox);
+		accountSettingFieldSet.appendChild(document.createTextNode(" "));
+		accountSettingFieldSet.appendChild(document.createTextNode("Enable"));
+		accountSettingFieldSet.appendChild(document.createElement("br"));
+		accountSettingFieldSet.appendChild(passwordDiv);
+		cell2.className="w3-twothird w3-padding-small";
+		cell2.appendChild(accountSettingFieldSet);
+		row.appendChild(cell2);
+		
+		this.userManagementFieldSet.appendChild(row);
+		
+		row=document.createElement("div");
+		$(accessRightLegend).text("Access Right");
+		accessRightFieldSet.appendChild(accessRightLegend);
+		row2=thead.insertRow(thead.rows.length);
+		$(th).text("Virtual Path");
+		row2.appendChild(th);
+		
+		th=document.createElement("th");
+		$(th).text("Physical Path");
+		row2.appendChild(th);
+		
+		th=document.createElement("th");
+		$(th).html("<i class=\"fa fa-plus\" style=\"font-size:24px\"></i>");
+		row2.appendChild(th);
+		this.accessRightTable.border=border;
+		this.accessRightTable.appendChild(thead);
+		this.accessRightTable.className="display";
+		this.accessRightTable.setAttribute("width","100%");
+		accessRightFieldSet.appendChild(this.accessRightTable);
+		
+		
+		
+		row.className="w3-row";
+		cell3.className="w3-padding-small";
+		cell3.appendChild(accessRightFieldSet);
+		row.appendChild(cell3);
+		this.userManagementFieldSet.appendChild(row);	
 	}
 	getHTML()
 	{
