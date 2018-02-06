@@ -132,7 +132,6 @@ class UserManagement
 	loadData(userInfoList)
 	{
 		var self=this;
-		var itemCount=0;
 		$(this.usersList).empty();
 		this.userInfoList=userInfoList;
 		this.accessRightTableX=$(this.accessRightTable).DataTable({ 
@@ -149,94 +148,96 @@ class UserManagement
 																  });
 		for (var key in this.userInfoList)
 		{
-			var userInfo=document.createElement("li");
-			let password=userInfoList[key].password;
-			let enabled=userInfoList[key].enabled;
-			let accessRightList=userInfoList[key].accessRightList;
+			self.addRow(userInfoList[key]);
+		}
+		if (this.userInfoList.length>0)
+		{
+			var firstItem=$(this.usersList).find("li:first-child");
+			$(firstItem).click();
+		}
+	}
+	addRow(userInfo)
+	{
+			var self=this;
+			var userItem=document.createElement("li");
+			let password=userInfo.password;
+			let enabled=userInfo.enabled;
+			let accessRightList=userInfo.accessRightList;
 			
-			userInfo.className="userInfo";
-			userInfo.id=key;
-			$(userInfo).text(userInfoList[key].userName);
-			this.usersList.appendChild(userInfo);
+			userItem.className="userInfo";
+			userItem.id=userInfo.userId;
+			$(userItem).text(userInfo.userName);
+			this.usersList.appendChild(userItem);
 			
-			$(userInfo).on("click",function()
-									{
-										$(".userInfo-highlight").each(function()
+			$(userItem).on("click",function()
+															{
+																	$(".userInfo-highlight").each(function()
 																	{
 																		this.className="userInfo";
 																	});
-										this.className="userInfo-highlight";
-										self.userPasswordInputBox.value=password;
-										self.userEnableCheckBox.checked=enabled;
-										if (enabled)
-										{
-											self.passwordDiv.style.display="block";
-										}
-										else
-										{
-											self.passwordDiv.style.display="none";
-										}
-										self.accessRightTableX.clear();										
-										for (var key2 in accessRightList)
-										{
-											var physicalDirInputBox=document.createElement("input");
-											physicalDirInputBox.setAttribute("type","text");
-											physicalDirInputBox.id="physicalPath_"+key+"_"+key2;
-											physicalDirInputBox.setAttribute("value",accessRightList[key2].physicalDir);
-											physicalDirInputBox.readOnly=true;
-											physicalDirInputBox.onclick=function()
-																		{
-																			
-																		};
-											self.accessRightTableX.row.add([
-																			"<input type=text id=\"virtualPath_"+key+"_"+key2+"\" value=\""+accessRightList[key2].virtualDir+"\">",
-																			physicalDirInputBox.outerHTML,
-																			"<i class=\"fa fa-trash\" style=\"font-size:25px\"></i>"
-																			]).draw();
-										}
-									});
-			//$(userInfo).mousedown(function(e){ e.preventDefault(); });	//prevent highlight text from double click	
-			
-			$(userInfo).blur(function(e)
+																	this.className="userInfo-highlight";
+																	self.userPasswordInputBox.value=password;
+																	self.userEnableCheckBox.checked=enabled;
+																	
+																	if (enabled)
+																	{
+																		self.passwordDiv.style.display="block";
+																	}
+																	else
+																	{
+																		self.passwordDiv.style.display="none";
+																	}
+																	self.accessRightTableX.clear();
+																	
+																	for (var key2 in accessRightList)
+																	{
+																		var physicalDirInputBox=document.createElement("input");
+																		physicalDirInputBox.setAttribute("type","text");
+																		physicalDirInputBox.id="physicalPath_"+userInfo.userId+"_"+key2;
+																		physicalDirInputBox.setAttribute("value",accessRightList[key2].physicalDir);
+																		physicalDirInputBox.readOnly=true;
+																		physicalDirInputBox.onclick=function()
+																									{
+																										
+																									};
+																		self.accessRightTableX.row.add([
+																										"<input type=text id=\"virtualPath_"+userInfo.userId+"_"+key2+"\" value=\""+accessRightList[key2].virtualDir+"\">",
+																										physicalDirInputBox.outerHTML,
+																										"<i class=\"fa fa-trash\" style=\"font-size:25px\"></i>"
+																										]).draw();
+																	}																				
+															});
+			//$(userItem).mousedown(function(e){ e.preventDefault(); });	//prevent highlight text from double click	
+			$(userItem).blur(function(e)
 							{
-								if ($.trim($(this).text())=="")
-								{	
-									this.focus();
-									$(self.warningDiv).show();
-									self.warningDiv.innerHTML="Login Name cannot be empty!!";
-								}
-								else
-								{	
-									this.contentEditable=false;
-									$(self.warningDiv).hide();
-								}
+								self.validateUserName(this);
 							});
-			$(userInfo).on("dblclick",function ()
+			$(userItem).on("dblclick",function ()
 									  {
 										this.contentEditable=true;
 									  });
-			$(userInfo).keydown(function(event)
+			$(userItem).keydown(function(event)
 								{
 									if (event.which==13)
 									{
-										if ($.trim($(this).text())=="")
-										{	
-											this.focus();
-											$(self.warningDiv).show();
-											self.warningDiv.innerHTML="Login Name cannot be empty!!";
-										}
-										else			
-										{	
-											this.contentEditable=false;
-										}
+										self.validateUserName(this);
 										event.preventDefault();
 									}
 								});
-			if (itemCount==0)
-			{
-				userInfo.click();
-				itemCount=1;
-			}
+	}
+	validateUserName(userNameBox)
+	{
+		var self=this;
+		if ($.trim($(userNameBox).text())=="")
+		{	
+			userNameBox.focus();
+			$(self.warningDiv).show();
+			self.warningDiv.innerHTML="Login Name cannot be empty!!";
+		}
+		else
+		{	
+			userNameBox.contentEditable=false;
+			$(self.warningDiv).hide();
 		}
 	}
 	getHTML()
