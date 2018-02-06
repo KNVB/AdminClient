@@ -24,8 +24,27 @@ class FtpModule extends ModuleTemplate
 	addServer()
 	{
 		//this.setMainContent(new Array(this.heading+" > add server"));
-		var ftpModule_AddServer=new FtpModule_AddServer(this.adminPageControl);
-		this.adminPageControl.setMainContent(ftpModule_AddServer.getDomObjList());
+		
+		var userInfo=new UserInfo();
+		userInfo.userName="anonymous";
+		userInfo.password="password";
+		userInfo.enabled=true;
+		
+		var ftpServerInfo=new FtpServerInfo();
+		var ftpServerInfoPage=new FtpServerInfoPage(this.adminPageControl);
+		ftpServerInfo.userInfoList[userInfo.userId]=userInfo;
+		userInfo=new UserInfo();
+		userInfo.userId="sddssdfds";
+		userInfo.userName="陳大文";
+		userInfo.password="密碼";
+		userInfo.enabled=false;
+		var accessRight=new AccessRight(0);
+		accessRight.physicalDir="C:\\";
+		userInfo.accessRightList.push(accessRight);
+		ftpServerInfo.userInfoList[userInfo.userId]=userInfo;
+		
+		this.adminPageControl.setMainContent(ftpServerInfoPage.getDomObjList());
+		ftpServerInfoPage.loadData(ftpServerInfo);
 	}
 	removeServer()
 	{

@@ -1,4 +1,4 @@
-class FtpModule_AddServer
+class FtpServerInfoPage
 {
 	constructor(adminPageControl)
 	{
@@ -13,26 +13,23 @@ class FtpModule_AddServer
 		var spacer=document.createElement("div");
 		var saveLink=document.createElement("a");
 		
-		var descriptionInputBox=document.createElement("input");
-		var controlPortInputBox=document.createElement("input");
-		var passiveModeCheckBox=document.createElement("input");
-		var bindingAddressDropDown=document.createElement("select");
-		var passiveModePortRangeInputBox=document.createElement("input");
-		
 		var controlPortLegend=document.createElement("Legend");
 		var passiveModeLegend=document.createElement("Legend");
 		var networkSettingLegend=document.createElement("Legend");
 		var bindingAddressLegend=document.createElement("Legend");
 		
-		var bindingAddressFieldSet=document.createElement("fieldset");
 		var controlPortFieldSet=document.createElement("fieldset");
 		var passiveModeFieldSet=document.createElement("fieldset");
+		var bindingAddressFieldSet=document.createElement("fieldset");
 		var networkSettingFieldSet=document.createElement("fieldset");
 
 		var descriptionTextNode=document.createTextNode("Description:");
-		
-		
-		
+
+		this.descriptionInputBox=document.createElement("input");
+		this.controlPortInputBox=document.createElement("input");
+		this.passiveModeCheckBox=document.createElement("input");
+		this.bindingAddressDropDown=document.createElement("select");
+		this.passiveModePortRangeInputBox=document.createElement("input");
 
 		spacer.className="w3-padding-small";
 		$(networkSettingLegend).text("Network related setting");
@@ -40,38 +37,38 @@ class FtpModule_AddServer
 		$(controlPortLegend).text("Port Listening");
 		$(passiveModeLegend).text("Custom port range for passive mode:");
 		
-		descriptionInputBox.id="description";
+		this.descriptionInputBox.id="description";
 
-		bindingAddressDropDown.id="bindingAddress";
-		bindingAddressDropDown.multiple=true;
+		this.bindingAddressDropDown.id="bindingAddress";
+		this.bindingAddressDropDown.multiple=true;
 		
-		controlPortInputBox.min=1;
-		controlPortInputBox.value=21;
-		controlPortInputBox.max=65535;
-		controlPortInputBox.required=true;
-		controlPortInputBox.id="controlPort";
-		controlPortInputBox.setAttribute("type","number");
+		this.controlPortInputBox.min=1;
+		
+		this.controlPortInputBox.max=65535;
+		this.controlPortInputBox.required=true;
+		this.controlPortInputBox.id="controlPort";
+		this.controlPortInputBox.setAttribute("type","number");
 
-		passiveModeCheckBox.id="isPassiveModeEnable";
-		passiveModeCheckBox.onclick=function()
+		this.passiveModeCheckBox.id="isPassiveModeEnable";
+		this.passiveModeCheckBox.onclick=function()
 									{
 										$(passiveModeFieldSet).toggle();
 									}
-		passiveModeCheckBox.setAttribute("type","checkbox");
+		this.passiveModeCheckBox.setAttribute("type","checkbox");
 		
-		passiveModePortRangeInputBox.setAttribute("type","text");
-		passiveModePortRangeInputBox.id="passiveModePortRange";
+		this.passiveModePortRangeInputBox.setAttribute("type","text");
+		this.passiveModePortRangeInputBox.id="passiveModePortRange";
 		
 		networkSettingFieldSet.appendChild(networkSettingLegend);	
 		bindingAddressFieldSet.appendChild(bindingAddressLegend);
-		bindingAddressFieldSet.appendChild(bindingAddressDropDown);
+		bindingAddressFieldSet.appendChild(this.bindingAddressDropDown);
 		
 		controlPortFieldSet.appendChild(controlPortLegend);
-		controlPortFieldSet.appendChild(controlPortInputBox);
+		controlPortFieldSet.appendChild(this.controlPortInputBox);
 		
 		passiveModeFieldSet.style.display="none";
 		passiveModeFieldSet.appendChild(passiveModeLegend);
-		passiveModeFieldSet.appendChild(passiveModePortRangeInputBox);
+		passiveModeFieldSet.appendChild(this.passiveModePortRangeInputBox);
 		
 		row.className="w3-row";
 		cell.className="w3-third w3-padding-small";
@@ -83,7 +80,7 @@ class FtpModule_AddServer
 		row.appendChild(cell2);
 		
 		cell3.className="w3-third w3-padding-small";
-		cell3.appendChild(passiveModeCheckBox);
+		cell3.appendChild(this.passiveModeCheckBox);
 		cell3.appendChild(document.createTextNode(" Support Passive Mode?"));
 		cell3.appendChild(passiveModeFieldSet);
 		row.appendChild(cell3);
@@ -93,7 +90,7 @@ class FtpModule_AddServer
 		$(saveLink).html("Add <i class=\"fa fa-check\"></i>");
 		this.userManagement=new UserManagement(adminPageControl);
 		p.appendChild(descriptionTextNode);
-		p.appendChild(descriptionInputBox);
+		p.appendChild(this.descriptionInputBox);
 		p.innerHTML+="<br><br>";
 		p.appendChild(networkSettingFieldSet);
 		p.appendChild(spacer);
@@ -103,7 +100,17 @@ class FtpModule_AddServer
 		this.domObjList.push(heading);
 		this.domObjList.push(p);
 	}
-	
+	loadData(ftpServerInfo)
+	{
+		this.descriptionInputBox.value=ftpServerInfo.description;
+		this.controlPortInputBox.value=ftpServerInfo.controlPort;
+		this.passiveModePortRangeInputBox.value=ftpServerInfo.passiveModePortRange;
+		this.passiveModeCheckBox.checked=ftpServerInfo.passiveModeEnabled;
+		
+		/*ftpServerInfo.bindingAddress
+		this.bindingAddressDropDown*/
+		this.userManagement.loadData(ftpServerInfo.userInfoList);		
+	}
 	getDomObjList()
 	{
 		return this.domObjList;
