@@ -42,16 +42,21 @@ class UserManagement
 		$(userManagementLegend).text("User Management");
 		this.userManagementFieldSet.appendChild(userManagementLegend);
 		
-		this.usersList.className="w3-ul w3-hoverable";
+		this.usersList.className="w3-ul";
 		this.usersList.style.border="2px inset"; 
 		this.usersList.style.overflowY="scroll";
-		/*this.usersList.innerHTML="<li>Jill</li>";
-		this.usersList.innerHTML+="<li>Eve</li>";
-		this.usersList.innerHTML+="<li>Adam</li>";*/
 		
 		$(userListLegend).text("Users List");
 		$(addUserButton).text("Add");
+		$(addUserButton).click(function ()
+								{
+									self.addUser();
+								});
 		$(removeUserButton).text("Remove");
+		$(removeUserButton).click(function ()
+									{
+										self.removeUser();
+									});
 		$(copyUserButton).text("Copy");
 		addUserButton.className="w3-button";
 		removeUserButton.className="w3-button";
@@ -132,6 +137,7 @@ class UserManagement
 	loadData(userInfoList)
 	{
 		var self=this;
+		var itemCount=0;
 		$(this.usersList).empty();
 		this.userInfoList=userInfoList;
 		this.accessRightTableX=$(this.accessRightTable).DataTable({ 
@@ -148,15 +154,60 @@ class UserManagement
 																  });
 		for (var key in this.userInfoList)
 		{
-			self.addRow(userInfoList[key]);
-		}
-		if (this.userInfoList.length>0)
-		{
-			var firstItem=$(this.usersList).find("li:first-child");
-			$(firstItem).click();
-		}
+			if (itemCount==0)
+			{
+				self.addRow(userInfoList[key],UserManagement.userNameCellSelectMode);
+				itemCount=1;
+			}
+			else
+				self.addRow(userInfoList[key]);
+		}	
 	}
-	addRow(userInfo)
+	removeUser()
+	{
+		var userItem=$(this.usersList).children(".userInfo-highlight")[0];
+		var warningModalContent=document.createElement("div");
+		warningModalContent.innerHTML="Are you are sure to delete user "+$(userItem).text()+"?";
+		$(warningModalContent).dialog({
+										resizable: false,
+										height: "auto",
+										width: "auto",
+										modal: true,
+										buttons: {
+											"Yes": function() {
+												console.log(userItem.id);
+											  $( this ).dialog( "close" );
+											},
+											"No": function() {
+											  $( this ).dialog( "close" );
+											}
+										},
+										title:"Warning!",
+										open: function(event, ui) 
+												{
+													$(this).parent().find(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+													$(this).parent().find(".ui-dialog-titlebar").css("background-color","red");
+													$(this).parent().find(".ui-dialog-titlebar").css("color","white");
+													$(this).parent().find(".ui-dialog-buttonpane button").css("background-color","red");
+													$(this).parent().find(".ui-dialog-buttonpane button").css("color","white");
+													$(this).parent().find(".ui-widget-content").css("border","none");
+													$(this).parent().find(".ui-dialog-buttonpane button:contains('No')").focus();
+												}
+									});
+
+
+		
+		//alert($(userItem).text());
+		//this.userInfoList[
+	}
+	addUser()
+	{
+		var userInfo=new UserInfo();
+		userInfo.userId=Utility.getUniqueId();
+		this.userInfoList[userInfo.userId]=userInfo;
+		this.addRow(userInfo,(UserManagement.userNameCellEditMode | UserManagement.userNameCellSelectMode));
+	}
+	addRow(userInfo,userNameCellMode)
 	{
 			var self=this;
 			var userItem=document.createElement("li");
@@ -170,60 +221,72 @@ class UserManagement
 			this.usersList.appendChild(userItem);
 			
 			$(userItem).on("click",function()
-															{
-																	$(".userInfo-highlight").each(function()
-																	{
-																		this.className="userInfo";
-																	});
-																	this.className="userInfo-highlight";
-																	self.userPasswordInputBox.value=password;
-																	self.userEnableCheckBox.checked=enabled;
-																	
-																	if (enabled)
-																	{
-																		self.passwordDiv.style.display="block";
-																	}
-																	else
-																	{
-																		self.passwordDiv.style.display="none";
-																	}
-																	self.accessRightTableX.clear();
-																	
-																	for (var key2 in accessRightList)
-																	{
-																		var physicalDirInputBox=document.createElement("input");
-																		physicalDirInputBox.setAttribute("type","text");
-																		physicalDirInputBox.id="physicalPath_"+userInfo.userId+"_"+key2;
-																		physicalDirInputBox.setAttribute("value",accessRightList[key2].physicalDir);
-																		physicalDirInputBox.readOnly=true;
-																		physicalDirInputBox.onclick=function()
-																									{
-																										
-																									};
-																		self.accessRightTableX.row.add([
-																										"<input type=text id=\"virtualPath_"+userInfo.userId+"_"+key2+"\" value=\""+accessRightList[key2].virtualDir+"\">",
-																										physicalDirInputBox.outerHTML,
-																										"<i class=\"fa fa-trash\" style=\"font-size:25px\"></i>"
-																										]).draw();
-																	}																				
-															});
+									{
+										$(".userInfo-highlight").each(function()
+										{
+											this.className="userInfo";
+										});
+										this.className="userInfo-highlight";
+										self.userPasswordInputBox.value=password;
+										self.userEnableCheckBox.checked=enabled;
+										
+										if (enabled)
+										{
+											self.passwordDiv.style.display="block";
+										}
+										else
+										{
+											self.passwordDiv.style.display="none";
+										}
+										self.accessRightTableX.clear();
+										
+										for (var key2 in accessRightList)
+										{
+											var physicalDirInputBox=document.createElement("input");
+											physicalDirInputBox.setAttribute("type","text");
+											physicalDirInputBox.id="physicalPath_"+userInfo.userId+"_"+key2;
+											physicalDirInputBox.setAttribute("value",accessRightList[key2].physicalDir);
+											physicalDirInputBox.readOnly=true;
+											physicalDirInputBox.onclick=function()
+																		{
+																			
+																		};
+											self.accessRightTableX.row.add([
+																			"<input type=text id=\"virtualPath_"+userInfo.userId+"_"+key2+"\" value=\""+accessRightList[key2].virtualDir+"\">",
+																			physicalDirInputBox.outerHTML,
+																			"<i class=\"fa fa-trash\" style=\"font-size:25px\"></i>"
+																			]).draw();
+										}																				
+									});
 			//$(userItem).mousedown(function(e){ e.preventDefault(); });	//prevent highlight text from double click	
 			$(userItem).blur(function(e)
 							{
+								console.log("blur");
 								self.validateUserName(this);
 							});
 			$(userItem).on("dblclick",function ()
 									  {
 										this.contentEditable=true;
+										this.focus();
 									  });
 			$(userItem).keydown(function(event)
 								{
 									if (event.which==13)
 									{
+										console.log("keydown");
 										self.validateUserName(this);
 										event.preventDefault();
 									}
 								});
+			if (userNameCellMode & UserManagement.userNameCellSelectMode)
+				$(userItem).click();
+
+			if (userNameCellMode & UserManagement.userNameCellEditMode)
+			{
+				var evt = new Event('dblclick');
+				userItem.dispatchEvent(evt);
+			}
+
 	}
 	validateUserName(userNameBox)
 	{
@@ -236,8 +299,28 @@ class UserManagement
 		}
 		else
 		{	
-			userNameBox.contentEditable=false;
-			$(self.warningDiv).hide();
+			var isDuplicated=false;
+			for (var key in this.userInfoList)
+			{
+				var userInfoItem=this.userInfoList[key];
+				if ((userInfoItem.userName==$.trim($(userNameBox).text())) &&(userInfoItem.userId!=userNameBox.id))
+				{	
+					isDuplicated=true;
+					break;
+				}
+			}
+			if (isDuplicated)
+			{
+				userNameBox.focus();
+				$(self.warningDiv).show();
+				self.warningDiv.innerHTML="Login Name cannot be duplicated!!";
+			}
+			else	
+			{	
+				userNameBox.contentEditable=false;
+				$(self.warningDiv).hide();
+				this.userInfoList[userNameBox.id].userName=$.trim($(userNameBox).text());
+			}
 		}
 	}
 	getHTML()
@@ -245,3 +328,5 @@ class UserManagement
 		return this.userManagementFieldSet;
 	}
 }
+UserManagement.userNameCellEditMode =1;
+UserManagement.userNameCellSelectMode =2;
