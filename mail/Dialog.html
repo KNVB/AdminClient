@@ -3,6 +3,7 @@
 <title>Dialog Demo</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-3.2.1.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -43,8 +44,8 @@ class Dialog
 													if (self.titleBarBackgroundColor!="")
 														$(this).parent().find(".ui-dialog-titlebar").css("background-color",self.titleBarBackgroundColor);
 													
-													$(this).parent().find(".ui-dialog-buttonpane button").css("background-color","red");
-													$(this).parent().find(".ui-dialog-buttonpane button").css("color","white");
+													//$(this).parent().find(".ui-dialog-buttonpane button").css("background-color","red");
+													//$(this).parent().find(".ui-dialog-buttonpane button").css("color","white");
 													$(this).parent().find(".ui-widget-content").css("border","none");
 												}
 								});
@@ -67,10 +68,9 @@ function showDialog()
 			 label: "custom label",
 			 icon: "ui-icon-heart"};
 	button2={text: "No",
-			 classes: {
-				"ui-button": "highlight"
-			  },
+			 class:"w3-red",
 			 icon:"ui-icon-gear"};
+
 	dialog.buttons.push(button1);
 	dialog.buttons.push(button2);
 	//dialog.width="640px";

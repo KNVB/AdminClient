@@ -6,8 +6,10 @@ class AlertBox extends Dialog
 		this.titleBarColor="white";
 		this.titleBarBackgroundColor="red";
 		this.showCloseButton=false;
-		var okButton={text:"Ok",
-						  click:function() 
+		var okButton={
+						class:"w3-red",
+						text:"Ok",
+						click:function() 
 								{
 								  $( this ).dialog( "close" );
 								},
