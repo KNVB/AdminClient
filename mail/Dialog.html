@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>Dialog Demo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+class Dialog
+{
+	constructor(contentDiv)
+	{
+		this.title="";
+		this.modal=true;
+		this.resizable=false;
+		this.contentDiv=contentDiv;
+		this.showCloseButton=true;
+		this.buttons=[];
+		this.titleBarColor="";
+		this.titleBarBackgroundColor="";
+		this.closeOnEscape=false;
+		this.height="auto";
+		this.width="auto";
+	}
+	
+	show()
+	{
+		var self=this;
+		$(this.contentDiv).dialog({ "buttons":this.buttons,
+									"height":this.height,
+									"width": this.width,
+									"closeOnEscape":this.closeOnEscape,
+									"modal":this.modal,
+									"title":this.title,
+									"resizable":this.resizable,
+									open: function(event, ui) 
+												{
+													if (!self.showCloseButton)
+														$(this).parent().find(".ui-dialog-titlebar-close").css("display","none");
+													if (self.titleBarColor!="")
+														$(this).parent().find(".ui-dialog-titlebar").css("color",self.titleBarColor);
+													if (self.titleBarBackgroundColor!="")
+														$(this).parent().find(".ui-dialog-titlebar").css("background-color",self.titleBarBackgroundColor);
+													
+													$(this).parent().find(".ui-dialog-buttonpane button").css("background-color","red");
+													$(this).parent().find(".ui-dialog-buttonpane button").css("color","white");
+													$(this).parent().find(".ui-widget-content").css("border","none");
+												}
+								});
+	}
+}
+function showDialog()
+{
+	var dialog,button1,button2;
+	var div=document.createElement("div");
+	
+	div.innerHTML="Are you free tonight?";
+	dialog=new Dialog(div);
+	dialog.title="abc";
+	dialog.titleBarColor="white";
+	dialog.titleBarBackgroundColor="red";
+	dialog.showCloseButton=false;
+	dialog.closeOnEscape=true;
+	
+	button1={text: "Ok",
+			 label: "custom label",
+			 icon: "ui-icon-heart"};
+	button2={text: "No",
+			 classes: {
+				"ui-button": "highlight"
+			  },
+			 icon:"ui-icon-gear"};
+	dialog.buttons.push(button1);
+	dialog.buttons.push(button2);
+	//dialog.width="640px";
+	//dialog.height="580px";
+	dialog.show();
+}
+</script>
+</head>
+<body>
+	<button onclick="showDialog()">Show</button>
+</body>
+</html>

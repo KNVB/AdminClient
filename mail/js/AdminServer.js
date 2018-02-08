@@ -4,41 +4,48 @@ const WsStateConnected = 2;
 const WsStateConnecting = 3;
 class AdminServer
 {
-	constructor(url)
+	constructor()
 	{
-		this.url=url;
 		this.ws = null;
-		this.messageCoder;
+		this.messageCoder=null;
 		this.wsState = WsStateDisconnected;
 	}
-	
-	connect()
+	connect(url)
 	{
+		var self=this;
+		this.url=url;
 		this.wsState = WsStateConnecting;
 		this.ws = new WebSocket(this.url);
-		this.ws.onopen = function (e) {
-	        this.wsState = WsStateConnected;
-	        if (this.wsState === WsStateConnected) {
-	          this.sendPublicKey();
-			  this.initCoder().then(function()
-									{
-										if (self.messageCoder!=null)
-											console.log("Initialize messageCoder successfully");
-										else
-											console.log("Initialize messageCoder failed.");
-									});		
-	        } else {
-	          console.log('connection is closed or closing')
-	        }
-	      }.bind(this);
-		this.ws.onerror = function (e) {
-	          // TODO
-	          this.errorHandler(e);
-	        }.bind(this);  
+		return new Promise((resolve, reject) => {
+			self.ws.onerror = function (e)
+							{
+								reject("Connection to Admin. Server failure.");
+							}								
+			self.ws.onopen = (e)=> {
+					console.log("connection opened at:"+new Date());
+					self.wsState = WsStateConnected;
+					if (this.wsState === WsStateConnected) 
+					{ 
+						self.sendPublicKey();
+						this.initCoder().then(function()
+											{
+												resolve();
+											},
+											function ()
+											{
+												reject("Init Message Coder failure");
+											});
+					}
+					else 
+					{
+						reject('connection is closed or closing');
+					}
+				}			
+		});	
 	}
 	errorHandler(evt)
 	{
-		alert(evt.type);
+		alert(evt);
 	}
 	disConnect()
 	{
@@ -59,6 +66,9 @@ class AdminServer
     {
 		var dt = new Date();
 		var time = -(dt.getTime());
+		this.keyCoder = new JSEncrypt({
+						default_key_size: 2048
+					});
 		this.keyCoder.getKey();
 		//console.log("Public key="+keyCoder.getPublicKey());
 		var publicKey=this.keyCoder.getPublicKey();
@@ -68,6 +78,14 @@ class AdminServer
 		this.ws.send(publicKey);
 		this.keyCoder.setPrivateKey(this.keyCoder.getPrivateKey());
     }
+	login(userName,password,callBack)
+	{
+		this.sendRequestObj(new Login(userName,password),callBack);
+	}
+	sendRequestObj(obj,callBack)
+	{
+		this.sendMessage(JSON.stringify(obj),callBack);
+	}
 	sendMessage(message,callBack)
 	{
 		var self=this;
@@ -86,16 +104,18 @@ class AdminServer
 	initCoder()
 	{
 		var self=this;
-		
 		return new Promise((resolve, reject) => {
 			self.ws.onmessage = (e) => {
 				console.log("Server responsed received at:"+new Date());	
 				var serverResponseMessage = e.data;
 				var decodedServerResponseMessage = self.keyCoder.decrypt(serverResponseMessage);
-				$(self.serverResponse).val($(self.serverResponse).val()+"decoded AES key="+decodedServerResponseMessage+"\n");
+				console.log("decoded AES key="+decodedServerResponseMessage+"\n");
 				var aesKey=JSON.parse(decodedServerResponseMessage);
 				self.messageCoder=new MessageCoder(aesKey.messageKey,aesKey.ivText);
-				resolve();
+				if (self.messageCoder!=null)
+					resolve();
+				else
+					reject();
 			}
 		})
 	}
@@ -105,7 +125,7 @@ class AdminServer
 		return new Promise((resolve, reject) =>{
 				self.ws.onmessage = (e) =>{
 					var serverResponseMessage = e.data;
-					resolve(self.messageCoder.decode(serverResponseMessage));
+					resolve(JSON.parse(self.messageCoder.decode(serverResponseMessage)));
 				}
 			});
 	}	

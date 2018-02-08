@@ -9,7 +9,7 @@ class AdminPageControl
 		this.mainStage;
 		this.moduleList;
 		this.loginSideBar;
-		
+		this.adminServer=new AdminServer();
 		//<!-- Side Navigation -->
 		this.navBar=document.createElement("nav");
 		this.navBar.className="w3-sidebar w3-bar-block w3-collapse w3-red w3-animate-left w3-card"; 
@@ -48,42 +48,27 @@ class AdminPageControl
 		document.body.appendChild(overlayDiv);
 		document.body.appendChild(mainStageContainer);
 		
-		//this.initSideBar();	
-		this.initAdminPage();
+		this.initSideBar();	
+		//this.initAdminPage();
 	}
 	
 	initSideBar()
 	{
 		this.navBar.className=this.navBar.className.replace("w3-white","w3-red");
 		$(this.navBar).empty();
-		this.loginSideBar=new LoginSideBar(this.login.bind(this));
+		this.loginSideBar=new LoginSideBar(this.adminServer,this.initAdminPage.bind(this));
 		$(this.navBar).append(this.loginSideBar.getDomObj());
-	}
-	login()
-	{
-		var self=this;
-		this.navBar.className=this.navBar.className.replace("w3-red","w3-white");
-		this.loginSideBar.hide().then(function()
-									{
-										self.initAdminPage();
-									});
 	}
 	initAdminPage()
 	{
 		$(this.navBar).empty();
+		this.navBar.className=this.navBar.className.replace("w3-red","w3-white");
 		this.moduleList=new ModuleList(this.w3_close.bind(this));
-		
-		/*var module1=new FtpModule(this.moduleList.showHideFunctionList.bind(this.moduleList),this.setMainStageContent.bind(this));		
-		var module2=new AdminServerModule(this.moduleList.showHideFunctionList.bind(this.moduleList),this.setMainStageContent.bind(this));
-		
-		this.moduleList.addModule(module1);
-		this.moduleList.addModule(module2);*/
 		
 		this.moduleList.addModule(new FtpModule(this));
 		this.moduleList.addModule(new AdminServerModule(this));
 		this.moduleList.addModule(new LogoutModule(this.logout.bind(this)));
 		$(this.navBar).append(this.moduleList.getDomObj());
-		//var accessRight=new AccessRight("dsfsfdsfds",this);
 	}
 	setMainContent(content)
 	{
@@ -97,7 +82,7 @@ class AdminPageControl
 	logout()
 	{
 		var self=this;
-		this.setMainStageContent("");
+		this.setMainContent("");
 		this.moduleList.hide().then(function()
 									{
 										self.initSideBar();

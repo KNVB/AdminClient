@@ -55,7 +55,7 @@ class UserManagement
 		$(removeUserButton).text("Remove");
 		$(removeUserButton).click(function ()
 									{
-										self.removeUser();
+										self.popupRemoveUserDialog();
 									});
 		$(copyUserButton).text("Copy");
 		addUserButton.className="w3-button";
@@ -139,8 +139,11 @@ class UserManagement
 		var self=this;
 		var itemCount=0;
 		$(this.usersList).empty();
+		//$(this.accessRightTable).empty();
 		this.userInfoList=userInfoList;
-		this.accessRightTableX=$(this.accessRightTable).DataTable({ 
+		if (this.accessRightTableX==null)
+		{	
+			this.accessRightTableX=$(this.accessRightTable).DataTable({ 
 																	responsive: true,
 																	"columnDefs": 
 																	[
@@ -152,19 +155,28 @@ class UserManagement
 																	},				
 																	"fixedHeader":true
 																  });
-		for (var key in this.userInfoList)
+		}
+		if (Object.keys(this.userInfoList).length>0)
 		{
-			if (itemCount==0)
+			for (var key in this.userInfoList)
 			{
-				self.addRow(userInfoList[key],UserManagement.userNameCellSelectMode);
-				itemCount=1;
-			}
-			else
-				self.addRow(userInfoList[key]);
-		}	
+				if (itemCount==0)
+				{
+					self.addRow(userInfoList[key],UserManagement.userNameCellSelectMode);
+					itemCount=1;
+				}
+				else
+					self.addRow(userInfoList[key]);
+			}	
+		}
+		else
+		{	
+			this.accessRightTableX.clear().draw();
+		}
 	}
-	removeUser()
+	popupRemoveUserDialog()
 	{
+		var self=this;
 		var userItem=$(this.usersList).children(".userInfo-highlight")[0];
 		var warningModalContent=document.createElement("div");
 		warningModalContent.innerHTML="Are you are sure to delete user "+$(userItem).text()+"?";
@@ -175,7 +187,7 @@ class UserManagement
 										modal: true,
 										buttons: {
 											"Yes": function() {
-												console.log(userItem.id);
+												self.removeUser(userItem.id);
 											  $( this ).dialog( "close" );
 											},
 											"No": function() {
@@ -194,11 +206,18 @@ class UserManagement
 													$(this).parent().find(".ui-dialog-buttonpane button:contains('No')").focus();
 												}
 									});
-
-
-		
-		//alert($(userItem).text());
-		//this.userInfoList[
+	}
+	removeUser(userId)
+	{
+		var newUserInfoList=new Array();
+		for (var id in this.userInfoList)
+		{
+			if (id!=userId)
+			{
+				newUserInfoList[id]=this.userInfoList[id];	
+			}
+		}
+		this.loadData(newUserInfoList);
 	}
 	addUser()
 	{
