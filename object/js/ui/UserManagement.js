@@ -182,7 +182,36 @@ class UserManagement
 		this.adminServer.getRemoteSubDir(physicalDir,userId,accessRightId);
 		this.adminServer.getServerResponse().then(function(serverResponseObj)
 													{
+														var msg="<div style=\"border:1px solid black;padding-top: 0px; margin-top: 0px;\">";
+														msg+="<ul style=\"padding: 0px; margin: 0px;\">";
+														var listItem;
+														var dirList=serverResponseObj.returnObjects.dirList;
 														console.log(serverResponseObj);
+														console.log(dirList);
+														
+														for (var i=0;i<dirList.length;i++)
+														{
+															msg+="<li style=\"margin-left: 10px; list-style: none;\">";
+															switch(dirList[i].type)
+															{
+																case "drive":msg+="<i class=\"fa fa-hdd-o\"></i>";
+																						break;
+															}
+															msg+="&nbsp;<a rel=\""+dirList[i].pathName+"\" style=\"cursor: pointer;\">";
+															msg+=dirList[i].pathName;
+															msg+="</a>";
+															msg+="</li>";
+														}
+														msg+="</ul></div>";
+														console.log(msg);
+														$.jAlert({
+															//noPadContent:true,
+															'title': "Select a Directory",
+															'content':msg,
+															'theme': 'red',
+															closeBtn:false,
+															'btns': { 'text': 'Ok',class:"w3-red"}
+														  });
 													});	
 	}
 	popupRemoveUserDialog()
