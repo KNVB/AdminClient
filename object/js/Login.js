@@ -1,8 +1,6 @@
-	function Login(hostName,portNo,userName,password)
+	function Login(userName,password)
 	{
 		this.action="Login";
 		this.userName=userName;
 		this.password=password;
-		this.hostName=hostName;
-		this.portNo=portNo;
 	}

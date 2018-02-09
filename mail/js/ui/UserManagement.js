@@ -1,6 +1,6 @@
 class UserManagement
 {
-	constructor(adminPageControl)
+	constructor()
 	{
 		var border=0;
 		var self=this;
@@ -13,6 +13,7 @@ class UserManagement
 		var spacer=document.createElement("div");
 	
 		var thead=document.createElement("thead"); 
+		//var tbody1=document.createElement("TBODY");
 		
 		var addUserButton=document.createElement("Span");
 		var copyUserButton=document.createElement("Span");
@@ -28,9 +29,7 @@ class UserManagement
 		var accountSettingFieldSet=document.createElement("fieldset");	
 		
 		this.accessRightTableX=null;
-		this.adminServer=adminPageControl.adminServer;
 		this.userInfoList=new Array();
-		
 		this.usersList=document.createElement("ul");
 		this.warningDiv=document.createElement("div");
 		this.passwordDiv=document.createElement("div");
@@ -175,15 +174,9 @@ class UserManagement
 			this.accessRightTableX.clear().draw();
 		}
 	}
-	popupPhyiscalDirDialog(physicalDir,userId,accessRightId)
+	popupPhyiscalDirDialog(userId,accessRightId)
 	{
-		//alert(userId+","+accessRightId);
-		console.log(physicalDir,userId,accessRightId);
-		this.adminServer.getRemoteSubDir(physicalDir,userId,accessRightId);
-		this.adminServer.getServerResponse().then(function(serverResponseObj)
-													{
-														console.log(serverResponseObj);
-													});	
+		alert(userId+","+accessRightId);
 	}
 	popupRemoveUserDialog()
 	{
@@ -281,7 +274,7 @@ class UserManagement
 											var row=document.createElement("tr");
 											var cell=row.insertCell(row.cells.length);
 											var virtualDirInputBox=document.createElement("input");
-											let physicalDirInputBox=document.createElement("input");
+											var physicalDirInputBox=document.createElement("input");
 											var deleteButton=document.createElement("i");
 											
 											virtualDirInputBox.setAttribute("type","text");
@@ -295,7 +288,7 @@ class UserManagement
 											physicalDirInputBox.readOnly=true;
 											physicalDirInputBox.onclick=function()
 																		{
-																			self.popupPhyiscalDirDialog(physicalDirInputBox.value,userInfo.userId,key2);
+																			self.popupPhyiscalDirDialog(userInfo.userId,key2);
 																		};
 											cell=row.insertCell(row.cells.length);
 											cell.appendChild(physicalDirInputBox);	

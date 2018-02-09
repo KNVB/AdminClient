@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>FTP Server Administration Page</title>
+<title>J</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
@@ -74,43 +75,56 @@ html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
-<script language="JavaScript" src="js/security/JsEncrypt.js"></script>
-<script language="JavaScript" src="js/security/MessageCoder.js"></script>
-<script src="js/security/cryptojs/rollups/aes.js"></script>
-<script src="js/security/cryptojs/components/mode-ctr-min.js"></script>
-<script src="js/security/cryptojs/components/pad-nopadding.js"></script>
-
-<script src="js/util/Utility.js"></script>
-<script src="js/util/AdminServer.js"></script>
-
-<script src="js/ui/ModuleTemplate.js"></script>
-<script src="js/ui/FtpModule.js"></script>
-<script src="js/ui/ModuleList.js"></script>
-<script src="js/ui/LogoutModule.js"></script>
-<script src="js/ui/LoginSideBar.js"></script>
-<script src="js/ui/AdminServerModule.js"></script>
-<script src="js/ui/AdminPageControl.js"></script>
-<script src="js/ui/FtpServerInfoPage.js"></script>
-
-<script src="js/ui/UserManagement.js"></script>
-<script src="js/ui/jquery.easing.1.3.js"></script>
-<script src="js/ui/AlertBox.js"></script>
-<script src="js/ui/ConfirmBox.js"></script>
-<script src="js/ui/jAlert.min.js"></script>
-<script src="js/ui/jAlert-functions.min.js"></script>
-<script src="js/ui/jquery.loading.block.js"></script>
-
-<script src="js/Login.js"></script>
-<script src="js/UserInfo.js"></script>
-<script src="js/AccessRight.js"></script>
-<script src="js/FtpServerInfo.js"></script>
+<script src="jAlert.min.js"></script>
+<script src="jAlert-functions.min.js"></script>
+<script src="jquery.easing.1.3.js"></script>
 <script>
-	$(document).ready(function() 
-				{
-					var adminPageControl=new AdminPageControl();
+	class ConfirmBox
+	{
+		constructor(questionText)
+		{
+			var defer = $.Deferred();
+			$.jAlert({
+					'title': false,
+					"type":"confirm",
+					"content":questionText,
+					"confirmQuestion":questionText,
+					"confirmBtnText":"Yes",
+					"denyBtnText":"No",
+					"closeBtn":false,
+					"confirmAutofocus":'.denyBtn',
+					onConfirm:function()
+								{
+									defer.resolve(true);
+								},
+					onDeny:function()
+							{	
+								defer.resolve(false);
+							}
 				});
+			return defer.promise();	
+		}
+	}
+	function showAlert()
+	{
+		$.jAlert({
+			'title': false,
+			'content': 'YAY!',
+			'theme': 'red',
+			closeBtn:false,
+			'btns': { 'text': 'Ok',class:"w3-red"}
+		  });
+	}
+	function showConfirm()
+	{
+		(new ConfirmBox("Are u?")).then(function (result)
+										{
+											console.log(result);
+										})
+	}
 </script>
-</head>
 <body>
+<button onclick="showAlert()">Alert</button>
+<button onclick="showConfirm()">Confirm</button>
 </body>
-</html> 
+</html>
