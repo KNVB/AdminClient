@@ -19,8 +19,7 @@ class AdminPageControl
 		
 		//<!-- Overlay effect when opening the side navigation on small screens -->
 		overlayDiv=document.createElement("div");
-		overlayDiv.className="w3-overlay w3-hide-large w3-animate-opacity" 
-		overlayDiv.style="cursor:pointer";
+		overlayDiv.className="w3-overlay w3-hide-large w3-animate-opacity w3-button"; 
 		overlayDiv.title="Close Sidemenu"; 
 		overlayDiv.id="myOverlay";
 		overlayDiv.onclick=function()
