@@ -177,7 +177,7 @@ class UserManagement
 	}
 	popupPhyiscalDirDialog(physicalDir,userId,accessRightId)
 	{
-		//alert(userId+","+accessRightId);
+		//ale(userId+","+accessRightId);
 		console.log(physicalDir,userId,accessRightId);
 		this.adminServer.getRemoteSubDir(physicalDir,userId,accessRightId);
 		this.adminServer.getServerResponse().then(function(serverResponseObj)
@@ -186,8 +186,8 @@ class UserManagement
 														msg+="<ul style=\"padding: 0px; margin: 0px;\">";
 														var listItem;
 														var dirList=serverResponseObj.returnObjects.dirList;
-														console.log(serverResponseObj);
-														console.log(dirList);
+														//console.log(serverResponseObj);
+														//console.log(dirList);
 														
 														for (var i=0;i<dirList.length;i++)
 														{
@@ -203,7 +203,7 @@ class UserManagement
 															msg+="</li>";
 														}
 														msg+="</ul></div>";
-														console.log(msg);
+														//console.log(msg);
 														$.jAlert({
 															//noPadContent:true,
 															'title': "Select a Directory",
@@ -304,39 +304,9 @@ class UserManagement
 											self.passwordDiv.style.display="none";
 										}
 										self.accessRightTableX.clear();
-										
 										for (let key2 in accessRightList)
 										{
-											var row=document.createElement("tr");
-											var cell=row.insertCell(row.cells.length);
-											var virtualDirInputBox=document.createElement("input");
-											let physicalDirInputBox=document.createElement("input");
-											var deleteButton=document.createElement("i");
-											
-											virtualDirInputBox.setAttribute("type","text");
-											virtualDirInputBox.id="virtualPath_"+userInfo.userId+"_"+key2;
-											virtualDirInputBox.setAttribute("value",accessRightList[key2].virtualDir);
-											cell.appendChild(virtualDirInputBox);	
-
-											physicalDirInputBox.setAttribute("type","text");
-											physicalDirInputBox.id="physicalPath_"+userInfo.userId+"_"+key2;
-											physicalDirInputBox.setAttribute("value",accessRightList[key2].physicalDir);
-											physicalDirInputBox.readOnly=true;
-											physicalDirInputBox.onclick=function()
-																		{
-																			self.popupPhyiscalDirDialog(physicalDirInputBox.value,userInfo.userId,key2);
-																		};
-											cell=row.insertCell(row.cells.length);
-											cell.appendChild(physicalDirInputBox);	
-											
-											deleteButton.className="fa fa-trash"; 
-											deleteButton.style.fontSize="25px";
-											cell=row.insertCell(row.cells.length);
-											cell.appendChild(deleteButton);	
-
-											var dt = $(self.accessRightTable).dataTable().api();
-											dt.row.add($(row));
-											dt.draw();
+											self.addAccessRightRow(userInfo.userId,accessRightList[key2]);
 										}																				
 									});
 			//$(userItem).mousedown(function(e){ e.preventDefault(); });	//prevent highlight text from double click	
@@ -368,6 +338,41 @@ class UserManagement
 				userItem.dispatchEvent(evt);
 			}
 
+	}
+	addAccessRightRow(userId,accessRightItem)
+	{
+		var self=this;
+		var row=document.createElement("tr");
+		var cell=row.insertCell(row.cells.length);
+		var virtualDirInputBox=document.createElement("input");
+		let physicalDirInputBox=document.createElement("input");
+		var deleteButton=document.createElement("i");
+		
+		virtualDirInputBox.setAttribute("type","text");
+		virtualDirInputBox.id="virtualPath_"+userId+"_"+accessRightItem.id;
+		virtualDirInputBox.setAttribute("value",accessRightItem.virtualDir);
+		cell.appendChild(virtualDirInputBox);	
+		
+		physicalDirInputBox.setAttribute("type","text");
+		physicalDirInputBox.id="physicalPath_"+userId+"_"+accessRightItem.id;
+		physicalDirInputBox.setAttribute("value",accessRightItem.physicalDir);
+		physicalDirInputBox.readOnly=true;
+		
+		physicalDirInputBox.onclick=function()
+																		{
+																			self.popupPhyiscalDirDialog(physicalDirInputBox.value,userId,accessRightItem.id);
+																		};
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(physicalDirInputBox);	
+		
+		deleteButton.className="fa fa-trash"; 
+		deleteButton.style.fontSize="25px";
+		cell=row.insertCell(row.cells.length);
+		cell.appendChild(deleteButton);	
+																
+		var dt = $(self.accessRightTable).dataTable().api();
+		dt.row.add($(row));
+		dt.draw();
 	}
 	validateUserName(userNameBox)
 	{
