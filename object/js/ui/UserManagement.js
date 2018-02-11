@@ -184,7 +184,7 @@ class UserManagement
 													{
 														var msg="<div style=\"border:1px solid black;padding-top: 0px; margin-top: 0px;\">";
 														msg+="<ul style=\"padding: 0px; margin: 0px;\">";
-														var listItem;
+														var listItem,linkItem;
 														var dirList=serverResponseObj.returnObjects.dirList;
 														//console.log(serverResponseObj);
 														//console.log(dirList);
@@ -196,9 +196,16 @@ class UserManagement
 															{
 																case "drive":msg+="<i class=\"fa fa-hdd-o\"></i>";
 																						break;
+																case "folder":msg+="<i class=\"fa fa-folder\"></i>";
+																						break;
 															}
-															msg+="&nbsp;<a rel=\""+dirList[i].pathName+"\" style=\"cursor: pointer;\">";
-															msg+=dirList[i].pathName;
+															linkItem=document.createElement("a");
+															linkItem.setAttribute("rel",dirList[i].pathName);
+															linkItem.style.cursor="pointer";
+															linkItem.text=dirList[i].pathName;
+															msg+="&nbsp;"+linkItem.outerHTML;
+															
+															//msg+="&nbsp;<a rel=\""+dirList[i].pathName+"\" style=\"cursor: pointer;\">";
 															msg+="</a>";
 															msg+="</li>";
 														}
