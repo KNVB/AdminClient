@@ -36,6 +36,8 @@
 	.closeButtonSpan
 	{
 		float:right;
+		color:white;
+		cursor:pointer;
 	}
 	.titleTextSpan
 	{
@@ -49,23 +51,20 @@
 	}
 	.dialogContentDiv
 	{
+		position:relative;
 		padding:8px;
-
+		height:100%;
 	}
 	.butttonDiv
 	{
-		position:relative;
-		bottom:8px;
-		right:8px;
+		display:table-cell
 	}
 	.butttonSetDiv
 	{
+		display:flex;
 		position:absolute;
-		
-	}
-	.closeButton
-	{
-		color:white;
+		bottom:8px;
+		right:8px
 	}
 </style>
 </style>
@@ -78,28 +77,13 @@
 			<div class="titleBar">
 				<span class="titleTextSpan">Title</span>
 				<span class="closeButtonSpan">
-					<i class="closeButton fa fa-remove"></i>
+					X
 				</span>
 			</div>
-			<div style="position:relative;border:1px solid brown;padding:8px;height:100%">
-				<ul style="padding: 0px; margin: 0px;">
-				  <li style="margin-left: 10px; list-style: none;"><span style="color: red; background: white;">🖿</span><a rel="/abc" style="cursor: pointer; background: white;">abc</a>
-					<ul style="padding: 0px; margin: 0px;">
-					  <li style="margin-left: 10px; list-style: none;"><span style="color: red; background: white;">🖿</span><a rel="/abc/一二三" style="cursor: pointer; background: white;">一二三</a>
-						<ul style="padding: 0px; margin: 0px;">
-						  <li style="margin-left: 10px; list-style: none;"><span style="color: red; background: rgb(170, 183, 209);">🖿</span><a rel="/abc/一二三/一二三" style="cursor: pointer; background: rgb(170, 183, 209);">一二三</a>
-							<ul style="padding: 0px; margin: 0px;">
-							  <li style="margin-left: 10px; list-style: none;"><span style="color: red;">🖿</span><a rel="/abc/一二三/一二三/一二三" style="cursor: pointer;">一二三</a></li>
-							</ul>
-						  </li>
-						</ul>
-					  </li>
-					</ul>
-				  </li>
-				</ul>
-				<div style="position:absolute;bottom:8px;right:8px">
-					<div style="float:right" class="w3-red w3-button">No</div>
-					<div style="float:right" class="w3-red w3-button">Yes</div>
+			<div class="dialogContentDiv">
+				<div class="butttonSetDiv">
+					<div class="butttonDiv">Yes</div>&nbsp;
+					<div class="butttonDiv">No</div>
 				</div>
 			</div>
 		</div>
