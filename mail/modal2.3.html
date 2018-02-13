@@ -31,12 +31,16 @@
 		width:30%;
 		height:20%;
 		background-color:white;
-		border-radius:10px;
 		padding:8px;
+	}
+	.dialogRoundCorner
+	{
+		border-radius:10px;
 	}
 	.closeButton
 	{
 		float:right!important;
+		cursor:pointer;
 	}
 	.title
 	{
@@ -44,8 +48,11 @@
 	}
 	.titleBar
 	{
-		border-radius:10px 10px 0px 0px;
 		height:20%;		
+	}
+	.titleBarRoundCorner
+	{
+		border-radius:10px 10px 0px 0px;
 	}
 	.dialogContent
 	{
@@ -61,8 +68,9 @@
 	.butttonBar
 	{
 		position:absolute!important;
-		bottom:8px!important;
+		bottom:0px!important;
 		width:100%;
+		
 	}
 	.centeredButttonBar
 	{
@@ -106,10 +114,13 @@
 							dialogContentContainerClass:"dialogContentContainer",
 							closeButtonHTML:"X",
 							closeButtonDom:null,
-							//buttons:[{class:"button","text":"Ok","handler":yes}],
-							buttons:[{class:"button","text":"Yes","handler":yes},{class:"button","text":"No","handler":no}],
+							closeOnEsc:true,
+							isRoundCorner:true,
+							showCloseButton:true,
+							buttons:[{class:"button","text":"Ok","handler":function(){$(backgroundDiv).remove();}}],
 						}
 					$.extend(defaults, opts);
+					backgroundDiv.id="modalBackground";
 					titleDiv.className=defaults.titleContentClass;
 					dialogDiv.className=defaults.dialogClass;
 					titleBarDiv.className=defaults.titleBarClass;
@@ -119,16 +130,22 @@
 					dialogContentDiv.className=defaults.dialogContentClass;
 					dialogContentContainerDiv.className=defaults.dialogContentContainerClass;
 					
+					if (defaults.isRoundCorner)
+					{
+						dialogDiv.className+=" dialogRoundCorner";
+						titleBarDiv.className+=" titleBarRoundCorner";
+					}
 					titleBarDiv.appendChild(titleDiv);
 					
 					if (defaults.closeButtonHTML!=false)
 						closeButtonDiv.innerHTML=defaults.closeButtonHTML;
 					else
 						closeButtonDiv.appendChild(defaults.closeButtonDom);
-						
-					titleBarDiv.appendChild(closeButtonDiv);
-					
-					addButtons(defaults.buttons,buttonBarDiv);
+					if (defaults.showCloseButton)	
+					{	
+						titleBarDiv.appendChild(closeButtonDiv);
+						closeButtonDiv.onclick=function(){$(backgroundDiv).remove();};
+					}
 					dialogContentContainerDiv.appendChild(buttonBarDiv);
 					dialogContentContainerDiv.appendChild(dialogContentDiv);
 
@@ -136,21 +153,48 @@
 					dialogDiv.appendChild(dialogContentContainerDiv);
 					backgroundDiv.appendChild(dialogDiv);
 					document.body.appendChild(backgroundDiv);
+					addButtons(defaults.buttons,buttonBarDiv);
+					if (defaults.closeOnEsc)
+					{
+						backgroundDiv.click();
+						$(dialogDiv).keydown(function(event)
+																{
+																	if (event.which==27)
+																	{
+																		$(backgroundDiv).remove();
+																	}
+																});
+					}
 				};
+				function close()
+				{
+					$("#modalBackground").remove();
+				}
 				function addButtons(buttonList,buttonBarDiv)
 				{
 					buttonList.map(function (item)
 									{
-										var buttonDiv=document.createElement("div");
-										buttonDiv.textContent=item.text;
-										buttonDiv.className=item.class;
-										buttonDiv.onclick=function()
-														{
-															item.handler();
-														}
-										buttonBarDiv.appendChild(buttonDiv);
+										var buttonObj
+										if (item.text==false)
+										{
+											buttonObj=item.domObj;
+										}
+										else
+										{
+											buttonObj=document.createElement("button");
+											buttonObj.textContent=item.text;
+										}
+										buttonObj.className+=" "+item.class;
+										buttonObj.onclick=function()
+																			{
+																				item.handler();
+																				close();
+																			};
 										if (buttonList.length>1)
-											buttonDiv.className+=" buttonRight";
+												buttonObj.className+=" buttonRight";
+										buttonBarDiv.appendChild(buttonObj);
+										if ((item.focus)||(buttonList.length==1))
+												buttonObj.focus();
 									});
 					if (buttonList.length==1)
 					{	
@@ -162,9 +206,22 @@
 	{
 		console.log("go button clicked");
 		var closeDom=document.createElement("i");
+		var yesButton=document.createElement("button");
 		closeDom.className="fa fa-remove";
-		$.Modal({closeButtonHTML:"<i class=\"fa fa-remove\"></i>",
-				 	
+		yesButton.className="w3-button w3-red";
+		$(yesButton).text("Ok");		
+		$.Modal({closeButtonHTML:false,
+				 		 closeButtonDom:closeDom,
+				 		 isRoundCorner:false,
+				 		 //showCloseButton:false,
+				 		 buttons:[{focus:true,
+				 		 					 class:"button w3-button w3-red",
+				 		 					 "text":"No",
+				 		 					 "handler":no},
+				 		 					{"text":false,
+				 		 						focus:false,
+				 		 					domObj:yesButton,
+				 		 					"handler":yes}],
 				});
 	}
 	function yes()
