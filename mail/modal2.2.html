@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 	html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
-	.baseDiv
+	.background
 	{
 		left:0;
 		top:0;
@@ -21,73 +21,82 @@
 		background-color:rgba(0, 0, 0, .5);
 		z-index:10000;
 	}
-	.dialogDiv
+	.dialog
 	{
 		display:flex;
 		flex-direction:column;
 		z-index:4;
 		min-height:100px;
 		min-width:250px;
-		width:500px;
-		height:200px;
+		width:30%;
+		height:20%;
 		background-color:white;
-		border-radius:10px
+		border-radius:10px;
+		//border:1px solid yellow;
+		padding:8px;
 	}
-	.closeButtonSpan
+	.closeButton
 	{
-		float:right;
-		color:white;
-		cursor:pointer;
+		float:right!important;
 	}
 	.title
 	{
-		color:white;
+		float:left!important;
 	}
 	.titleBar
 	{
-		padding:8px;
-		display:flex;
-		position:relative;
-		width:100%;
-		background-color:red;
 		border-radius:10px 10px 0px 0px;
+		//padding:8px;
+		//border:1px solid green;
+		height:20%;		
 	}
-	.dialogContentDiv
+	.dialogContent
+	{
+		
+	}
+	.dialogContentContainer
 	{
 		position:relative;
-		padding:8px;
-		height:100%;
+		//padding:8px;
+		height:80%;
+		width:100%;
+		//border:1px solid red;
+		
 	}
-	.butttonDiv
+	
+	.butttonBar
 	{
-		display:table-cell
-	}
-	.butttonSetDiv
-	{
-		display:flex;
 		position:absolute;
 		bottom:8px;
-		right:8px
+		width:100%;
+		//padding-right:8px;
+		border:1px solid #445566;
+		text-align:center;
+	}
+	.button
+	{
+		margin-left:3px;
 	}
 </style>
 </style>
 <script src="http://code.jquery.com/jquery-3.2.1.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
-<body bgcolor="blue">
-	<div class="baseDiv">
-		<div class="dialogDiv">
-			<div style="border-radius:10px 10px 0px 0px;padding:8px;background-color:red">
-				<div style="float:left!important;">Title</div>
-				<div style="float:right!important;">X</div>
+<body bgcolor="white">
+	<input type=button value="go">
+	<div class="background">
+		<div class="dialog">
+			<div class="titleBar">
+				<div class="title">title</div>
+				<div class="closeButton">X</div>
 			</div>
-			<div class="dialogContentDiv">
-				<div>
-					content
-				</div>
-				<div class="butttonSetDiv">
-					<div class="butttonDiv">Yes</div>&nbsp;
-					<div class="butttonDiv">No</div>
+			<div class="dialogContentContainer">
+				<div class="dialogContent">Content</div>
+				<div class="butttonBar">
+					<div class="w3-red w3-button">2</div>
+					<!-- div style="float:right;margin-left:3px;" class="w3-red w3-button">1</div>
+					<div style="float:right;margin-left:3px;" class="w3-red w3-button">2</div>
+					<div style="float:right;margin-left:3px;" class="w3-red w3-button">3</div -->
 				</div>
 			</div>
 		</div>
