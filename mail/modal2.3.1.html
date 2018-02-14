@@ -42,14 +42,25 @@
 	{
 		float:right!important;
 		cursor:pointer;
+		border:1px solid #00ffff;
+	}
+	.titleContentWrapper
+	{
+		padding:5px;
+		border:1px solid white;
+		position:relative!important;
+		width:100%!important;
+		height:100%!important;
 	}
 	.title
 	{
 		float:left!important;
+		position:relative!important;
+		border:1px solid #00ffff;
 	}
 	.titleBar
 	{
-		height:15%;
+		height:20%;
 		position:relative!important;
 		background-color:green;
 	}
@@ -63,7 +74,7 @@
 	}
 	.dialogContentContainer
 	{
-		height:85%;
+		height:80%;
 		width:100%;
 		padding:8px;
 		//border:1px solid red;
@@ -91,14 +102,6 @@
 		float:right!important;
 	}
 	
-	.titleContentWrapper
-	{
-		padding:5px;
-		//border:1px solid white;
-		position:relative!important;
-		width:100%!important;
-		height:100%!important;
-	}
 	.dialogContentWrapper
 	{	
 		position:relative;
@@ -136,9 +139,11 @@
 							closeButtonClass:"closeButton",
 							dialogContentClass:"dialogContent",
 							dialogContentContainerClass:"dialogContentContainer",
-							closeButtonHTML:"X",
+							closeButtonText:"X",
 							closeButtonDom:null,
 							closeOnEsc:true,
+							titleText:"Title",
+							titleDom:null,
 							isRoundCorner:true,
 							showCloseButton:true,
 							buttons:[{class:"button","text":"Ok","handler":function(){$(backgroundDiv).remove();}}],
@@ -159,12 +164,19 @@
 						dialogDiv.className+=" dialogRoundCorner";
 						titleBarDiv.className+=" titleBarRoundCorner";
 					}
+					if (defaults.titleText!=false)
+						titleContentDiv.textContent=defaults.titleText;
+					else
+					{	
+						console.log(defaults.titleDom);
+						titleContentDiv.appendChild(defaults.titleDom);
+					}
+					console.log(titleContentDiv.outerHTML);					
 					titleContentWrapper.className="titleContentWrapper";
 					titleContentWrapper.appendChild(titleContentDiv);
-					
-					
-					if (defaults.closeButtonHTML!=false)
-						closeButtonDiv.innerHTML=defaults.closeButtonHTML;
+					console.log("1:"+titleContentWrapper.outerHTML);
+					if (defaults.closeButtonText!=false)
+						closeButtonDiv.textContent=defaults.closeButtonText;
 					else
 						closeButtonDiv.appendChild(defaults.closeButtonDom);
 					if (defaults.showCloseButton)	
@@ -172,17 +184,23 @@
 						titleContentWrapper.appendChild(closeButtonDiv);
 						closeButtonDiv.onclick=function(){$(backgroundDiv).remove();};
 					}
+					console.log("2:"+titleContentWrapper.outerHTML);
 					titleBarDiv.appendChild(titleContentWrapper);
+					console.log("3:"+titleBarDiv.outerHTML);
+					
 					dialogContentWrapper.className="dialogContentWrapper";
 					dialogContentWrapper.appendChild(dialogContentDiv);
 					dialogContentWrapper.appendChild(buttonBarDiv);
 					dialogContentContainerDiv.appendChild(dialogContentWrapper);
 					
 					dialogDiv.appendChild(titleBarDiv);
+					console.log("4:"+dialogDiv.outerHTML);
 					dialogDiv.appendChild(dialogContentContainerDiv);
+					console.log("5:"+dialogDiv.outerHTML);
 					backgroundDiv.appendChild(dialogDiv);
 					document.body.appendChild(backgroundDiv);
 					addButtons(defaults.buttons,buttonBarDiv);
+					console.log("6:"+dialogDiv.outerHTML);
 					if (defaults.closeOnEsc)
 					{
 						backgroundDiv.click();
@@ -240,22 +258,29 @@
 		console.log("go button clicked");
 		var closeDom=document.createElement("i");
 		var yesButton=document.createElement("div");
-		closeDom.className="fa fa-remove";
+		var noButton=document.createElement("div");
+		closeDom.className="w3-red fa fa-remove";
 		yesButton.className="button";
+		$(noButton).text("reject");
+		noButton.className="w3-red";
+		
+		
 		$(yesButton).text("Ok");		
-		$.Modal({closeButtonHTML:false,
-				 		 closeButtonDom:closeDom,
-				 		 isRoundCorner:true,
-				 		 //showCloseButton:false,
-						 //titleBarClass:"titleBar",
-				 		 buttons:[{focus:true,
-				 		 					 class:"button",
-				 		 					 "text":"No",
-				 		 					 "handler":no},
-				 		 					{"text":false,
-				 		 						focus:false,
-				 		 					domObj:yesButton,
-				 		 					"handler":yes}],
+		$.Modal({titleText:"Title",
+				 titleDom:noButton,
+				 closeButtonText:false,
+				 closeButtonDom:closeDom,
+				 isRoundCorner:true,
+				 //showCloseButton:false,
+				 //titleBarClass:"titleBar",
+				 buttons:[{focus:true,
+									 class:"button",
+									 "text":"No",
+									 "handler":no},
+									{"text":false,
+										focus:false,
+									domObj:yesButton,
+									"handler":yes}],
 				});
 	}
 	function yes()
