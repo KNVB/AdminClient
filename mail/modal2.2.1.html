@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>Modal testing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+	html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
+	.background
+	{
+		left:0;
+		top:0;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		position:fixed;
+		width:100%;
+		height:100%;
+		background-color:rgba(0, 0, 0, .5);
+		z-index:10000;
+	}
+	.dialog
+	{
+		display:table;
+		flex-direction:column;
+		z-index:4;
+		min-height:100px;
+		min-width:250px;
+		width:30%;
+		height:20%;
+		background-color:white;
+		border-radius:10px;
+		border:1px solid yellow;
+	}
+	.closeButton
+	{
+		float:right!important;
+	}
+	.title
+	{
+		float:left!important;
+	}
+	.titleBar
+	{
+		border-radius:10px 10px 0px 0px;
+		//padding:8px;
+		//border:1px solid green;
+		height:20%;		
+	}
+	.dialogContent
+	{
+		
+	}
+	.dialogContentContainer
+	{
+		position:relative;
+		//padding:8px;
+		height:80%;
+		width:100%;
+		//border:1px solid red;
+		
+	}
+	
+	.butttonBar
+	{
+		position:absolute;
+		bottom:8px;
+		width:100%;
+		//padding-right:8px;
+		border:1px solid #445566;
+		text-align:center;
+	}
+	.button
+	{
+		margin-left:3px;
+	}
+</style>
+</style>
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body bgcolor="white">
+	<input type=button value="go">
+	<div class="background">
+		<div class="dialog">
+			<div style="height:20%;display:table-row">
+				<div style="display:table-cell">
+					<div style="display:table;width:100%;border:1px solid green;">
+						<div style="display:table-row;">
+							<div style="display:table-cell;float:left;padding:8px">
+								title
+							</div>
+							<div style="display:table-cell;float:right;padding:8px">
+								title
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>	
+			<div style="display:table-row;height:80%">
+				<div style="display:table-cell;border:1px solid blue;padding:8px">
+					<div>
+					sdfdsfds
+					</div>
+					<div style="border:1px solid magenta;display:table;float:right;bottom:0px">
+						<div style="display:table-row;cell-spacing:8px">
+							<div style="display:table-cell;margin-left:3px">
+								fddsfdsf
+							</div>
+							<div style="display:table-cell;margin-left:3px">
+								dsfdsff
+							</div>
+						</div>
+					</div
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</body>
+</html>	

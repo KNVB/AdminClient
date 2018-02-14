@@ -32,6 +32,7 @@
 		height:25%;
 		background-color:white;
 		padding:0px;
+		position:relative;
 	}
 	.dialogRoundCorner
 	{
@@ -48,7 +49,7 @@
 	}
 	.titleBar
 	{
-		height:10%;
+		height:15%;
 		position:relative!important;
 		background-color:green;
 	}
@@ -58,26 +59,23 @@
 	}
 	.dialogContent
 	{
-		//position:relative!important;
-		//height:90%;
 		border:1px solid yellow;
 	}
 	.dialogContentContainer
 	{
-		position:relative!important;
-		height:100%;
+		height:85%;
 		width:100%;
-		padding:3px;
-		border:1px solid green;
+		padding:8px;
+		//border:1px solid red;
+		position:relative;
 	}
 	
 	.butttonBar
 	{
-		position:absolute!important;
 		bottom:0px!important;
-		width:inherit;
-		
-		border:1px solid purple;
+		width:100%!important;
+		position:absolute!important;
+		//border:1px solid orange;
 	}
 	.centeredButttonBar
 	{
@@ -92,6 +90,22 @@
 	{
 		float:right!important;
 	}
+	
+	.titleContentWrapper
+	{
+		padding:5px;
+		//border:1px solid white;
+		position:relative!important;
+		width:100%!important;
+		height:100%!important;
+	}
+	.dialogContentWrapper
+	{	
+		position:relative;
+		//border:1px solid blue;
+		width:100%!important;
+		height:100%!important;
+	}
 </style>
 <script src="http://code.jquery.com/jquery-3.2.1.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -100,13 +114,16 @@
 	{
 		$.Modal=function(opts) 
 				{
-					var titleDiv=document.createElement("DIV");
-					var dialogDiv=document.createElement("DIV");
 					var titleBarDiv=document.createElement("DIV");
+					var titleContentDiv=document.createElement("DIV");
+					var titleContentWrapper=document.createElement("DIV");
+					var dialogDiv=document.createElement("DIV");
+					
 					var backgroundDiv=document.createElement("DIV");
 					var buttonBarDiv=document.createElement("DIV");
 					var closeButtonDiv=document.createElement("DIV");
 					var dialogContentDiv=document.createElement("DIV");
+					var dialogContentWrapper=document.createElement("DIV");
 					var dialogContentContainerDiv=document.createElement("DIV");
 					
 					var defaults = 
@@ -128,7 +145,7 @@
 						}
 					$.extend(defaults, opts);
 					backgroundDiv.id="modalBackground";
-					titleDiv.className=defaults.titleContentClass;
+					titleContentDiv.className=defaults.titleContentClass;
 					dialogDiv.className=defaults.dialogClass;
 					titleBarDiv.className=defaults.titleBarClass;
 					backgroundDiv.className=defaults.backgroundClass;
@@ -142,7 +159,9 @@
 						dialogDiv.className+=" dialogRoundCorner";
 						titleBarDiv.className+=" titleBarRoundCorner";
 					}
-					titleBarDiv.appendChild(titleDiv);
+					titleContentWrapper.className="titleContentWrapper";
+					titleContentWrapper.appendChild(titleContentDiv);
+					
 					
 					if (defaults.closeButtonHTML!=false)
 						closeButtonDiv.innerHTML=defaults.closeButtonHTML;
@@ -150,12 +169,14 @@
 						closeButtonDiv.appendChild(defaults.closeButtonDom);
 					if (defaults.showCloseButton)	
 					{	
-						titleBarDiv.appendChild(closeButtonDiv);
+						titleContentWrapper.appendChild(closeButtonDiv);
 						closeButtonDiv.onclick=function(){$(backgroundDiv).remove();};
 					}
-					
-					dialogContentContainerDiv.appendChild(dialogContentDiv);
-					dialogContentContainerDiv.appendChild(buttonBarDiv);
+					titleBarDiv.appendChild(titleContentWrapper);
+					dialogContentWrapper.className="dialogContentWrapper";
+					dialogContentWrapper.appendChild(dialogContentDiv);
+					dialogContentWrapper.appendChild(buttonBarDiv);
+					dialogContentContainerDiv.appendChild(dialogContentWrapper);
 					
 					dialogDiv.appendChild(titleBarDiv);
 					dialogDiv.appendChild(dialogContentContainerDiv);
@@ -192,7 +213,8 @@
 											buttonObj=document.createElement("button");
 											buttonObj.textContent=item.text;
 										}
-										buttonObj.className+=" "+item.class;
+										if ((item.class!=null) &&($.trim(item.class)!=""))
+											buttonObj.className+=" "+item.class;
 										if(typeof item.handler==="function")
 										{	
 											buttonObj.onclick=function()
@@ -223,9 +245,9 @@
 		$(yesButton).text("Ok");		
 		$.Modal({closeButtonHTML:false,
 				 		 closeButtonDom:closeDom,
-				 		 isRoundCorner:false,
+				 		 isRoundCorner:true,
 				 		 //showCloseButton:false,
-						 titleBarClass:"titleBar",
+						 //titleBarClass:"titleBar",
 				 		 buttons:[{focus:true,
 				 		 					 class:"button",
 				 		 					 "text":"No",
@@ -248,22 +270,6 @@
 </head>
 <body bgcolor="white" onload="go()">
 	<input type=button value="go" onclick="go()">
-	<!--div class="background">
-		<div class="dialog">
-			<div class="titleBar">
-				<div class="title">title</div>
-				<div class="closeButton">X</div>
-			</div>
-			<div class="dialogContentContainer">
-				<div class="dialogContent">Content</div>
-				<div class="butttonBar">
-					<div class="w3-red w3-button">2</div>
-					<div style="float:right;margin-left:3px;" class="w3-red w3-button">1</div>
-					<div style="float:right;margin-left:3px;" class="w3-red w3-button">2</div>
-					<div style="float:right;margin-left:3px;" class="w3-red w3-button">3</div>
-				</div>
-			</div>
-		</div>
-	</div-->
+	
 </body>
 </html>	

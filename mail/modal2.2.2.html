@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>Modal testing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+	html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
+	.background
+	{
+		left:0;
+		top:0;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		position:fixed;
+		width:100%;
+		height:100%;
+		background-color:rgba(0, 0, 0, .5);
+		z-index:10000;
+	}
+	.dialog
+	{
+		display:flex;
+		flex-direction:column;
+		z-index:4;
+		min-height:100px;
+		min-width:250px;
+		width:35%;
+		height:25%;
+		background-color:white;
+		padding:0px;
+		position:relative;
+	}
+	.dialogContent
+	{
+	}
+	.titleBar
+	{
+		height:15%;
+		position:relative!important;
+		background-color:green;
+	}
+	.title
+	{
+		float:left!important;
+	}
+	.closeButton
+	{
+		float:right!important;
+		cursor:pointer;
+	}
+	.dialogContentContainer
+	{
+		height:85%;
+		width:100%;
+		padding:3px;
+		border:1px solid red;
+		position:relative;
+	}
+	.butttonBar
+	{
+		bottom:0px;
+		width:100%;
+		position:absolute!important;
+		border:1px solid orange;
+		//vertical-align: bottom; not working
+	}
+</style>
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body bgcolor="white">
+	<input type=button value="go">
+	<div class="background">
+		<div class="dialog">
+			<div class="titleBar">
+				<div style="vertical-align:middle;padding:5px;border:1px solid white;position:relative;width:100%;height:100%">
+					<div class="title">title</div>
+					<div class="closeButton">X</div>
+				</div>
+			</div>
+			<div class="dialogContentContainer">
+				<div style="position:relative;border:1px solid blue;width:100%;height:100%">
+					<div class="dialogContent">Content</div>
+					<div class="butttonBar">
+						<div class="w3-red w3-button">2</div>
+						<div style="float:right;margin-left:3px;" class="w3-red w3-button">1</div>
+						<div style="float:right;margin-left:3px;" class="w3-red w3-button">2</div>
+						<div style="float:right;margin-left:3px;" class="w3-red w3-button">3</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>	
