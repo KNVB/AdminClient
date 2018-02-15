@@ -36,22 +36,11 @@
 	}
 	.dialogContent
 	{
-	}
-	.titleBar
-	{
-		height:15%;
-		position:relative!important;
-		background-color:green;
-	}
-	.title
-	{
-		float:left!important;
-		border:1px solid #00ffff;
-	}
-	.closeButton
-	{
-		float:right!important;
-		cursor:pointer;
+		position:absolute;
+		border:10px solid black;
+		width:100%;
+		height:100%;
+		position:absolute!important;
 	}
 	.dialogContentContainer
 	{
@@ -61,6 +50,26 @@
 		border:1px solid red;
 		position:relative;
 	}
+	.titleBar
+	{
+		height:15%;
+		position:relative!important;
+		background-color:green;
+		padding:5px;
+	}
+	.title
+	{
+		float:left!important;
+		vertical-align:top;
+		//border:1px solid #00ffff;
+	}
+	.closeButton
+	{
+		float:right!important;
+		cursor:pointer;
+		//border:1px solid #00ffff;
+	}
+	
 	.butttonBar
 	{
 		bottom:0px;
@@ -78,19 +87,25 @@
 	<div class="background">
 		<div class="dialog">
 			<div class="titleBar">
-				<div style="vertical-align:middle;padding:5px;border:1px solid white;position:relative;width:100%;height:100%">
-					<div class="title">Title</div>
+					<span class="title">Title</span>
 					<div class="closeButton">X</div>
-				</div>
 			</div>
 			<div class="dialogContentContainer">
-				<div style="position:relative;border:1px solid blue;width:100%;height:100%">
-					<div class="dialogContent">Content</div>
+				<div style="position:relative;border:10px solid blue;width:100%;height:100%">
+					<div class="dialogContent">
+						<ul style="margin-top:0;overflow:scroll;">
+							<li style="list-style:none"><a>1</a></li>
+							<li style="list-style:none"><a>1</a></li>
+							<li style="list-style:none"><a>1</a></li>
+							<li style="list-style:none"><a>1</a></li>
+							<li style="list-style:none"><a>1</a></li>
+							<li style="list-style:none"><a>1</a></li>							
+						</ul>
+					</div>
 					<div class="butttonBar">
-						<div class="w3-red w3-button">2</div>
-						<div style="float:right;margin-left:3px;" class="w3-red w3-button">1</div>
-						<div style="float:right;margin-left:3px;" class="w3-red w3-button">2</div>
-						<div style="float:right;margin-left:3px;" class="w3-red w3-button">3</div>
+						<div style="float:right;margin-left:3px;">1</div>
+						<div style="float:right;margin-left:3px;">2</div>
+						<div style="float:right;margin-left:3px;">3</div>
 					</div>
 				</div>
 			</div>

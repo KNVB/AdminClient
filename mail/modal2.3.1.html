@@ -1,8 +1,8 @@
 <html>
 <head>
 <title>Modal testing</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -10,21 +10,19 @@
 	html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
 	.background
 	{
-		left:0;
-		top:0;
-		display:flex;
-		justify-content:center;
-		align-items:center;
-		position:fixed;
-		width:100%;
-		height:100%;
-		background-color:rgba(0, 0, 0, .5);
-		z-index:10000;
+		left:0!important;
+		top:0!important;
+		display:flex!important;
+		justify-content:center!important;
+		align-items:center!important;
+		position:fixed!important;
+		width:100%!important;
+		height:100%!important;
+		background-color:rgba(0, 0, 0, .5)!important;
+		z-index:10000!important;
 	}
 	.dialog
 	{
-		display:flex;
-		flex-direction:column;
 		z-index:4;
 		min-height:100px;
 		min-width:250px;
@@ -32,22 +30,39 @@
 		height:25%;
 		background-color:white;
 		padding:0px;
-		position:relative;
+		position:relative!important;
 	}
 	.dialogRoundCorner
 	{
 		border-radius:10px;
 	}
-	.closeButton
+	.dialogContent
 	{
-		float:right!important;
-		cursor:pointer;
-		border:1px solid #00ffff;
+		border:1px solid yellow;
+		position:relative;
+		padding:0px;
+		vertical-align:text-top;
 	}
+	.dialogContentContainer
+	{
+		height:80%;
+		width:100%;
+		padding:8px;
+		//border:1px solid red;
+		position:relative!important;
+	}
+	.dialogContentWrapper
+	{	
+		position:relative;
+		//border:1px solid blue;
+		width:100%!important;
+		height:100%!important;
+	}
+
 	.titleContentWrapper
 	{
 		padding:5px;
-		border:1px solid white;
+		//border:1px solid white;
 		position:relative!important;
 		width:100%!important;
 		height:100%!important;
@@ -56,33 +71,23 @@
 	{
 		float:left!important;
 		position:relative!important;
-		border:1px solid #00ffff;
+		vertical-align:top!important;
+		//border:1px solid #00ffff;
 	}
 	.titleBar
 	{
 		height:20%;
 		position:relative!important;
-		background-color:green;
+		//background-color:green;
+		padding:5px!important;
 	}
 	.titleBarRoundCorner
 	{
 		border-radius:10px 10px 0px 0px;
-	}
-	.dialogContent
-	{
-		border:1px solid yellow;
-	}
-	.dialogContentContainer
-	{
-		height:80%;
-		width:100%;
-		padding:8px;
-		//border:1px solid red;
-		position:relative;
-	}
-	
+	}	
 	.butttonBar
 	{
+		height:20%;
 		bottom:0px!important;
 		width:100%!important;
 		position:absolute!important;
@@ -101,13 +106,16 @@
 	{
 		float:right!important;
 	}
-	
-	.dialogContentWrapper
-	{	
-		position:relative;
-		//border:1px solid blue;
-		width:100%!important;
-		height:100%!important;
+	.closeButton
+	{
+		float:right!important;
+		cursor:pointer;
+	}
+
+	.blueFont
+	{
+		color:blue;
+		font-size:20px;
 	}
 </style>
 <script src="http://code.jquery.com/jquery-3.2.1.js"></script>
@@ -118,8 +126,7 @@
 		$.Modal=function(opts) 
 				{
 					var titleBarDiv=document.createElement("DIV");
-					var titleContentDiv=document.createElement("DIV");
-					var titleContentWrapper=document.createElement("DIV");
+					var titleContentSpan=document.createElement("span");
 					var dialogDiv=document.createElement("DIV");
 					
 					var backgroundDiv=document.createElement("DIV");
@@ -143,14 +150,16 @@
 							closeButtonDom:null,
 							closeOnEsc:true,
 							titleText:"Title",
-							titleDom:null,
+							contentText:"Content",
+							contentDom:null,
 							isRoundCorner:true,
 							showCloseButton:true,
 							buttons:[{class:"button","text":"Ok","handler":function(){$(backgroundDiv).remove();}}],
 						}
-					$.extend(defaults, opts);
+					defaults=consolidOpts(defaults,opts);
+					
 					backgroundDiv.id="modalBackground";
-					titleContentDiv.className=defaults.titleContentClass;
+					titleContentSpan.className=defaults.titleContentClass;
 					dialogDiv.className=defaults.dialogClass;
 					titleBarDiv.className=defaults.titleBarClass;
 					backgroundDiv.className=defaults.backgroundClass;
@@ -165,46 +174,41 @@
 						titleBarDiv.className+=" titleBarRoundCorner";
 					}
 					if (defaults.titleText!=false)
-						titleContentDiv.textContent=defaults.titleText;
-					else
-					{	
-						console.log(defaults.titleDom);
-						titleContentDiv.appendChild(defaults.titleDom);
+					{
+						titleContentSpan.textContent=defaults.titleText;
+						titleBarDiv.appendChild(titleContentSpan);
+						
+						if (defaults.closeButtonText!=false)
+							closeButtonDiv.textContent=defaults.closeButtonText;
+						else
+							closeButtonDiv.appendChild(defaults.closeButtonDom);
+						if (defaults.showCloseButton)	
+						{	
+							titleBarDiv.appendChild(closeButtonDiv);
+							closeButtonDiv.onclick=function(){$(backgroundDiv).remove();};
+						}
+						
+						dialogDiv.appendChild(titleBarDiv);
 					}
-					console.log(titleContentDiv.outerHTML);					
-					titleContentWrapper.className="titleContentWrapper";
-					titleContentWrapper.appendChild(titleContentDiv);
-					console.log("1:"+titleContentWrapper.outerHTML);
-					if (defaults.closeButtonText!=false)
-						closeButtonDiv.textContent=defaults.closeButtonText;
+					if (defaults.contentText==false)
+						dialogContentDiv.appendChild(defaults.contentDom);
 					else
-						closeButtonDiv.appendChild(defaults.closeButtonDom);
-					if (defaults.showCloseButton)	
-					{	
-						titleContentWrapper.appendChild(closeButtonDiv);
-						closeButtonDiv.onclick=function(){$(backgroundDiv).remove();};
-					}
-					console.log("2:"+titleContentWrapper.outerHTML);
-					titleBarDiv.appendChild(titleContentWrapper);
-					console.log("3:"+titleBarDiv.outerHTML);
-					
+						dialogContentDiv.textContent=defaults.contentText;
+						
 					dialogContentWrapper.className="dialogContentWrapper";
 					dialogContentWrapper.appendChild(dialogContentDiv);
 					dialogContentWrapper.appendChild(buttonBarDiv);
 					dialogContentContainerDiv.appendChild(dialogContentWrapper);
 					
-					dialogDiv.appendChild(titleBarDiv);
-					console.log("4:"+dialogDiv.outerHTML);
+					
 					dialogDiv.appendChild(dialogContentContainerDiv);
-					console.log("5:"+dialogDiv.outerHTML);
 					backgroundDiv.appendChild(dialogDiv);
 					document.body.appendChild(backgroundDiv);
 					addButtons(defaults.buttons,buttonBarDiv);
-					console.log("6:"+dialogDiv.outerHTML);
 					if (defaults.closeOnEsc)
 					{
 						backgroundDiv.click();
-						$(dialogDiv).keydown(function(event)
+						$(document.body).keydown(function(event)
 												{
 													if (event.which==27)
 													{
@@ -213,6 +217,41 @@
 												});
 					}
 				};
+				function consolidOpts(defaults,opts)
+				{
+					defaults.dialogClass=addOption(defaults.dialogClass,opts.dialogClass);
+					defaults.titleBarClass=addOption(defaults.titleBarClass,opts.titleBarClass);
+					defaults.titleContentClass=addOption(defaults.titleContentClass,opts.titleContentClass);
+					defaults.backgroundClass=addOption(defaults.backgroundClass,opts.backgroundClass);
+					defaults.butttonBarClass=addOption(defaults.butttonBarClass,opts.butttonBarClass);
+					defaults.closeButtonClass=addOption(defaults.closeButtonClass,opts.closeButtonClass);
+					defaults.dialogContentClass=addOption(defaults.dialogContentClass,opts.dialogContentClass);
+					defaults.dialogContentContainerClass=addOption(defaults.dialogContentContainerClass,opts.dialogContentContainerClass);
+					
+					defaults.closeButtonText=overrideOption(defaults.closeButtonText,opts.closeButtonText);
+					defaults.closeButtonDom=overrideOption(defaults.closeButtonDom,opts.closeButtonDom);
+					defaults.closeOnEsc=overrideOption(defaults.closeOnEsc,opts.closeOnEsc);
+					defaults.titleText=overrideOption(defaults.titleText ,opts.titleText);
+					defaults.isRoundCorner=overrideOption(defaults.isRoundCorner,opts.isRoundCorner);
+					defaults.showCloseButton=overrideOption(defaults.showCloseButton,opts.showCloseButton);
+					defaults.buttons=overrideOption(defaults.buttons,opts.buttons);
+					defaults.contentText=overrideOption(defaults.contentText,opts.contentText);
+					defaults.contentDom=overrideOption(defaults.contentDom,opts.contentDom);
+					return defaults;
+				}
+				function overrideOption(finalSetting,customSetting)
+				{
+					if ((customSetting!=null) && ($.trim((customSetting.dialogClass)!="")))
+						finalSetting=customSetting;
+					return finalSetting;	
+					
+				}
+				function addOption(finalSetting,customSetting)
+				{
+					if ((customSetting!=null) && ($.trim((customSetting.dialogClass)!="")))
+						finalSetting+=" "+customSetting;
+					return finalSetting;	
+				}
 				function close()
 				{
 					$("#modalBackground").remove();
@@ -259,28 +298,79 @@
 		var closeDom=document.createElement("i");
 		var yesButton=document.createElement("div");
 		var noButton=document.createElement("div");
-		closeDom.className="w3-red fa fa-remove";
-		yesButton.className="button";
+		var content=document.createElement("ul");
+		var li=document.createElement("li");
+		var item=document.createElement("a");
+		
+		closeDom.className="w3-red w3-button fa fa-remove";
+		yesButton.className="button w3-red w3-button w3-tiny";
 		$(noButton).text("reject");
 		noButton.className="w3-red";
-		
-		
 		$(yesButton).text("Ok");		
+		
+		item.textContent="1";
+		/*item.onclick=function()
+					{
+						alert("click");
+					};*/
+		item.ondblclick=function()
+						{
+							alert("double click");
+						};
+		li.appendChild(item);
+		content.style.position="relative";
+		content.style.border="1px solid #123456";
+		content.appendChild(li);
+		item=document.createElement("a");
+		item.textContent="1";
+		li=document.createElement("li");
+		li.appendChild(item);
+		content.appendChild(li);
+		item=document.createElement("a");
+		item.textContent="1";
+		li=document.createElement("li");
+		li.appendChild(item);
+		content.appendChild(li);
+		item=document.createElement("a");
+		item.textContent="1";
+		li=document.createElement("li");
+		li.appendChild(item);
+		content.appendChild(li);
+		item=document.createElement("a");
+		item.textContent="1";
+		li=document.createElement("li");
+		li.appendChild(item);
+		content.appendChild(li);
+		item=document.createElement("a");
+		item.textContent="1";
+		li=document.createElement("li");
+		li.appendChild(item);
+		content.appendChild(li);
+		item=document.createElement("a");
+		item.textContent="1";
+		li=document.createElement("li");
+		li.appendChild(item);
+		content.appendChild(li);
+		content.style.overflow="scroll";
+		content.style.verticalAlign="text-top";
 		$.Modal({titleText:"Title",
-				 titleDom:noButton,
 				 closeButtonText:false,
 				 closeButtonDom:closeDom,
 				 isRoundCorner:true,
-				 //showCloseButton:false,
-				 //titleBarClass:"titleBar",
-				 buttons:[{focus:true,
-									 class:"button",
-									 "text":"No",
-									 "handler":no},
-									{"text":false,
-										focus:false,
-									domObj:yesButton,
-									"handler":yes}],
+				 showCloseButton:false,
+				 titleBarClass:"w3-red",
+				 titleContentClass:"blueFont",
+				 contentText:false,
+				 contentDom:content,
+				 buttons:[
+						{focus:true,
+						class:"button w3-red w3-button w3-tiny",
+						"text":"No",
+						"handler":no},
+						{"text":false,
+						focus:false,
+						domObj:yesButton,
+						"handler":yes}],
 				});
 	}
 	function yes()

@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Modal testing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+	.background
+	{
+		left:0;
+		top:0;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		position:fixed;
+		width:100%;
+		height:100%;
+		background-color:rgba(0, 0, 0, .5);
+		z-index:10000;
+	}
+	.flex 
+	{
+		display: flex;
+		width:35%;
+		height:25%;
+		padding: 5px;
+		background-color: #61a0f8;
+		flex-direction: column;
+	}
+	.item 
+	{
+		flex-basis:20%;
+		margin: 0px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border:1px solid black;
+		padding:0;
+	}
+	.flex-2 
+	{
+		flex-shrink: 3;
+		flex-basis: 60%;
+	}
+</style>
+</head>
+<body bgcolor="white">
+<div class="background">
+	<div class="flex">
+		<div class="item">1</div>
+		<div class="item flex-2" style="align-items:stretch;">
+			<ul style="width:100%;height:100%;margin-top:0;overflow:scroll;display:flex;flex-direction:column">
+				<li style="display:inline-block;list-style:none"><a>1</a></li>
+				<li style="display:inline-block;list-style:none"><a>1</a></li>
+				<!--li style="list-style:none"><a>1</a></li>
+				<li style="list-style:none"><a>1</a></li>
+				<li style="list-style:none"><a>1</a></li>
+				<li style="list-style:none"><a>1</a></li-->							
+			</ul>
+		</div>
+		<div class="item">
+			<div style="float:right;margin-left:3px;">1</div>
+			<div style="float:right;margin-left:3px;">2</div>
+			<div style="float:right;margin-left:3px;">3</div>		
+		</div>
+	</div>
+</div>
+</body>	
