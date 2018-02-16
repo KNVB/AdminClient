@@ -178,48 +178,61 @@ class UserManagement
 	popupPhyiscalDirDialog(physicalDir,userId,accessRightId)
 	{
 		//ale(userId+","+accessRightId);
-		console.log(physicalDir,userId,accessRightId);
+		//console.log(physicalDir,userId,accessRightId);
+		var self=this;
 		this.adminServer.getRemoteSubDir(physicalDir,userId,accessRightId);
 		this.adminServer.getServerResponse().then(function(serverResponseObj)
 													{
-														var msg="<div style=\"border:1px solid black;padding-top: 0px; margin-top: 0px;\">";
-														msg+="<ul style=\"padding: 0px; margin: 0px;\">";
 														var listItem,linkItem;
-														var dirList=serverResponseObj.returnObjects.dirList;
-														//console.log(serverResponseObj);
-														//console.log(dirList);
+														var dirList=document.createElement("ul");
+														var dirListContainer=document.createElement("div");
+														var phyicalDirList=serverResponseObj.returnObjects.dirList;
+														dirListContainer.className="dirListContainer";
+														dirList.className="dirList";									
+														dirList.id='dirList'+userId+'_'+accessRightId;
+														dirListContainer.appendChild(dirList);
 														
-														for (var i=0;i<dirList.length;i++)
+														for (var i=0;i<phyicalDirList.length;i++)
 														{
-															msg+="<li style=\"margin-left: 10px; list-style: none;\">";
-															switch(dirList[i].type)
+															listItem=document.createElement("li");
+															listItem.className="directoryItem";
+															switch(phyicalDirList[i].type)
 															{
-																case "drive":msg+="<i class=\"fa fa-hdd-o\"></i>";
+																case "drive":listItem.innerHTML="<i class=\"fa fa-hdd-o\"></i>";
 																						break;
-																case "folder":msg+="<i class=\"fa fa-folder\"></i>";
+																case "folder":listItem.innerHTML="<i class=\"fa fa-folder\"></i>";
 																						break;
 															}
+															listItem.innerHTML+="&nbsp;";
 															linkItem=document.createElement("a");
-															linkItem.setAttribute("rel",dirList[i].pathName);
+															linkItem.setAttribute("rel",phyicalDirList[i].pathName);
 															linkItem.style.cursor="pointer";
-															linkItem.text=dirList[i].pathName;
-															msg+="&nbsp;"+linkItem.outerHTML;
-															
-															//msg+="&nbsp;<a rel=\""+dirList[i].pathName+"\" style=\"cursor: pointer;\">";
-															msg+="</a>";
-															msg+="</li>";
+															linkItem.text=phyicalDirList[i].pathName;
+															linkItem.onmousedown=function(){return false;};
+															linkItem.onclick=function(){self.selectPath(this);}
+															listItem.appendChild(linkItem);
+															dirList.appendChild(listItem);	
 														}
-														msg+="</ul></div>";
-														//console.log(msg);
+														var msg=dirListContainer.outerHTML;
 														$.jAlert({
-															//noPadContent:true,
-															'title': "Select a Directory",
-															'content':msg,
-															'theme': 'red',
-															closeBtn:false,
-															'btns': { 'text': 'Ok',class:"w3-red"}
-														  });
-													});	
+																		//noPadContent:true,
+																		'title': "Select a Directory",
+																		'theme': 'red',
+																		'content':msg,
+																		closeBtn:false,
+																		'btns': { 'text': 'Ok',class:"w3-red"}
+																	  });
+													});
+		
+		//this.drillDown(physicalDir,userId,accessRightId);				  
+	}
+	selectPath(item)
+	{
+		console.log("hello");
+	}
+	drillDown(physicalDir,userId,accessRightId)
+	{
+		
 	}
 	popupRemoveUserDialog()
 	{
