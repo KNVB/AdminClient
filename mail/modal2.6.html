@@ -1,0 +1,111 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+	html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
+	.background
+	{
+		left:0;
+		top:0;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		position:fixed;
+		width:100%;
+		height:100%;
+		background-color:rgba(0, 0, 0, .5);
+		z-index:10000;
+	}
+	.dialog
+	{
+		width:35%;
+		height:25%;
+		border: 1px solid red;
+		min-height:100px;
+		min-width:250px;
+		background-color:white;
+		display: flex;
+		flex-direction: column;
+		border-radius:10px;
+	}
+
+	div.dialogTitleBar
+	{
+		margin: 0;
+		padding:5px;
+		border: 1px solid green;
+		background:red;
+		color:white;
+		border-radius:10px 10px 0px 0px;
+	}
+	div.dialogTitle
+	{
+		float:left;
+	}
+	div.dialogCloseButtonContainer
+	{
+		float:right;
+	}
+	div.dialogMessageContainer
+	{
+		padding:5px;
+		flex: 1;
+		border: 1px solid yellow;
+		display: flex;
+		flex-direction: column;
+		min-height:0px;
+	}
+	div.dialogMessage
+	{
+		flex: 1;
+		overflow:auto;
+		border: 1px solid #ff00ff;
+	}
+	div.dialogButtonBar 
+	{
+		padding:5px;
+		margin-top: auto;
+		border: 1px solid blue;
+	}
+</style>
+<body>
+	<div class="background">
+		<div class="dialog">
+			<div class="dialogTitleBar">
+				<div class="dialogTitle">
+					<div style="font-family:arial;color:gold">
+						<div style="background:black">title</div>
+						<div>ff</div>
+					</div>
+				</div>
+				<div class="dialogCloseButtonContainer">
+					<div style="font-family:arial;color:white">
+						<div>x</div>
+						<div style="background:black">y</div>
+					</div>	
+				</div>
+			</div>
+			<div class="dialogMessageContainer">
+				<div class="dialogMessage">
+					<div>
+					1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
+					</div>
+					<ul style="margin-top:0;">
+						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
+						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
+						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
+						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
+						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
+						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>							
+					</ul>
+				</div>	
+			</div>	
+			<div class="dialogButtonBar">
+				<div style="margin-left:3px;float:right"><button>1</button></div>
+				<div style="margin-left:3px;float:right"><button>2</button></div>
+				<div style="margin-top: auto;text-align:center"><button>center</button></div>
+			</div>
+		</div>	
+	</div>
+</body>
