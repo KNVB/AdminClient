@@ -21,7 +21,7 @@
 				var tagVariable;
 				switch (domObj.nodeType) //Currently process DOM element and text node only
 				{
-					case 1:
+					case 1: //DOM element
 						tagVariable=getTagVariableName(domObj);
 						domCode+="var "+tagVariable+"=document.createElement(\""+domObj.tagName+"\");\n";
 						domCode+=getAttrDomCode(domObj,tagVariable);
@@ -35,7 +35,7 @@
 							domCode+=parentTagVariable+".appendChild("+tagVariable+");\n";						
 						}						
 						break; 
-					case 3:
+					case 3: //text node
 						if (($.trim(domObj.textContent)!="") && 
 							((domObj.parentNode.nodeType==11)|| 
 							 (!domObj.parentNode.hasAttribute("text"))))

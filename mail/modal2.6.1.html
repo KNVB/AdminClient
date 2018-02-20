@@ -1,10 +1,30 @@
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 	html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
-	div.background
+	.redBackground
+	{
+		background-color:red;
+	}
+	.whiteBackground
+	{
+		background-color:white;
+	}
+	.textInWhite
+	{
+		color:white;
+	}
+	.padding
+	{
+		padding:8px;
+	}
+	div.modalBackground
 	{
 		left:0;
 		top:0;
@@ -16,103 +36,328 @@
 		height:100%;
 		background-color:rgba(0, 0, 0, .5);
 		z-index:10000;
-	}
-	div.dialog
+	}	
+	div.modal
 	{
-		width:400;
-		height:200;
-		min-height:100px;
-		min-width:250px;
-		display: flex;
-		flex-direction: column;
+		display: flex!important;
+		flex-direction: column!important;
 	}
-	div.dialogRoundCorner
+	div.modalRoundCorner
 	{
 		border-radius:10px;
 	}
-	div.dialogTitleBar
+	div.modalTitleBar
 	{
 		margin: 0;
-		padding:5px;
 	}
-	div.dialogTitleBarRoundCorner
+	div.modalTitleBarRoundCorner
 	{
 		border-radius:10px 10px 0px 0px;
 	}
-	div.dialogTitle
+	div.modalTitleWrapper
 	{
-		float:left;
+		float:left!important;
 	}
-	div.dialogCloseButtonContainer
+	div.modalCloseButtonWrapper
 	{
-		float:right;
+		float:right!important;
+		cursor:pointer;
 	}
-	div.dialogMessageContainer
+	div.modalMessageContainer
 	{
-		padding:5px;
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		min-height:0px;
+		flex: 1!important;
+		display: flex!important;
+		flex-direction: column!important;
+		min-height:0px!important;
 	}
-	div.dialogMessage
+	div.modalMessageWrapper
 	{
-		flex: 1;
-		overflow:auto;
+		flex: 1!important;
+		overflow:auto!important;
+		
 	}
-	div.dialogButtonBar 
+	div.modalButtonBar 
 	{
-		padding:5px;
-		margin-top: auto;
+		margin-top: auto!important;
 	}
-	div.dialogButtonRight
+	div.modalButtonRight
 	{
 		margin-left:3px;
-		float:right;
+		float:right!important;
 	}
-	div.dialogButtonCenter
+	div.modalButtonCenter
 	{
 		margin-top: auto;
-		text-align:center;
+		text-align:center!important;
 	}
+	li.directoryItem
+	{
+		margin-left: 10px; 
+		list-style: none;
+	}
+	li.directoryItem:hover
+	{
+		background:orange;
+	}	
+	ul.dirList
+	{
+		padding: 0px; 
+		margin: 0px;
+		margin-top:0;
+	}
+	@media screen and (max-width:768px) 
+	{ 
+		div.modal{width:200px;height:auto}
+	}
+	@media screen and (max-width:992px)
+	{ 
+		div.modal{width:400px;height:auto}
+	}
+	@media screen and (min-width:992px)
+	{ 
+		div.modal{width:600px;height:auto}
+	}		
 </style>
-<body>
-	<div class="background">
-		<div class="dialog">
-			<div class="dialogTitleBar">
-				<div class="dialogTitle">
-					<div style="font-family:arial;color:gold">
-						<div style="background:black">title</div>
-						<div>ff</div>
-					</div>
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+<script language=javascript>
+	(function ( $ ) 
+	{
+		$.MyModal=function(opts)
+				{
+					var modal=document.createElement("div");
+					var modalBackground=document.createElement("div");
+					var modalTitleBar=document.createElement("div");
+					var modalButtonBar=document.createElement("div");
+					var modalTitleWrapper=document.createElement("div");
+					var modalMessageWrapper=document.createElement("div");
+					var modalMessageContainer=document.createElement("div");
+					var modalCloseButtonWrapper=document.createElement("div");
+
+					var defaults = 
+						{
+							closeOnEsc:true,
+							titleDom:null,
+							titleText:"Title",
+							closeButtonText:"X",
+							closeButtonDom:null,
+													
+							contentDom:null,
+							contentText:"Content",
+							
+							isRoundCorner:true,
+							showTitleBar:true,
+							showButtonBar:true,
+							showCloseButton:true,
+							
+							/*modalWidth:"320px",
+							modalHeight:"250px",*/
+							
+							modalClassName:"modal",
+							modalTitleBarClassName:"modalTitleBar padding",
+							modalButtonBarClassName:"modalButtonBar padding",
+							modalBackgroundClassName:"modalBackground",
+							modalTitleWrapperClassName:"modalTitleWrapper",
+							modalMessageWrapperClassName:"modalMessageWrapper padding",
+							modalMessageContainerClassName:"modalMessageContainer",
+							modalCloseButtonWrapperClassName:"modalCloseButtonWrapper",
+							
+							buttons:[{focus:false,class:"","text":"Ok","handler":function(){alert("hitted");}}],
+						};
+					if (opts!=null)	
+						defaults=consolidOpts(defaults,opts);
+					
+					modal.className=defaults.modalClassName;
+					modal.style.width=defaults.modalWidth;
+					modal.style.height=defaults.modalHeight;
+					modalTitleBar.className=defaults.modalTitleBarClassName;
+					modalButtonBar.className=defaults.modalButtonBarClassName;
+					modalBackground.className=defaults.modalBackgroundClassName;
+					modalTitleWrapper.className=defaults.modalTitleWrapperClassName;
+					modalMessageWrapper.className=defaults.modalMessageWrapperClassName;
+					modalMessageContainer.className=defaults.modalMessageContainerClassName;
+					modalCloseButtonWrapper.className=defaults.modalCloseButtonWrapperClassName;
+					modalBackground.id="modalBackground";
+					
+					if (defaults.isRoundCorner)
+					{
+						modal.className+=" modalRoundCorner";
+						modalTitleBar.className+=" modalTitleBarRoundCorner";
+					}					
+					
+					
+					if (defaults.showTitleBar)
+					{
+						if (defaults.titleText!=false)
+							modalTitleWrapper.textContent=defaults.titleText;
+						else
+							modalTitleWrapper.appendChild(defaults.titleDom);
+						modalTitleBar.appendChild(modalTitleWrapper);	
+						if (defaults.showCloseButton)
+						{	
+							modalCloseButtonWrapper.onclick=function(){close();};
+							if (defaults.closeButtonText!=false)
+								modalCloseButtonWrapper.textContent=defaults.closeButtonText;
+							else
+								modalCloseButtonWrapper.appendChild(defaults.closeButtonDom);	
+							modalTitleBar.appendChild(modalCloseButtonWrapper);	
+						}
+						modal.appendChild(modalTitleBar);	
+					}
+					
+					
+					if (defaults.contentText==false)
+						modalMessageWrapper.appendChild(defaults.contentDom);
+					else
+						modalMessageWrapper.textContent=defaults.contentText;
+					
+					modalMessageContainer.appendChild(modalMessageWrapper);
+					modal.appendChild(modalMessageContainer);
+					modalBackground.appendChild(modal);
+					document.body.appendChild(modalBackground);
+					
+					
+					if (defaults.showButtonBar)
+					{
+						modal.appendChild(modalButtonBar);
+						addButtons(defaults.buttons,modalButtonBar);
+					}
+					if (defaults.closeOnEsc)
+					{
+						modalBackground.click();
+						$(document.body).keydown(function(event)
+												{
+													if (event.which==27)
+													{
+														$(modalBackground).remove();
+													}
+												});
+					}
+						
+				};
+				function addButtons(buttonList,buttonBar)
+				{
+					buttonList.map(function (item)
+									{
+										var buttonObj,buttonWrapper;
+										buttonWrapper=document.createElement("div");
+										if (item.text==false)
+										{
+											buttonObj=item.domObj;
+										}
+										else
+										{
+											buttonObj=document.createElement("button");
+											buttonObj.textContent=item.text;
+										}
+										if ((item.class!=null) &&($.trim(item.class)!=""))
+											buttonObj.className+=" "+item.class;
+										if(typeof item.handler==="function")
+										{	
+											buttonObj.onclick=function()
+																{
+																	item.handler();
+																	close();
+																};
+										}
+										buttonWrapper.appendChild(buttonObj);
+										if (buttonList.length>1)
+											buttonWrapper.className+="modalButtonRight";
+										else
+											buttonWrapper.className+="modalButtonCenter";
+										buttonBar.appendChild(buttonWrapper);
+										if ((item.focus)||(buttonList.length==1))
+											buttonObj.focus();	
+											
+									});
+				}
+				function close()
+				{
+					$("#modalBackground").remove();
+				}
+				function consolidOpts(defaults,opts)
+				{
+					var result=new Array();
+					for (var key in defaults)
+					{
+						result[key]=defaults[key];
+						if (typeof opts[key]!="undefined")
+						{
+							if (key.indexOf("ClassName")>-1)
+								result[key]+=" "+opts[key];
+							else
+								result[key]=opts[key];	
+						}
+					}
+					return result;
+				}
+	}( jQuery ));		
+	function init()
+	{
+		var closeDom=document.createElement("i");
+		var titleDom=document.createElement("i");
+		var dirList=document.createElement("ul");
+		var listItem=document.createElement("li");
+		var linkItem=document.createElement("a");
+		var yesButton=document.createElement("div");
+		yesButton.className="button w3-red w3-button";
+		$(yesButton).text("Ok");		
+		listItem.className="directoryItem";
+		dirList.className="dirList";
+		closeDom.className="fa fa-remove";
+		titleDom.className="fa fa-check";
+		listItem.innerHTML="<i class=\"fa fa-hdd-o\"></i>&nbsp;";
+		linkItem.style.cursor="pointer";
+		linkItem.text="C:\\";
+		listItem.appendChild(linkItem);
+		dirList.appendChild(listItem);	
+		$.MyModal({//isRoundCorner:false,
+		           titleText:false,
+				   "titleDom":titleDom,
+				   contentText:false,
+				   contentDom:dirList,
+				   closeButtonText:false,
+				   closeButtonDom:closeDom,
+				   //showTitleBar:false,
+				   //showButtonBar:false,
+				   modalWidth:"35%",
+				   modalHeight:"25%",
+				   modalClassName:"whiteBackground",
+				   modalTitleBarClassName:"redBackground textInWhite",
+				   buttons:[
+						{focus:true,
+						class:"button w3-red w3-button",
+						"text":"No",
+						"handler":yes},
+						{"text":false,
+						focus:false,
+						domObj:yesButton,
+						"handler":no}]
+				  });
+	}
+	function yes()
+	{
+		alert("hello");
+	}
+	function no()
+	{
+		alert("Bye Bye");
+	}
+</script>
+<body onload="init()">
+	<!--div class="modalBackground">
+		<div class="modal">
+			<div class="modalTitleBar">
+				<div class="modalTitleWrapper">
 				</div>
-				<div class="dialogCloseButtonContainer">
-					<div style="font-family:arial;color:white">
-						<div>x</div>
-						<div style="background:black">y</div>
-					</div>	
+				<div class="modalCloseButtonWrapper">
 				</div>
 			</div>
-			<div class="dialogMessageContainer">
-				<div class="dialogMessage">
-					<div>
-					1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
-					</div>
-					<ul style="margin-top:0;">
-						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
-						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
-						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
-						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
-						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>
-						<li style="list-style:none;"><span>x</span><a rel="c:\" onmousedown="return false;" style="cursor:pointer" onclick="f1()" ondblclick="f2()">1</a></li>							
-					</ul>
+			<div class="modalMessageContainer">
+				<div class="modalMessageWrapper">
 				</div>	
 			</div>	
-			<div class="dialogButtonBar">
-				<div class="dialogButtonRight"><button>1</button></div>
-				<div class="dialogButtonRight"><button>2</button></div>
-				<div class="dialogButtonCenter"><button>center</button></div>
+			<div class="modalButtonBar">
 			</div>
 		</div>	
-	</div>
+	</div-->
 </body>
