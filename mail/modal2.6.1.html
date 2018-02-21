@@ -149,8 +149,8 @@
 							showButtonBar:true,
 							showCloseButton:true,
 							
-							/*modalWidth:"320px",
-							modalHeight:"250px",*/
+							modalWidth:null,
+							modalHeight:null,
 							
 							modalClassName:"modal",
 							modalTitleBarClassName:"modalTitleBar padding",
@@ -161,14 +161,16 @@
 							modalMessageContainerClassName:"modalMessageContainer",
 							modalCloseButtonWrapperClassName:"modalCloseButtonWrapper",
 							
-							buttons:[{focus:false,class:"","text":"Ok","handler":function(){alert("hitted");}}],
+							buttons:[{focus:true,class:"","text":"Ok","handler":function(){alert("hitted");}}],
 						};
 					if (opts!=null)	
 						defaults=consolidOpts(defaults,opts);
 					
 					modal.className=defaults.modalClassName;
-					modal.style.width=defaults.modalWidth;
-					modal.style.height=defaults.modalHeight;
+					if (defaults.modalWidth!=null)
+						modal.style.setProperty("width",defaults.modalWidth,"important");
+					if (defaults.modalHeight!=null)
+						modal.style.setProperty("height",defaults.modalHeight,"important");
 					modalTitleBar.className=defaults.modalTitleBarClassName;
 					modalButtonBar.className=defaults.modalButtonBarClassName;
 					modalBackground.className=defaults.modalBackgroundClassName;
@@ -319,11 +321,11 @@
 				   closeButtonDom:closeDom,
 				   //showTitleBar:false,
 				   //showButtonBar:false,
-				   modalWidth:"35%",
-				   modalHeight:"25%",
+				   modalWidth:"500px",
+				   modalHeight:"auto",
 				   modalClassName:"whiteBackground",
 				   modalTitleBarClassName:"redBackground textInWhite",
-				   buttons:[
+				   /*buttons:[
 						{focus:true,
 						class:"button w3-red w3-button",
 						"text":"No",
@@ -331,7 +333,7 @@
 						{"text":false,
 						focus:false,
 						domObj:yesButton,
-						"handler":no}]
+						"handler":no}]*/
 				  });
 	}
 	function yes()

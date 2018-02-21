@@ -3,26 +3,33 @@ class ConfirmBox
 	constructor(questionText)
 	{
 		var defer = $.Deferred();
-		$.jAlert({
-				'title': false,
-				"type":"confirm",
-				"content":questionText,
-				"confirmQuestion":questionText,
-				"confirmBtnText":"Yes",
-				"denyBtnText":"No",
-				"closeBtn":false,
-				"confirmAutofocus":'.denyBtn',
-				onConfirm:function()
-							{
-								defer.resolve(true);
-							},
-				onDeny:function()
-						{	
-							defer.resolve(false);
-						}
-			});
-		$(".confirmBtn")[0].className+=" w3-red";
-		$(".denyBtn")[0].className+=" w3-red";
+		var options={
+						titleText:"Confirm",
+						modalTitleBarClassName:"w3-red",
+						backgroundColor:"black",
+						contentText:questionText,
+						showCloseButton:false,
+						buttons:[
+								{
+									focus:true,
+									class:"w3-red w3-button",
+									"text":"No",
+									"handler":function()
+										{
+											defer.resolve(false);
+										}
+								},
+								{
+									focus:false,
+									class:"w3-red w3-button",
+									"text":"Yes",
+									"handler":function()
+											{
+												defer.resolve(true);
+											}
+								}],		
+					}
+		$.MyModal(options);
 		return defer.promise();	
 	}
 	

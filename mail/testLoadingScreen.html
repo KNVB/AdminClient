@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css/MyModal.css">
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="js/ui/MyLoadingScreen.js"></script>
+<script src="js/ui/MyModal.js"></script>
+<script language="javascript">
+	function startLoadingScreen()
+	{
+		var loadingScreen=new MyLoadingScreen({imgPath:"img/icon.gif"});
+		loadingScreen.show();
+		setTimeout(function(){ loadingScreen.hide(); }, 3000);
+	}
+</script>
+</head>
+<body onload="startLoadingScreen()">
+</body>
+</html>

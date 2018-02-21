@@ -180,60 +180,13 @@ class UserManagement
 		//ale(userId+","+accessRightId);
 		//console.log(physicalDir,userId,accessRightId);
 		var self=this;
-		this.adminServer.getRemoteSubDir(physicalDir,userId,accessRightId);
-		this.adminServer.getServerResponse().then(function(serverResponseObj)
-													{
-														var listItem,linkItem;
-														var dirList=document.createElement("ul");
-														var dirListContainer=document.createElement("div");
-														var phyicalDirList=serverResponseObj.returnObjects.dirList;
-														dirListContainer.className="dirListContainer";
-														dirList.className="dirList";									
-														dirList.id='dirList'+userId+'_'+accessRightId;
-														dirListContainer.appendChild(dirList);
-														
-														for (var i=0;i<phyicalDirList.length;i++)
-														{
-															listItem=document.createElement("li");
-															listItem.className="directoryItem";
-															switch(phyicalDirList[i].type)
-															{
-																case "drive":listItem.innerHTML="<i class=\"fa fa-hdd-o\"></i>";
-																						break;
-																case "folder":listItem.innerHTML="<i class=\"fa fa-folder\"></i>";
-																						break;
-															}
-															listItem.innerHTML+="&nbsp;";
-															linkItem=document.createElement("a");
-															linkItem.setAttribute("rel",phyicalDirList[i].pathName);
-															linkItem.style.cursor="pointer";
-															linkItem.text=phyicalDirList[i].pathName;
-															linkItem.onmousedown=function(){return false;};
-															linkItem.onclick=function(){self.selectPath(this);}
-															listItem.appendChild(linkItem);
-															dirList.appendChild(listItem);	
-														}
-														var msg=dirListContainer.outerHTML;
-														$.jAlert({
-																		//noPadContent:true,
-																		'title': "Select a Directory",
-																		'theme': 'red',
-																		'content':msg,
-																		closeBtn:false,
-																		'btns': { 'text': 'Ok',class:"w3-red"}
-																	  });
-													});
-		
-		//this.drillDown(physicalDir,userId,accessRightId);				  
+		var selectPhyicalDirBox=new SelectPhyicalDirBox(this.adminServer,physicalDir,userId,accessRightId);
+		selectPhyicalDirBox.getResult().then(function(physicalDir)
+											{	
+												console.log(physicalDir);
+											});
 	}
-	selectPath(item)
-	{
-		console.log("hello");
-	}
-	drillDown(physicalDir,userId,accessRightId)
-	{
-		
-	}
+	
 	popupRemoveUserDialog()
 	{
 		var self=this;
@@ -243,35 +196,6 @@ class UserManagement
 																							if (confirmDelete)
 																								self.removeUser(userItem.id);
 																						});	
-		
-		/*var warningModalContent=document.createElement("div");
-		warningModalContent.innerHTML="Are you are sure to delete user "+$(userItem).text()+"?";
-		$(warningModalContent).dialog({
-										resizable: false,
-										height: "auto",
-										width: "auto",
-										modal: true,
-										buttons: {
-											"Yes": function() {
-												self.removeUser(userItem.id);
-											  $( this ).dialog( "close" );
-											},
-											"No": function() {
-											  $( this ).dialog( "close" );
-											}
-										},
-										title:"Warning!",
-										open: function(event, ui) 
-												{
-													$(this).parent().find(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
-													$(this).parent().find(".ui-dialog-titlebar").css("background-color","red");
-													$(this).parent().find(".ui-dialog-titlebar").css("color","white");
-													$(this).parent().find(".ui-dialog-buttonpane button").css("background-color","red");
-													$(this).parent().find(".ui-dialog-buttonpane button").css("color","white");
-													$(this).parent().find(".ui-widget-content").css("border","none");
-													$(this).parent().find(".ui-dialog-buttonpane button:contains('No')").focus();
-												}
-									});*/
 	}
 	removeUser(userId)
 	{
@@ -379,9 +303,9 @@ class UserManagement
 		physicalDirInputBox.readOnly=true;
 		
 		physicalDirInputBox.onclick=function()
-																		{
-																			self.popupPhyiscalDirDialog(physicalDirInputBox.value,userId,accessRightItem.id);
-																		};
+									{
+										self.popupPhyiscalDirDialog(physicalDirInputBox.value,userId,accessRightItem.id);
+									};
 		cell=row.insertCell(row.cells.length);
 		cell.appendChild(physicalDirInputBox);	
 		

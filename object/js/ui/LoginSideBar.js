@@ -4,6 +4,7 @@ class LoginSideBar
 	{
 		var self=this;
 		//<!-- Login Side Navigation  -->
+		this.loadingScreen=new MyLoadingScreen({imgPath:"img/icon.gif"});
 		this.loginSideBar=document.createElement("TABLE");
 		this.loginSideBar.className="loginTable";
 		this.loginSideBar.id="loginTable";
@@ -138,7 +139,7 @@ class LoginSideBar
 		{
 			var url="ws://"+$.trim(hostName)+":"+portNo+"/websocket";
 			console.log("url:"+url);
-			$.loadingBlockShow();
+			this.loadingScreen.show();
 			this.adminServer.connect(url).then(function ()
 												{
 													self.adminServer.login(userName,password,self.processLoginResult.bind(self));
@@ -156,7 +157,7 @@ class LoginSideBar
 		var self=this;
 		if (loginResultObj.responseCode==0)
 		{
-			$.loadingBlockHide();
+			this.loadingScreen.hide();
 			this.hide().then(function()
 							{
 								self.postLoginHandler();

@@ -11,7 +11,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css">
-<link rel="stylesheet" type="text/css" href="css/jAlert.css">
+<link rel="stylesheet" type="text/css" href="css/MyModal.css">
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
 .w3-bar-block .w3-bar-item {padding: 16px}
@@ -73,15 +73,19 @@ li.directoryItem
 	margin-left: 10px; 
 	list-style: none;
 }
+li.directoryItemSelected
+{
+	background-color:#a2aec7;
+}
 li.directoryItem:hover
 {
-	background:orange;
+	background:#a2aec7;
 }
 div.dirListContainer
 {
 	border-style:inset;
 	border-width:3px;
-	overflow:scroll;
+	overflow:auto;
 }
 ul.dirList
 {
@@ -117,9 +121,9 @@ ul.dirList
 <script src="js/ui/jquery.easing.1.3.js"></script>
 <script src="js/ui/AlertBox.js"></script>
 <script src="js/ui/ConfirmBox.js"></script>
-<script src="js/ui/jAlert.min.js"></script>
-<script src="js/ui/jAlert-functions.min.js"></script>
-<script src="js/ui/jquery.loading.block.js"></script>
+<script src="js/ui/MyLoadingScreen.js"></script>
+<script src="js/ui/MyModal.js"></script>
+<script src="js/ui/SelectPhysicalDirBox.js"></script>
 
 <script src="js/Login.js"></script>
 <script src="js/UserInfo.js"></script>

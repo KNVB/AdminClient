@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="css/MyModal.css">
+<style>
+li.directoryItem
+{
+	margin-left: 10px; 
+	list-style: none;
+}
+li.directoryItemSelected
+{
+	background-color:#a2aec7;
+}
+li.directoryItem:hover
+{
+	background:#a2aec7;
+}
+div.dirListContainer
+{
+	border-style:inset;
+	border-width:3px;
+	overflow:auto;
+	margin-top:8px;
+}
+ul.dirList
+{
+	padding: 0px; 
+	margin: 0px;
+	margin-top:0;
+}
+</style>
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="js/ui/SelectPhysicalDirBox.js"></script>
+<script src="js/ui/MyModal.js"></script>
+<script language="javascript">
+	function startSelectPhysicalDirBox()
+	{
+		var loadingScreen=new SelectPhysicalDirBox(null,"/","dsdsfsd","fdsds");
+	}
+</script>
+</head>
+<body onload="startSelectPhysicalDirBox()">
+</body>
+</html>
