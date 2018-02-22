@@ -14,6 +14,7 @@
 
 					var defaults = 
 						{
+							attachedTo:document.body,
 							backgroundColor:"black",
 							closeOnEsc:true,
 							titleDom:null,
@@ -109,8 +110,8 @@
 					}
 					
 					modalBackground.appendChild(modal);
-					document.body.appendChild(modalBackground);
-					
+					//document.body.appendChild(modalBackground);
+					defaults.attachedTo.appendChild(modalBackground);
 					
 					if (defaults.showButtonBar)
 					{

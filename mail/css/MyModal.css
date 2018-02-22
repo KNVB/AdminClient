@@ -33,6 +33,7 @@ div.modal
 	display: flex!important;
 	flex-direction: column!important;
 	background-color:white;
+	max-height:100%;
 }
 div.modalRoundCorner
 {
