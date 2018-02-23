@@ -44,7 +44,10 @@ class FtpModule extends ModuleTemplate
 		ftpServerInfo.userInfoList[userInfo.userId]=userInfo;
 		
 		this.adminPageControl.setMainContent(ftpServerInfoPage.getDomObjList());
+		this.adminPageControl.adminServer.getInitialFtpServerInfo();
+		
 		ftpServerInfoPage.loadData(ftpServerInfo);
+		
 	}
 	removeServer()
 	{

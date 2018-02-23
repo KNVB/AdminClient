@@ -41,7 +41,7 @@ class FtpServerInfoPage
 
 		this.bindingAddressDropDown.id="bindingAddress";
 		this.bindingAddressDropDown.multiple=true;
-		
+
 		this.controlPortInputBox.min=1;
 		
 		this.controlPortInputBox.max=65535;

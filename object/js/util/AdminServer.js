@@ -89,6 +89,10 @@ class AdminServer
 			              "userId":userEntryId,
 			              "accessRightId":accessRightEntryId});
 	}
+	getInitialFtpServerInfo()
+	{
+		this.sendRequestObj({"action":"GetInitialFtpServerInfo"});
+	}
 	sendRequestObj(obj,callBack)
 	{
 		this.sendMessage(JSON.stringify(obj),callBack);
