@@ -180,11 +180,11 @@ class UserManagement
 		//ale(userId+","+accessRightId);
 		//console.log(physicalDir,userId,accessRightId);
 		var self=this;
-		var selectPhyicalDirBox=new SelectPhyicalDirBox(this.adminServer,physicalDir,userId,accessRightId);
-		selectPhyicalDirBox.getResult().then(function(physicalDir)
+		var selectPhysicalDirBox=new SelectPhysicalDirBox(this.adminServer,physicalDir,userId,accessRightId);
+		/*selectPhysicalDirBox.getResult().then(function(physicalDir)
 											{	
 												console.log(physicalDir);
-											});
+											});*/
 	}
 	
 	popupRemoveUserDialog()

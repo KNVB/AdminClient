@@ -1,0 +1,36 @@
+div.dirListContainer
+{
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	overflow:auto;
+}
+li.directoryItem
+{
+	margin-left: 10px; 
+	list-style: none;
+}
+a.directoryItemSelected
+{
+	background-color:#BDF;
+}
+a:hover
+{
+	background:#BDF;
+}
+ul.dirList
+{
+	padding: 0px; 
+	margin: 0px;
+	margin-top:0;
+}
+ul.topDirList
+{	
+	border-style:inset;
+	border-width:1px;flex: 1;
+	overflow:auto;
+}
+div.selectDirWrapper
+{
+	padding-bottom:5px;
+}

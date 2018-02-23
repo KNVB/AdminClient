@@ -67,7 +67,9 @@ div.modalMessageWrapper
 {
 	flex: 1!important;
 	overflow:auto!important;
-	
+	display: flex!important;
+	flex-direction: column!important;
+	min-height:0px!important;
 }
 div.modalButtonBar 
 {

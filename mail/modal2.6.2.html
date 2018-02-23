@@ -1,0 +1,173 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+	html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
+	.background
+	{
+		left:0;
+		top:0;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		position:fixed;
+		width:100%;
+		height:100%;
+		background-color:rgba(0, 0, 0, .5);
+		z-index:10000;
+	}
+	.dialog
+	{
+		width:35%;
+		height:25%;
+		border: 1px solid red;
+		min-height:100px;
+		min-width:250px;
+		background-color:white;
+		display: flex;
+		flex-direction: column;
+		border-radius:10px;
+	}
+
+	div.dialogTitleBar
+	{
+		margin: 0;
+		padding:5px;
+		border: 1px solid green;
+		background:red;
+		color:white;
+		border-radius:10px 10px 0px 0px;
+	}
+	div.dialogTitle
+	{
+		float:left;
+	}
+	div.dialogCloseButtonContainer
+	{
+		float:right;
+	}
+	div.dialogMessageContainer
+	{
+		padding:5px;
+		flex: 1;
+		border: 1px solid yellow;
+		display: flex;
+		flex-direction: column;
+		min-height:0px;
+	}
+	div.dialogMessage
+	{
+		flex: 1;
+		overflow:auto;
+		border: 1px solid #ff00ff;
+		min-height:0px;
+		display: flex;
+		flex-direction: column;
+	}
+	div.dialogButtonBar 
+	{
+		padding:5px;
+		margin-top: auto;
+		border: 1px solid blue;
+	}
+	
+.directoryItem
+{
+	margin-left: 10px; 
+	list-style: none;
+}
+.directoryItemSelected
+{
+	background-color:#BDF;
+}
+a:hover
+{
+	background:#BDF;
+}
+div.dirListContainer
+{
+	border-style:inset;
+	border-width:3px;
+	margin-top:8px;
+	overflow:auto;
+}
+ul.dirList
+{
+	padding: 0px; 
+	margin: 0px;
+	margin-top:0;
+	//overflow:auto;
+	//height:auto;
+
+}
+ul.topDirList
+{	
+	border-style:inset;
+	border-width:1px;
+	flex: 1;
+	overflow:auto;
+}
+	
+</style>
+<body>
+	<div class="background">
+		<div class="dialog">
+			<div class="dialogTitleBar">
+				<div class="dialogTitle">
+					<div style="font-family:arial;color:gold">
+						<div style="background:black">title</div>
+						<div>ff</div>
+					</div>
+				</div>
+				<div class="dialogCloseButtonContainer">
+					<div style="font-family:arial;color:white">
+						<div>x</div>
+						<div style="background:black">y</div>
+					</div>
+				</div>
+			</div>
+			<div class="dialogMessageContainer">
+				<div class="dialogMessage">
+					<div style="display: flex;
+		flex-direction: column;flex: 1;overflow:auto">
+					<div style="padding:5px">
+						Look in:<input type="text" readonly="">
+						<i class="fa fa-arrow-circle-up" style="cursor: pointer; font-size: 30px; color: red; vertical-align: bottom;"></i>
+					</div>				
+    <ul class="dirList" id="dirList_dsdsfsd_fdsds" style="overflow:auto;border-style:inset;
+	border-width:1px;flex:1;">
+      <li class="directoryItem"><a rel="abc" class="" style="display: block; cursor: pointer;"><i class="fa fa-hdd-o" style="font-size:30px;color:red">&nbsp;</i>abc</a>
+        <ul class="dirList" style="">
+          <li class="directoryItem"><a rel="一二三" style="display: block; cursor: pointer;"><i class="fa fa-folder" style="font-size:30px;color:red">&nbsp;</i>一二三</a></li>
+          <li class="directoryItem"><a rel="四五六" class="" style="display: block; cursor: pointer;"><i class="fa fa-folder" style="font-size:30px;color:red">&nbsp;</i>四五六</a>
+            <ul class="dirList" style="">
+              <li class="directoryItem"><a rel="一二三" style="display: block; cursor: pointer;"><i class="fa fa-folder" style="font-size:30px;color:red">&nbsp;</i>一二三</a></li>
+              <li class="directoryItem"><a rel="四五六" class="" style="display: block; cursor: pointer;"><i class="fa fa-folder" style="font-size:30px;color:red">&nbsp;</i>四五六</a>
+                <ul class="dirList" style="">
+                  <li class="directoryItem"><a rel="一二三" style="display: block; cursor: pointer;"><i class="fa fa-folder" style="font-size:30px;color:red">&nbsp;</i>一二三</a></li>
+                  <li class="directoryItem"><a rel="四五六" class="" style="display: block; cursor: pointer;"><i class="fa fa-folder" style="font-size:30px;color:red">&nbsp;</i>四五六</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+</div>
+					
+
+					
+				</div>		
+			</div>	
+			<div class="dialogButtonBar">
+				<div style="margin-left:3px;float:right"><button>1</button></div>
+				<div style="margin-left:3px;float:right"><button>2</button></div>
+				<div style="margin-top: auto;text-align:center"><button>center</button></div>
+			</div>
+		</div>	
+	</div>
+</body>

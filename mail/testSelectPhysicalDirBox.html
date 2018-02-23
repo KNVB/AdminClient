@@ -7,12 +7,19 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="css/MyModal.css">
 <style>
-.directoryItem
+div.dirListContainer
+{
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	overflow:auto;
+}
+li.directoryItem
 {
 	margin-left: 10px; 
 	list-style: none;
 }
-.directoryItemSelected
+a.directoryItemSelected
 {
 	background-color:#BDF;
 }
@@ -20,18 +27,21 @@ a:hover
 {
 	background:#BDF;
 }
-div.dirListContainer
-{
-	border-style:inset;
-	border-width:3px;
-	overflow:auto;
-	margin-top:8px;
-}
 ul.dirList
 {
 	padding: 0px; 
 	margin: 0px;
 	margin-top:0;
+}
+ul.topDirList
+{	
+	border-style:inset;
+	border-width:1px;flex: 1;
+	overflow:auto;
+}
+div.selectDirWrapper
+{
+	padding-bottom:5px;
 }
 </style>
 <script src="http://code.jquery.com/jquery-3.2.1.js"></script>

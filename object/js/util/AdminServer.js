@@ -113,7 +113,7 @@ class AdminServer
 		var self=this;
 		return new Promise((resolve, reject) => {
 			self.ws.onmessage = (e) => {
-				console.log("Server responsed received at:"+new Date());	
+				console.log("Server responsed received at:"+new Date());
 				var serverResponseMessage = e.data;
 				var decodedServerResponseMessage = self.keyCoder.decrypt(serverResponseMessage);
 				console.log("decoded AES key="+decodedServerResponseMessage+"\n");
@@ -131,6 +131,7 @@ class AdminServer
 		var self=this;
 		return new Promise((resolve, reject) =>{
 				self.ws.onmessage = (e) =>{
+					console.log("Server responsed received at:"+new Date());
 					var serverResponseMessage = e.data;
 					resolve(JSON.parse(self.messageCoder.decode(serverResponseMessage)));
 				}
