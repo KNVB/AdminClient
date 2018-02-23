@@ -30,9 +30,9 @@ class FtpModule extends ModuleTemplate
 		userInfo.password="password";
 		userInfo.enabled=true;
 		
-		var ftpServerInfo=new FtpServerInfo();
+//		var ftpServerInfo=new FtpServerInfo();
 		var ftpServerInfoPage=new FtpServerInfoPage(this.adminPageControl);
-		ftpServerInfo.userInfoList[userInfo.userId]=userInfo;
+	/*	ftpServerInfo.userInfoList[userInfo.userId]=userInfo;
 		userInfo=new UserInfo();
 		userInfo.userId="sddssdfds";
 		userInfo.userName="陳大文";
@@ -41,12 +41,15 @@ class FtpModule extends ModuleTemplate
 		var accessRight=new AccessRight(Utility.getUniqueId());
 		accessRight.physicalDir="C:\\";
 		userInfo.accessRightList[accessRight.id]=accessRight;
-		ftpServerInfo.userInfoList[userInfo.userId]=userInfo;
+		ftpServerInfo.userInfoList[userInfo.userId]=userInfo;*/
 		
 		this.adminPageControl.setMainContent(ftpServerInfoPage.getDomObjList());
 		this.adminPageControl.adminServer.getInitialFtpServerInfo();
-		
-		ftpServerInfoPage.loadData(ftpServerInfo);
+		this.adminPageControl.adminServer.getServerResponse().then(function(serverResponseObj)
+		{
+			console.log(serverResponseObj);
+		});
+		//ftpServerInfoPage.loadData(ftpServerInfo);
 		
 	}
 	removeServer()
