@@ -47,7 +47,7 @@ class FtpModule extends ModuleTemplate
 		this.adminPageControl.adminServer.getInitialFtpServerInfo();
 		this.adminPageControl.adminServer.getServerResponse().then(function(serverResponseObj)
 		{
-			console.log(serverResponseObj);
+			console.log(serverResponseObj.returnObjects);
 		});
 		//ftpServerInfoPage.loadData(ftpServerInfo);
 		
