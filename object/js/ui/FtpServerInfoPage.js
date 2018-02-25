@@ -38,6 +38,7 @@ class FtpServerInfoPage
 		$(passiveModeLegend).text("Custom port range for passive mode:");
 		
 		this.descriptionInputBox.id="description";
+		this.descriptionInputBox.setAttribute("type","text");	
 
 		this.bindingAddressDropDown.id="bindingAddress";
 		this.bindingAddressDropDown.multiple=true;
@@ -102,14 +103,20 @@ class FtpServerInfoPage
 	}
 	loadData(ftpServerInfo)
 	{
+		//var work=document.getElementById("description");
+		console.log(ftpServerInfo.description);
+		//console.log($(this.descriptionInputBox).position().top,$(this.descriptionInputBox).position().left);
+		//console.log($(work).position().top,$(work).position().left);
+		
 		this.descriptionInputBox.value=ftpServerInfo.description;
+		this.descriptionInputBox.style.backgroundColor="orange";
 		this.controlPortInputBox.value=ftpServerInfo.controlPort;
 		this.passiveModePortRangeInputBox.value=ftpServerInfo.passiveModePortRange;
 		this.passiveModeCheckBox.checked=ftpServerInfo.passiveModeEnabled;
 		
 		/*ftpServerInfo.bindingAddress
 		this.bindingAddressDropDown*/
-		this.userManagement.loadData(ftpServerInfo.userInfoList);		
+		this.userManagement.loadData(ftpServerInfo.ftpUserInfoList);
 	}
 	getDomObjList()
 	{

@@ -24,14 +24,14 @@ class FtpModule extends ModuleTemplate
 	addServer()
 	{
 		//this.setMainContent(new Array(this.heading+" > add server"));
-		
+		var self=this;
 		var userInfo=new UserInfo();
 		userInfo.userName="anonymous";
 		userInfo.password="password";
 		userInfo.enabled=true;
 		
 //		var ftpServerInfo=new FtpServerInfo();
-		var ftpServerInfoPage=new FtpServerInfoPage(this.adminPageControl);
+		this.ftpServerInfoPage=new FtpServerInfoPage(this.adminPageControl);
 	/*	ftpServerInfo.userInfoList[userInfo.userId]=userInfo;
 		userInfo=new UserInfo();
 		userInfo.userId="sddssdfds";
@@ -43,13 +43,14 @@ class FtpModule extends ModuleTemplate
 		userInfo.accessRightList[accessRight.id]=accessRight;
 		ftpServerInfo.userInfoList[userInfo.userId]=userInfo;*/
 		
-		this.adminPageControl.setMainContent(ftpServerInfoPage.getDomObjList());
+		this.adminPageControl.setMainContent(this.ftpServerInfoPage.getDomObjList());
 		this.adminPageControl.adminServer.getInitialFtpServerInfo();
 		this.adminPageControl.adminServer.getServerResponse().then(function(serverResponseObj)
 		{
-			console.log(serverResponseObj.returnObjects);
+			//console.log(serverResponseObj.returnObjects);
+			self.ftpServerInfoPage.loadData(serverResponseObj.returnObjects.ftpServerInfo);
 		});
-		//ftpServerInfoPage.loadData(ftpServerInfo);
+		
 		
 	}
 	removeServer()
