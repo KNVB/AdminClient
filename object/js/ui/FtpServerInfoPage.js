@@ -10,7 +10,7 @@ class FtpServerInfoPage
 		var cell=document.createElement("div");
 		var cell2=document.createElement("div");
 		var cell3=document.createElement("div");		
-		var spacer=document.createElement("div");
+
 		var saveLink=document.createElement("a");
 		
 		var controlPortLegend=document.createElement("Legend");
@@ -31,7 +31,6 @@ class FtpServerInfoPage
 		this.bindingAddressDropDown=document.createElement("select");
 		this.passiveModePortRangeInputBox=document.createElement("input");
 
-		spacer.className="w3-padding-small";
 		$(networkSettingLegend).text("Network related setting");
 		$(bindingAddressLegend).text("Binding Address");
 		$(controlPortLegend).text("Port Listening");
@@ -39,7 +38,8 @@ class FtpServerInfoPage
 		
 		this.descriptionInputBox.id="description";
 		this.descriptionInputBox.setAttribute("type","text");	
-
+		
+		
 		this.bindingAddressDropDown.id="bindingAddress";
 		this.bindingAddressDropDown.multiple=true;
 
@@ -87,14 +87,16 @@ class FtpServerInfoPage
 		row.appendChild(cell3);
 		
 		networkSettingFieldSet.appendChild(row);
+		networkSettingFieldSet.style.marginBottom="10px";
+		networkSettingFieldSet.style.marginTop="10px";
+		
 		saveLink.className="w3-red w3-button w3-right w3-margin-top w3-margin-right";
 		$(saveLink).html("Add <i class=\"fa fa-check\"></i>");
 		this.userManagement=new UserManagement(adminPageControl);
 		p.appendChild(descriptionTextNode);
 		p.appendChild(this.descriptionInputBox);
-		p.innerHTML+="<br><br>";
 		p.appendChild(networkSettingFieldSet);
-		p.appendChild(spacer);
+	
 		p.appendChild(this.userManagement.getHTML());
 		p.appendChild(saveLink);
 		this.domObjList=new Array();
@@ -109,12 +111,11 @@ class FtpServerInfoPage
 		//console.log($(work).position().top,$(work).position().left);
 		
 		this.descriptionInputBox.value=ftpServerInfo.description;
-		this.descriptionInputBox.style.backgroundColor="orange";
 		this.controlPortInputBox.value=ftpServerInfo.controlPort;
 		this.passiveModePortRangeInputBox.value=ftpServerInfo.passiveModePortRange;
 		this.passiveModeCheckBox.checked=ftpServerInfo.passiveModeEnabled;
 		
-		/*ftpServerInfo.bindingAddress
+		/*ftpServerInfo.bindingAddresses
 		this.bindingAddressDropDown*/
 		this.userManagement.loadData(ftpServerInfo.ftpUserInfoList);
 	}
