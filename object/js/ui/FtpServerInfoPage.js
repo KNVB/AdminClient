@@ -28,7 +28,7 @@ class FtpServerInfoPage
 		this.descriptionInputBox=document.createElement("input");
 		this.controlPortInputBox=document.createElement("input");
 		this.passiveModeCheckBox=document.createElement("input");
-		this.bindingAddressDropDown=document.createElement("select");
+		this.bindingAddressDropDown=document.createElement("ul");
 		this.passiveModePortRangeInputBox=document.createElement("input");
 
 		$(networkSettingLegend).text("Network related setting");
@@ -106,7 +106,6 @@ class FtpServerInfoPage
 	loadData(ftpServerInfo)
 	{
 		//var work=document.getElementById("description");
-		console.log(ftpServerInfo.description);
 		//console.log($(this.descriptionInputBox).position().top,$(this.descriptionInputBox).position().left);
 		//console.log($(work).position().top,$(work).position().left);
 		
@@ -114,9 +113,31 @@ class FtpServerInfoPage
 		this.controlPortInputBox.value=ftpServerInfo.controlPort;
 		this.passiveModePortRangeInputBox.value=ftpServerInfo.passiveModePortRange;
 		this.passiveModeCheckBox.checked=ftpServerInfo.passiveModeEnabled;
-		
-		/*ftpServerInfo.bindingAddresses
-		this.bindingAddressDropDown*/
+		$(this.bindingAddressDropDown).empty();
+		this.bindingAddressDropDown.onchange=function()
+		{
+			var option=this.options[this.selectedIndex];
+			$(option).toggleClass("w3-red");
+		}
+		this.bindingAddressDropDown.onfocus=function()
+		{
+			var option=this.options[this.selectedIndex];
+			$(option).toggleClass("w3-red");
+		}
+		for (var i=0;i<ftpServerInfo.bindingAddresses.length;i++)
+		{
+			//console.log(ftpServerInfo.bindingAddresses[i]);
+			var bindingAddress=document.createElement("li");
+			var bound=document.createElement("input");
+			bound.setAttribute("type","checkbox");
+			bindingAddress.textContent=ftpServerInfo.bindingAddresses[i].ipAddress;
+			bindingAddress.appendChild(bound);
+			if (ftpServerInfo.bindingAddresses[i].bound)
+			{
+				bound.checked=true;
+			}			
+			this.bindingAddressDropDown.appendChild(bindingAddress);
+		}
 		this.userManagement.loadData(ftpServerInfo.ftpUserInfoList);
 	}
 	getDomObjList()

@@ -157,6 +157,7 @@ class UserManagement
 																	"fixedHeader":true
 																  });
 		}
+		//console.log(this.userInfoList);
 		if (Object.keys(this.userInfoList).length>0)
 		{
 			for (var key in this.userInfoList)
@@ -222,7 +223,7 @@ class UserManagement
 			var userItem=document.createElement("li");
 			let password=userInfo.password;
 			let enabled=userInfo.enabled;
-			let accessRightList=userInfo.accessRightList;
+			let accessRightList=userInfo.accessRightEntries;
 			
 			userItem.className="userInfo";
 			userItem.id=userInfo.userId;
@@ -283,7 +284,7 @@ class UserManagement
 			}
 
 	}
-	addAccessRightRow(userId,accessRightItem)
+	addAccessRightRow(userId,accessRightEntry)
 	{
 		var self=this;
 		var row=document.createElement("tr");
@@ -293,18 +294,18 @@ class UserManagement
 		var deleteButton=document.createElement("i");
 		
 		virtualDirInputBox.setAttribute("type","text");
-		virtualDirInputBox.id="virtualPath_"+userId+"_"+accessRightItem.id;
-		virtualDirInputBox.setAttribute("value",accessRightItem.virtualDir);
+		virtualDirInputBox.id="virtualPath_"+userId+"_"+accessRightEntry.entryId;
+		virtualDirInputBox.setAttribute("value",accessRightEntry.virtualDir);
 		cell.appendChild(virtualDirInputBox);	
 		
 		physicalDirInputBox.setAttribute("type","text");
-		physicalDirInputBox.id="physicalPath_"+userId+"_"+accessRightItem.id;
-		physicalDirInputBox.setAttribute("value",accessRightItem.physicalDir);
+		physicalDirInputBox.id="physicalPath_"+userId+"_"+accessRightEntry.entryId;
+		physicalDirInputBox.setAttribute("value",accessRightEntry.physicalDir);
 		physicalDirInputBox.readOnly=true;
 		
 		physicalDirInputBox.onclick=function()
 									{
-										self.popupPhyiscalDirDialog(physicalDirInputBox.value,userId,accessRightItem.id);
+										self.popupPhyiscalDirDialog(physicalDirInputBox.value,userId,accessRightEntry.entryId);
 									};
 		cell=row.insertCell(row.cells.length);
 		cell.appendChild(physicalDirInputBox);	

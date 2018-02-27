@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FTP Server Administration Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
+.w3-bar-block .w3-bar-item {padding: 16px}
+.loginTable
+{
+	color: #f1f1f1;
+}
+.loginCaption
+{
+	text-align:right;
+	font-size: 16px;
+}
+.mySideBar
+{
+	z-index:3;
+	width:320px;
+}
+.remoteDirUnit
+{
+	display:none;
+	width:fit-content;
+	width: -moz-fit-content;
+}
+.remoteDirListContainer
+{
+	background: #FFF;
+	border-top: solid 1px #BBB;
+	border-left: solid 1px #BBB;
+	border-bottom: solid 1px #FFF;  
+	border-right: solid 1px #FFF;
+	overflow: scroll;
+	padding-left: 0px;
+	margin-left:0px
+}
+.passiveModeSetting
+{
+	border:none;
+}
+.toolbar 
+{
+    float: left;
+}
+.addEntry
+{
+	vertical-align: middle;
+}
+.userInfo
+{
+	background: #FFF;
+	color:black;
+}	
+.userInfo-highlight
+{
+	background: red;
+	color:white;
+}
+
+#table
+{
+	display: flex;
+    flex-flow: column;
+    height: 100%;
+	border-collapse: collapse;
+	border:none;
+}
+#table tbody 
+{
+	flex: 1;
+    overflow-y: auto;
+	max-height:100px;
+}
+#table thead
+{
+	flex: 0 0 auto;
+	//width: 100%;
+    width: calc(100% - 1.1em);
+}
+#table tbody tr 
+{
+    width: 100%;
+}
+#table thead,
+#table tbody tr `{
+    display: table;
+    table-layout: fixed;   
+}
+</style>
+</head>
+<body>
+
+ 
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-white w3-animate-left w3-card" id="mySideBar" style="z-index: 3; width: 320px; display: none;">
+	<div>
+		<a title="Close Sidemenu" class="w3-bar-item w3-button w3-hide-large w3-large">Close<i class="fa fa-remove"></i></a>
+		<a class="w3-bar-item w3-button moduleListItem w3-red">FTP Server Administration<i class="fa fa-caret-down w3-margin-left"></i></a>
+		<div class="w3-show w3-animate-left">
+			<a class="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey">
+				<div class="w3-container">
+					<span class="w3-opacity w3-large">List Server</span>
+				</div>
+			</a>
+			<a class="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey">
+				<div class="w3-container">
+					<span class="w3-opacity w3-large">Add Server <i class="w3-padding fa fa-pencil"></i></span>
+				</div>
+			</a>
+			<a class="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey">
+				<div class="w3-container">
+					<span class="w3-opacity w3-large">Remove Server <i class="w3-padding fa fa-pencil"></i></span>
+				</div>
+			</a>
+		</div>
+		<a class="w3-bar-item w3-button moduleListItem">Administration Server Setting<i class="fa fa-caret-down w3-margin-left"></i></a>
+		<div class="w3-hide w3-animate-left">
+			<a class="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey">
+				<div class="w3-container">
+					<span class="w3-opacity w3-large">Change Admin user and password<i class="w3-padding fa fa-pencil"></i></span>
+				</div>
+			</a>
+		</div>
+		<a class="w3-bar-item w3-button">Logout</a>
+	</div>
+</nav>
+
+
+<div class="w3-overlay w3-hide-large w3-animate-opacity w3-button" title="Close Sidemenu" id="myOverlay" style="display: none;">
+</div>
+<div class="w3-main" style="margin-left: 320px;">
+	<i class="fa fa-bars w3-button w3-white w3-hide-large w3-xlarge w3-margin-left w3-margin-top"></i>
+	<div style="margin-left: 10px;">
+		FTP Server Administration &gt; Add Server
+		<p>
+			Description:<input id="description" type="text">
+			<fieldset style="margin-bottom: 10px; margin-top: 10px;">
+				<legend>Network related setting</legend>
+				<div class="w3-row">
+					<div class="w3-third">
+						<fieldset>
+							<legend>Binding Address</legend>
+							<table border=1 style="width:100%">
+								<thead>
+									<tr>
+										<th >IP Address</th>
+										<th style="text-align:center">Is Bound</th>
+									</tr>
+								</thead>
+								<tbody style="overflow-y:auto;height:100px">
+									<tr>
+										<td>*</td>
+										<td style="text-align:center"><input type="checkbox"></td>
+									</tr>
+									<tr >	
+										<td >172.26.89.129</td>
+										<td style="text-align:center"><input type="checkbox"></td>
+									</tr>
+									<tr >	
+										<td >fe80:0:0:0:7d0b:45de:6c2d:de74</td>
+										<td style="text-align:center"><input type="checkbox"></td>
+									</tr>
+									<tr >	
+										<td >169.254.21.38</td>
+										<td style="text-align:center"><input type="checkbox"></td>
+									</tr>
+									<TR>
+										<td>fe80:0:0:0:fcd5:ef2:4749:1526</td>
+										<td style="text-align:center"><input type="checkbox"></td>
+									</tr>
+									<tr>
+										<td>10.53.11.32</td>
+										<td style="text-align:center"><input type="checkbox"></td>
+									</tr>
+								</tbody>		
+							</table>
+							<!--ul id="bindingAddress">
+								<li>*<input type="checkbox"></li>
+								<li>172.26.89.129<input type="checkbox"></li>
+								<li>fe80:0:0:0:7d0b:45de:6c2d:de74<input type="checkbox"></li>
+								<li>169.254.21.38<input type="checkbox"></li>
+								<li>fe80:0:0:0:fcd5:ef2:4749:1526<input type="checkbox"></li>
+								<li>10.53.11.32<input type="checkbox"></li>
+								<li>2406:0:8035:105:7960:c33e:a87:c7d7<input type="checkbox"></li>
+								<li>2406:0:8035:105:3daf:633e:6ed5:baf1<input type="checkbox"></li>
+								<li>fe80:0:0:0:7960:c33e:a87:c7d7<input type="checkbox"></li>
+							</ul-->
+						</fieldset>
+					</div>
+					<div class="w3-third w3-padding-small">
+						<fieldset>
+							<legend>Port Listening</legend>
+							<input min="1" max="65535" required="" id="controlPort" type="number">
+						</fieldset>
+					</div>
+					<div class="w3-third w3-padding-small">
+						<input id="isPassiveModeEnable" type="checkbox"> Support Passive Mode?
+						<fieldset style="display: none;">
+							<legend>Custom port range for passive mode:</legend>
+							<input type="text" id="passiveModePortRange">
+						</fieldset>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>User Management</legend>
+				<div class="w3-row">
+					<div class="w3-third w3-padding-small">
+						<fieldset>
+							<legend>Users List</legend>
+							<ul class="w3-ul" style="border: 2px inset; overflow-y: scroll;">
+								<li class="userInfo-highlight" id="0">anonymous</li>
+							</ul>
+							<div class="w3-padding-small">
+							</div>
+							<span class="w3-button">Add</span>
+							<span class="w3-button">Remove</span>
+							<span class="w3-button">Copy</span>
+							<div class="w3-panel w3-red" style="display: none;">
+							</div>
+						</fieldset>
+					</div>
+					<div class="w3-twothird w3-padding-small">
+						<fieldset>
+							<legend>Account Setting</legend>
+							<input id="isUserEnabled" type="checkbox"> Enable<br>
+							<div style="display: none;">
+								Password:<input id="userPassword" type="password" required="">
+							</div>
+						</fieldset>
+					</div>
+				</div>
+				<div class="w3-row">
+					<div class="w3-padding-small">
+						<fieldset>
+							<legend>Access Right</legend>
+								<div id="accessRightTable_wrapper" class="dataTables_wrapper no-footer">
+									<div class="dataTables_length" id="accessRightTable_length">
+										<label>Show 
+											<select name="accessRightTable_length" aria-controls="accessRightTable" class="">
+												<option value="10">10</option>
+												<option value="25">25</option>
+												<option value="50">50</option>
+												<option value="100">100</option>
+											</select> entries
+										</label>
+									</div>
+									<div id="accessRightTable_filter" class="dataTables_filter">
+										<label>
+											Search:<input type="search" class="" placeholder="" aria-controls="accessRightTable">
+										</label>
+									</div>
+									<table id="accessRightTable" border="0" class="display responsive no-wrap dataTable no-footer dtr-inline" width="100%" role="grid" aria-describedby="accessRightTable_info" style="width: 100%;">
+										<thead>
+											<tr role="row">
+												<th class="sorting_asc" tabindex="0" aria-controls="accessRightTable" rowspan="1" colspan="1" style="width: 341px;" aria-label="Virtual Path: activate to sort column descending" aria-sort="ascending">Virtual Path
+												</th>
+												<th class="sorting" tabindex="0" aria-controls="accessRightTable" rowspan="1" colspan="1" style="width: 341px;" aria-label="Physical Path: activate to sort column ascending">
+													Physical Path
+												</th>
+												<th class="dt-center sorting_disabled" rowspan="1" colspan="1" style="width: 77px;" aria-label="">
+													<i class="fa fa-plus" style="font-size:24px"></i>
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr role="row" class="odd"><td class="sorting_1" tabindex="0">
+												<input type="text" id="virtualPath_0_d3d5fa95-d6ea-4124-858e-1f1a9f37c612" value="/">
+												</td>
+												<td>
+													<input type="text" id="physicalPath_0_d3d5fa95-d6ea-4124-858e-1f1a9f37c612" value="/" readonly="">
+												</td>
+												<td class=" dt-center">
+													<i class="fa fa-trash" style="font-size: 25px;"></i>
+												</td>
+											</tr>
+											</tbody>
+									</table>
+									<div class="dataTables_info" id="accessRightTable_info" role="status" aria-live="polite">
+										Showing 1 to 1 of 1 entries
+									</div>
+									<div class="dataTables_paginate paging_simple_numbers" id="accessRightTable_paginate">
+										<a class="paginate_button previous disabled" aria-controls="accessRightTable" data-dt-idx="0" tabindex="0" id="accessRightTable_previous">
+										Previous
+										</a>
+										<span>
+											<a class="paginate_button current" aria-controls="accessRightTable" data-dt-idx="1" tabindex="0">
+												1
+											</a>
+										</span>
+										<a class="paginate_button next disabled" aria-controls="accessRightTable" data-dt-idx="2" tabindex="0" id="accessRightTable_next">
+											Next
+										</a>
+									</div>
+								</div>
+							</fieldset>
+					</div>
+				</div>
+			</fieldset>
+			<a class="w3-red w3-button w3-right w3-margin-top w3-margin-right">
+				Add <i class="fa fa-check"></i>
+			</a>
+		</p>
+	</div>
+</div>
+</body>
+</html>
