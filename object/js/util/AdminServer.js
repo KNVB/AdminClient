@@ -82,6 +82,10 @@ class AdminServer
 	{
 		this.sendRequestObj(new Login(userName,password),callBack);
 	}
+	getUniqueId()
+	{
+		this.sendRequestObj({"action":"GetUniqueId"});
+	}
 	getRemoteSubDir(physicalDir,userEntryId,accessRightEntryId)
 	{
 		this.sendRequestObj({"action":"GetRemoteDir",

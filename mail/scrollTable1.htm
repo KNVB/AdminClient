@@ -1,0 +1,122 @@
+<html>
+	<style>
+		fieldset
+		{
+			height:100px;
+			width:400px;
+			border:1px solid orange;
+			padding-left:1px;
+			padding-right:1px;
+			padding-bottom:1px;
+			padding-top:5px;
+		}
+		.scrollTableContainer
+		{
+			display:flex;
+			flex:1;
+			flex-direction:column;
+			border:1px solid green;
+			overflow:auto;
+			//width:100%;
+			height:75px;
+			
+		}
+		.ipHeaderCell
+		{
+			float:left;
+			width:49%;
+			display:table-cell;
+			text-align:center;
+		}
+		.isBoundCell
+		{
+			float:right;
+			width:49%;
+			text-align:center;
+			display:table-cell;
+		}
+		.ipCell
+		{	
+			float:left;
+			width:49%;
+			display:table-cell;
+			text-align:center;
+			border-right:1px solid grey;
+		}
+
+		.isBoundCell
+		{
+			float:right;
+			width:49%;
+			text-align:center;
+			display:table-cell;
+		}
+		.bindingAdddressHeader
+		{
+			display:table-row;
+			word-wrap:break-word;
+		}
+		.bindingAddressDataRow
+		{
+			display:table-row;
+			word-wrap:break-word;
+			border-top:1px solid grey;
+		}
+		.bindingAdddressBody
+		{
+			flex:1;
+			display:flex;
+			border:1px solid grey;
+			overflow:auto;
+			flex-direction:column;
+		}		
+	</style>
+	<body>
+		<div class="scrollTableContainer">
+			<div class="bindingAdddressHeader">
+				<div class="ipHeaderCell">
+					IP address
+				</div>
+				<div class="isBoundCell">
+					Is bound
+				</div>
+			</div>
+			<div class="bindingAdddressBody">
+				<div class="bindingAddressDataRow">
+					<div class="ipCell">
+						fe80:0:0:0:7d0b:45de:6c2d:de74
+					</div>
+					<div class="isBoundCell">
+						<input type="checkbox" style="vertical-align:middle;">
+					</div>
+				</div>
+				<div class="bindingAddressDataRow">
+					<div class="ipCell">
+						10.53.11.32
+					</div>
+					<div class="isBoundCell">
+						<input type="checkbox" style="vertical-align:middle;">
+					</div>
+				</div>					
+				
+				<div class="bindingAddressDataRow">
+					<div class="ipCell">
+						fe80:0:0:0:7d0b:45de:6c2d:de74
+					</div>
+					<div class="isBoundCell">
+						<input type="checkbox" style="vertical-align:middle;">
+					</div>
+				</div>					
+
+				<div class="bindingAddressDataRow">
+					<div class="ipCell">
+						10.53.11.32
+					</div>
+					<div class="isBoundCell">
+						<input type="checkbox" style="vertical-align:middle;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

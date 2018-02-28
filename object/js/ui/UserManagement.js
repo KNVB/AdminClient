@@ -27,9 +27,11 @@ class UserManagement
 		var accessRightFieldSet=document.createElement("fieldset");	
 		var accountSettingFieldSet=document.createElement("fieldset");	
 		
+		this.selectedUserId;
 		this.accessRightTableX=null;
-		this.adminServer=adminPageControl.adminServer;
 		this.userInfoList=new Array();
+		this.adminServer=adminPageControl.adminServer;
+		
 		
 		this.usersList=document.createElement("ul");
 		this.warningDiv=document.createElement("div");
@@ -119,7 +121,21 @@ class UserManagement
 		row2.appendChild(th);
 		
 		th=document.createElement("th");
-		$(th).html("<i class=\"fa fa-plus\" style=\"font-size:24px\"></i>");
+		var addAccessRightRowButton=document.createElement("i");
+		addAccessRightRowButton.className="fa fa-plus";
+		addAccessRightRowButton.style.fontSize="24px";
+		addAccessRightRowButton.style.cursor="pointer";
+		th.appendChild(addAccessRightRowButton);
+		addAccessRightRowButton.onclick=function()
+										{
+											self.adminServer.getUniqueId();
+											self.adminServer.getServerResponse().then(function(serverResponse)
+																						{
+																							var accessRightEntryId=serverResponse.returnObjects.uniqueId;
+																							var accessRightEntry=new AccessRight(accessRightEntryId);
+																							self.addAccessRightRow(self.selectedUserId,accessRightEntry);
+																						});	
+										};	
 		row2.appendChild(th);
 		this.accessRightTable.id="accessRightTable";
 		this.accessRightTable.border=border;
@@ -239,7 +255,6 @@ class UserManagement
 										this.className="userInfo-highlight";
 										self.userPasswordInputBox.value=password;
 										self.userEnableCheckBox.checked=enabled;
-										
 										if (enabled)
 										{
 											self.passwordDiv.style.display="block";
@@ -249,6 +264,7 @@ class UserManagement
 											self.passwordDiv.style.display="none";
 										}
 										self.accessRightTableX.clear();
+										self.selectedUserId=this.id;
 										for (let key2 in accessRightList)
 										{
 											self.addAccessRightRow(userInfo.userId,accessRightList[key2]);
@@ -291,6 +307,7 @@ class UserManagement
 		var cell=row.insertCell(row.cells.length);
 		var virtualDirInputBox=document.createElement("input");
 		let physicalDirInputBox=document.createElement("input");
+		
 		var deleteButton=document.createElement("i");
 		
 		virtualDirInputBox.setAttribute("type","text");
@@ -318,6 +335,8 @@ class UserManagement
 		var dt = $(self.accessRightTable).dataTable().api();
 		dt.row.add($(row));
 		dt.draw();
+		
+		self.userInfoList[userId].accessRightEntries[accessRightEntry.entryId]=accessRightEntry;
 	}
 	validateUserName(userNameBox)
 	{

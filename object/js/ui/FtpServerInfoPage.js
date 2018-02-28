@@ -28,7 +28,7 @@ class FtpServerInfoPage
 		this.descriptionInputBox=document.createElement("input");
 		this.controlPortInputBox=document.createElement("input");
 		this.passiveModeCheckBox=document.createElement("input");
-		this.bindingAddressDropDown=document.createElement("ul");
+		this.bindingAddressTable=document.createElement("table");
 		this.passiveModePortRangeInputBox=document.createElement("input");
 
 		$(networkSettingLegend).text("Network related setting");
@@ -39,9 +39,8 @@ class FtpServerInfoPage
 		this.descriptionInputBox.id="description";
 		this.descriptionInputBox.setAttribute("type","text");	
 		
+		this.bindingAddressTable.style.width="100%";
 		
-		this.bindingAddressDropDown.id="bindingAddress";
-		this.bindingAddressDropDown.multiple=true;
 
 		this.controlPortInputBox.min=1;
 		
@@ -62,7 +61,7 @@ class FtpServerInfoPage
 		
 		networkSettingFieldSet.appendChild(networkSettingLegend);	
 		bindingAddressFieldSet.appendChild(bindingAddressLegend);
-		bindingAddressFieldSet.appendChild(this.bindingAddressDropDown);
+		bindingAddressFieldSet.appendChild(this.bindingAddressTable);
 		
 		controlPortFieldSet.appendChild(controlPortLegend);
 		controlPortFieldSet.appendChild(this.controlPortInputBox);
@@ -111,33 +110,34 @@ class FtpServerInfoPage
 		
 		this.descriptionInputBox.value=ftpServerInfo.description;
 		this.controlPortInputBox.value=ftpServerInfo.controlPort;
-		this.passiveModePortRangeInputBox.value=ftpServerInfo.passiveModePortRange;
-		this.passiveModeCheckBox.checked=ftpServerInfo.passiveModeEnabled;
-		$(this.bindingAddressDropDown).empty();
-		this.bindingAddressDropDown.onchange=function()
+		
+		$(this.bindingAddressTable).empty();
+		var row=this.bindingAddressTable.insertRow(this.bindingAddressTable.rows.length);
+		var cell=row.insertCell(row.cells.length);
+		cell.innerHTML="Is bound";
+		cell.style.textAlign="center";
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="IP address";
+		cell.style.textAlign="center";
+		for (var ipAddress in ftpServerInfo.bindingAddresses)
 		{
-			var option=this.options[this.selectedIndex];
-			$(option).toggleClass("w3-red");
-		}
-		this.bindingAddressDropDown.onfocus=function()
-		{
-			var option=this.options[this.selectedIndex];
-			$(option).toggleClass("w3-red");
-		}
-		for (var i=0;i<ftpServerInfo.bindingAddresses.length;i++)
-		{
-			//console.log(ftpServerInfo.bindingAddresses[i]);
-			var bindingAddress=document.createElement("li");
+			row=this.bindingAddressTable.insertRow(this.bindingAddressTable.rows.length);
+			cell=row.insertCell(row.cells.length);
 			var bound=document.createElement("input");
 			bound.setAttribute("type","checkbox");
-			bindingAddress.textContent=ftpServerInfo.bindingAddresses[i].ipAddress;
-			bindingAddress.appendChild(bound);
-			if (ftpServerInfo.bindingAddresses[i].bound)
+			bound.id="bindingAddress";
+			bound.value=ipAddress;
+			if (ftpServerInfo.bindingAddresses[ipAddress].bound)
 			{
 				bound.checked=true;
-			}			
-			this.bindingAddressDropDown.appendChild(bindingAddress);
+			}
+			cell.appendChild(bound);
+			cell.style.textAlign="center";
+			cell=row.insertCell(row.cells.length);
+			cell.innerHTML=ipAddress;
 		}
+		this.passiveModePortRangeInputBox.value=ftpServerInfo.passiveModePortRange;
+		this.passiveModeCheckBox.checked=ftpServerInfo.passiveModeEnabled;
 		this.userManagement.loadData(ftpServerInfo.ftpUserInfoList);
 	}
 	getDomObjList()

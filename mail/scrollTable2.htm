@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<style>
+			fieldset
+			{
+				height:100px;
+				width:400px;
+				border:1px solid orange;
+				padding-left:1px;
+				padding-right:1px;
+				padding-bottom:1px;
+				padding-top:5px;
+			}
+			.scrollTableContainer
+			{
+				position:relative;
+				border:1px solid green;
+			}
+		</style>
+		<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+		<script>
+			function init()
+			{
+				var fieldset=document.getElementById("f");
+				var scrollTableContainer=document.getElementById("cb");
+				var innerHeight=$(fieldset).outerHeight()-$(scrollTableContainer).position().top;
+				$(scrollTableContainer).outerHeight(innerHeight);
+				console.log($(fieldset).outerHeight(),$(fieldset).innerHeight(),$(scrollTableContainer).position().top,$(scrollTableContainer).offset().top);
+			}
+		</script>
+	</head>
+	<body onload="init()">
+		<br>
+		<br>
+		<fieldset id="f">
+			<legend>Binding Address</legend>
+			<div class="scrollTableContainer" id="cb">
+				1<br>
+				<div style="display:block;overflow:auto"> 
+					1<br>
+					1<br>
+					1<br>
+					1<br>
+				</div>
+			</div>
+		</fieldset>
+	</body>
+</html>

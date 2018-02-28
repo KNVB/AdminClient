@@ -25,10 +25,10 @@ class FtpModule extends ModuleTemplate
 	{
 		//this.setMainContent(new Array(this.heading+" > add server"));
 		var self=this;
-		var userInfo=new UserInfo();
+		/*var userInfo=new UserInfo();
 		userInfo.userName="anonymous";
 		userInfo.password="password";
-		userInfo.enabled=true;
+		userInfo.enabled=true;*/
 		
 //		var ftpServerInfo=new FtpServerInfo();
 		this.ftpServerInfoPage=new FtpServerInfoPage(this.adminPageControl);
