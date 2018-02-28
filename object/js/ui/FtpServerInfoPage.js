@@ -112,29 +112,32 @@ class FtpServerInfoPage
 		this.controlPortInputBox.value=ftpServerInfo.controlPort;
 		
 		$(this.bindingAddressTable).empty();
+		this.bindingAddressTable.style.borderCollapse="collapse";
 		var row=this.bindingAddressTable.insertRow(this.bindingAddressTable.rows.length);
 		var cell=row.insertCell(row.cells.length);
-		cell.innerHTML="Is bound";
-		cell.style.textAlign="center";
-		cell=row.insertCell(row.cells.length);
 		cell.innerHTML="IP address";
 		cell.style.textAlign="center";
-		for (var ipAddress in ftpServerInfo.bindingAddresses)
+		cell=row.insertCell(row.cells.length);
+		cell.innerHTML="Is bound";
+		cell.style.textAlign="center";
+		row.style.borderBottom="1px solid grey";
+		for (var i=0;i< ftpServerInfo.bindingAddresses.length;i++)
 		{
 			row=this.bindingAddressTable.insertRow(this.bindingAddressTable.rows.length);
+			row.style.borderBottom="1px solid grey";
+			cell=row.insertCell(row.cells.length);
+			cell.innerHTML=ftpServerInfo.bindingAddresses[i].ipAddress;
 			cell=row.insertCell(row.cells.length);
 			var bound=document.createElement("input");
 			bound.setAttribute("type","checkbox");
 			bound.id="bindingAddress";
-			bound.value=ipAddress;
-			if (ftpServerInfo.bindingAddresses[ipAddress].bound)
+			bound.value=ftpServerInfo.bindingAddresses[i].ipAddress;
+			if (ftpServerInfo.bindingAddresses[i].bound)
 			{
 				bound.checked=true;
 			}
 			cell.appendChild(bound);
 			cell.style.textAlign="center";
-			cell=row.insertCell(row.cells.length);
-			cell.innerHTML=ipAddress;
 		}
 		this.passiveModePortRangeInputBox.value=ftpServerInfo.passiveModePortRange;
 		this.passiveModeCheckBox.checked=ftpServerInfo.passiveModeEnabled;
