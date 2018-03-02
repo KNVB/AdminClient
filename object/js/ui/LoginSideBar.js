@@ -147,7 +147,7 @@ class LoginSideBar
 												function(errorMsg)
 												{
 													self.adminServer.disConnect();
-													this.loadingScreen.hide();
+													self.loadingScreen.hide();
 													var alertBox=new AlertBox(errorMsg);
 												});
 		}
